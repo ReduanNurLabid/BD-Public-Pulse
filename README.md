@@ -9,12 +9,22 @@
 </p>
 
 <p align="center">
+  <a href="https://politicalcompass.web.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🌐_Visit_Live_Platform-politicalcompass.web.app-059669?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Platform" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://politicalcompass.web.app/" target="_blank"><img src="https://img.shields.io/badge/Live%20App-politicalcompass.web.app-brightgreen.svg?logo=firebase" alt="Live Demo" /></a>
   <a href="https://github.com/ReduanNurLabid/BD-Public-Pulse/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <img src="https://img.shields.io/badge/React-18-61dafb.svg?logo=react" alt="React 18" />
   <img src="https://img.shields.io/badge/Vite-5-646cff.svg?logo=vite" alt="Vite 5" />
   <img src="https://img.shields.io/badge/Firebase-Firestore-ffca28.svg?logo=firebase" alt="Firebase" />
   <img src="https://img.shields.io/badge/Language-Bangla%20%7C%20English-green.svg" alt="Bilingual" />
 </p>
+
+> 🔗 **Live Web Application:** [https://politicalcompass.web.app](https://politicalcompass.web.app/)  
+> Experience the full 40-question political assessment, discover your historical leader alignment, and explore the real-time public opinion dashboard live.
 
 ---
 
@@ -38,7 +48,7 @@ Beyond individual assessment, the platform aggregates anonymous citizen inputs i
 
 - **🏛️ Political Bloc & Historical Figure Matching**:
   - Euclidean distance matching against major political factions and philosophical traditions in Bangladesh.
-  - Alignment score with 40+ iconic historical thinkers and world/national leaders (e.g., Maulana Bhashani, H.S. Suhrawardy, Tajuddin Ahmad, Abraham Lincoln, Nelson Mandela, etc.).
+  - Alignment score with curated iconic historical thinkers and national/world leaders (e.g., Maulana Bhashani, H.S. Suhrawardy, Tajuddin Ahmad, Abraham Lincoln, Nelson Mandela, etc.).
 
 - **📊 Live Real-Time Dashboard**:
   - Live visitor count with heartbeat presence detection.
@@ -62,9 +72,10 @@ Beyond individual assessment, the platform aggregates anonymous citizen inputs i
 
 ## 🛠️ Tech Stack
 
+- **Live Deployment**: [Firebase Hosting (politicalcompass.web.app)](https://politicalcompass.web.app/)
 - **Framework**: [React 18](https://react.dev/)
 - **Bundler & Dev Server**: [Vite 5](https://vitejs.dev/)
-- **Database & Hosting**: [Google Firebase](https://firebase.google.com/) (Firestore, App Check, Cloud Functions, Analytics)
+- **Database & Cloud**: [Google Firebase](https://firebase.google.com/) (Firestore, App Check, Cloud Functions, Analytics)
 - **Data Visualization**: [Recharts](https://recharts.org/) & Custom SVG Canvas
 - **Card Generation**: [html2canvas](https://html2canvas.hertzen.com/) & [jsPDF](https://github.com/parallax/jsPDF)
 - **Icons**: [Lucide React](https://lucide.dev/)
@@ -78,10 +89,11 @@ Beyond individual assessment, the platform aggregates anonymous citizen inputs i
 ```text
 BD-Public-Pulse/
 ├── public/                 # Static assets, favicon suite, leader portraits, manifest
-│   └── personalities/      # Calibrated portrait images
+│   ├── countries/flags/    # Country flag icons for international comparative figures
+│   └── personalities/      # Calibrated historical leader portraits
 ├── scratch/                # Verification, simulation, backfill & tuning scripts
 ├── src/
-│   ├── assets/             # Vector icons and brand logos
+│   ├── assets/             # Brand vector logos and political bloc emblems
 │   ├── components/         # Modular React UI components
 │   │   ├── CompassChart.jsx        # 2D Canvas coordinate visualizer
 │   │   ├── Dashboard.jsx           # Real-time national aggregate analytics
@@ -113,12 +125,19 @@ BD-Public-Pulse/
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### Live Visit
+
+You can try the live application immediately without local setup:
+👉 **[https://politicalcompass.web.app](https://politicalcompass.web.app/)**
+
+### Local Development Setup
+
+#### Prerequisites
 
 - [Node.js](https://nodejs.org/) (version 18.0 or higher recommended)
 - [npm](https://www.npmjs.com/) or [pnpm](https://pnpm.io/)
 
-### Installation
+#### Installation
 
 1. **Clone the repository**:
    ```bash
