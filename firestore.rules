@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Survey Responses Collection
+    // - WRITE-ONLY: Citizens can submit their survey results.
+    // - PRIVACY PROTECTION: No client can read or list other citizens' responses.
+    // - SINGLE SUBMISSION: Once a document with this ID is created, it cannot be overwritten or deleted.
+    // - ANTI-BOT / SPAM: Validates required payload structure and minimal realistic duration.
+    match /responses/{responseId} {
+      allow read: if false;
+      
+      allow create: if !exists(/databases/$(database)/documents/responses/$(responseId))
+                    && request.resource.data.sessionId != null
+                    && request.resource.data.primaryBloc != null
+                    && (request.resource.data.durationSeconds == null || request.resource.data.durationSeconds >= 35);
+      
+      allow update, delete: if false;
+    }
+
+    // 2. Public Aggregate Statistics (O(1) Dashboard)
+    // - READ: Publicly accessible by all dashboard visitors.
+    // - WRITE: Permitted for aggregate counter increments during survey submission.
+    match /stats/{statId} {
+      allow read: if true;
+      allow create, update: if true;
+      allow delete: if false;
+    }
+
+    // 3. Real-Time Visitor Presence Tracking
+    // - READ: Open for getCountFromServer() aggregation.
+    // - WRITE: Visitors update their device heartbeat timestamp.
+    match /presence/{deviceId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.lastActive is timestamp;
+      allow delete: if false;
+    }
+
+    // 4. Citizen Survey-Topic Proposals
+    // - WRITE-ONLY: proposals are never publicly readable, mirroring /responses.
+    // - IMMUTABLE: once filed, a client cannot rewrite or delete a proposal.
+    // - SHAPE VALIDATION: rejects empty/spam documents, pins the category to
+    //   the known set, and requires the server timestamp so a client cannot
+    //   backdate an entry to win a "first proposal" race.
+    match /proposals/{proposalId} {
+      allow read: if false;
+
+      allow create: if request.resource.data.keys().hasAll(
+                      ['title', 'category', 'description', 'deviceId', 'createdAt', 'status']
+                    )
+                 && request.resource.data.title is string
+                 && request.resource.data.title.size() >= 5
+                 && request.resource.data.title.size() <= 120
+                 && request.resource.data.category in
+                      ['economy', 'governance', 'education', 'social_justice',
+                       'law_justice', 'foreign_policy', 'religion_state',
+                       'environment', 'health', 'other']
+                 && request.resource.data.description is string
+                 && request.resource.data.description.size() <= 500
+                 && request.resource.data.deviceId is string
+                 && request.resource.data.status == 'pending'
+                 && request.resource.data.createdAt == request.time;
+
+      allow update, delete: if false;
+    }
+
+    // Default deny for all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

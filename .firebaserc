@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "bd-political-compass"
+  },
+  "targets": {
+    "bd-political-compass": {
+      "hosting": {
+        "politicalcompass": [
+          "politicalcompass"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
