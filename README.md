@@ -24,7 +24,7 @@
 </p>
 
 > 🔗 **Live Web Application:** [https://politicalcompass.web.app](https://politicalcompass.web.app/)  
-> Experience the full 40-question political assessment, discover your historical leader alignment, and explore the real-time public opinion dashboard live.
+> Experience the full 24-question political assessment, discover your historical leader alignment, and explore the real-time public opinion dashboard live.
 
 ---
 
