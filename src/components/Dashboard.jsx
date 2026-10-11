@@ -73,6 +73,7 @@ const ENGLISH_DIVISIONS = {
 
 const ENGLISH_AGES = {
   '১৮-২৫ (তরুণ প্রজন্ম)': '18–25 (Young adults)',
+  '২৬-৩৫ (যুবক ও কর্মজীবী)': '26–35 (Young professionals)',
   '২৬-৩৫ (যুবক/কর্মজীবী)': '26–35 (Young professionals)',
   '২৬-৩৫ (যুবক ও পেশাজীবী)': '26–35 (Young professionals)',
   '৩৬-৪৫ (মধ্যবয়সী)': '36–45 (Middle-aged adults)',

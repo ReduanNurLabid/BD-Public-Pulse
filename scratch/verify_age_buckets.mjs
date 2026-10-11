@@ -25,7 +25,7 @@ check(new Set(AGE_BUCKETS).size === AGE_BUCKETS.length, 'AGE_BUCKETS has no dupl
 check(AGE_BUCKETS.every(k => k && k.trim() === k && k.length > 0), 'AGE_BUCKETS keys are non-empty and trimmed');
 
 // 3. Keys must not contain characters that break Firestore field paths.
-const illegal = AGE_BUCKETS.filter(k => /[.*#$\[\]]/.test(k));
+const illegal = AGE_BUCKETS.filter(k => /[.*#$\[\]\/~]/.test(k));
 check(illegal.length === 0, `AGE_BUCKETS keys are field-path safe${illegal.length ? ` (offenders: ${illegal.join(', ')})` : ''}`);
 
 // 4. The schema in firebase.js must be derived from AGE_BUCKETS, not a second literal list.

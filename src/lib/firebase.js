@@ -417,12 +417,18 @@ export async function saveAssessmentResponse(data) {
           const divClean = data.demographics.division.replace(' বিভাগ', '').trim();
           updates[`divisions.${divClean}.count`] = increment(1);
         }
-        const ageBucket = data.demographics?.ageRange;
+        const rawAgeBucket = data.demographics?.ageRange;
+        const ageBucket = (rawAgeBucket === '২৬-৩৫ (যুবক/কর্মজীবী)')
+          ? '২৬-৩৫ (যুবক ও কর্মজীবী)'
+          : rawAgeBucket;
         if (ageBucket && AGE_BUCKETS.includes(ageBucket)) {
           updates[`ageRanges.${ageBucket}.count`] = increment(1);
         }
         if (data.demographics?.religion) {
-          updates[`religions.${data.demographics.religion}.count`] = increment(1);
+          const relKey = data.demographics.religion.replace(/[/~*\[\]]/g, ' ').trim();
+          if (relKey) {
+            updates[`religions.${relKey}.count`] = increment(1);
+          }
         }
 
         // Raw accumulators for the 8 axes and the tracked wedge issues.
@@ -470,7 +476,10 @@ export async function saveAssessmentResponse(data) {
           const divClean = data.demographics.division.replace(' বিভাগ', '').trim();
           if (initial.divisions[divClean]) initial.divisions[divClean].count = 1;
         }
-        const ageBucket = data.demographics?.ageRange;
+        const rawAgeBucket = data.demographics?.ageRange;
+        const ageBucket = (rawAgeBucket === '২৬-৩৫ (যুবক/কর্মজীবী)')
+          ? '২৬-৩৫ (যুবক ও কর্মজীবী)'
+          : rawAgeBucket;
         if (ageBucket && initial.ageRanges[ageBucket]) {
           initial.ageRanges[ageBucket].count = 1;
         }
@@ -529,7 +538,11 @@ export function buildDashboardStats(cloudData) {
   const withPercentages = (source, cloudSource, round) => {
     const out = { ...source };
     Object.keys(out).forEach(k => {
-      const count = cloudSource?.[k]?.count || 0;
+      let count = cloudSource?.[k]?.count || 0;
+      // Backward compatibility: fold legacy key with slash into canonical key
+      if (k === '২৬-৩৫ (যুবক ও কর্মজীবী)' && cloudSource?.['২৬-৩৫ (যুবক/কর্মজীবী)']?.count) {
+        count += cloudSource['২৬-৩৫ (যুবক/কর্মজীবী)'].count;
+      }
       out[k] = {
         ...out[k],
         count,
