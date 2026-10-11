@@ -38,7 +38,7 @@ Beyond individual assessment, the platform aggregates anonymous citizen inputs i
 
 ## ✨ Key Features
 
-- **🎯 Contextualized 40-Question Assessment**:
+- **🎯 Contextualized 24-Question Assessment**:
   - 8 thematic blocks covering secularism vs. religious values, state-led vs. market economics, constitutional reform, judicial independence, federal devolution, foreign policy non-alignment, and digital civil liberties.
   - Multi-point Likert scale with balanced polarities to prevent agreement bias.
 
