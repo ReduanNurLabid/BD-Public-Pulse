@@ -31,7 +31,7 @@ const FAQ = [
     a: { bn: 'নাম, ফোন বা লগইন লাগে না। বয়স-এলাকা দেওয়া ঐচ্ছিক। উত্তর একটি এলোমেলো আইডিতে জমা হয়, আর কার্ডে দেওয়া নাম শুধু আপনার ফোনেই থাকে। ১০ জনের কম এমন কোনো গোষ্ঠীর ফলাফল আমরা দেখাই না।', en: 'No name, phone number or login is needed, and age and area are optional. Answers are stored under a random ID, and the name on your card stays on your phone. We never show results for a group of fewer than 10 people.' }
   },
   {
-    q: { bn: 'কোনো প্রশ্ন একপেশে মনে হলে?', en: 'What if a question seems biased?' },
+    q: { bn: 'কোনো প্রশ্ন একপাক্ষিক মনে হলে?', en: 'What if a question seems biased?' },
     a: { bn: 'পাতার একদম নিচে “ভুল বা পক্ষপাত জানান” চাপুন। প্রতিটি মতামত আমরা পড়ি।', en: 'Tap “Report a problem” at the very bottom of the page. We read every message.' }
   }
 ];

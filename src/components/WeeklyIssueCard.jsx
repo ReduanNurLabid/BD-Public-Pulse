@@ -90,9 +90,9 @@ export default function WeeklyIssueCard({ lang = 'bn', embedded = false, showEmp
             </p>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 'clamp(0.4rem, 2vw, 0.75rem)' }}>
             {VOTE_CHOICES.map((key) => (
-              <button key={key} type="button" className="btn-primary" disabled={voting} onClick={() => vote(key)} style={{ minHeight: '52px' }}>
+              <button key={key} type="button" className="btn-primary" disabled={voting} onClick={() => vote(key)} style={{ minHeight: '52px', padding: '0.6rem 0.25rem', whiteSpace: 'nowrap' }}>
                 {isEnglish ? LABELS[key].en : LABELS[key].bn}
               </button>
             ))}

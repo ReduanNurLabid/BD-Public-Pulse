@@ -991,9 +991,9 @@ export const BLOC_PROFILES = {
 export const QUADRANT_PROFILES = {
   "libertarian_left": {
     "key": "libertarian_left",
-    "name": "সনদের সৈনিক",
-    "title": "সনদের সৈনিক",
-    "nameEn": "The Charter Soldier",
+    "name": "সংস্কারের সৈনিক",
+    "title": "সংস্কারের সৈনিক",
+    "nameEn": "The Reform Soldier",
     "tagline": "গণভোটের রায় হুবহু কার্যকর করতে হবে।",
     "taglineEn": "The referendum’s verdict must be carried out in full.",
     "badgeColor": "#10B981",
@@ -1046,7 +1046,7 @@ export const QUADRANT_PROFILES = {
   }
 };
 
-// A name like "সনদের সৈনিক" makes a specific claim, and the card prints the
+// A name like "সংস্কারের সৈনিক" makes a specific claim, and the card prints the
 // person's verdicts right beneath it. If their own answer contradicts the
 // name, they get the alternate name for the same compass area instead.
 const IDENTITY_ALTERNATES = {

@@ -2077,16 +2077,28 @@ main {
   border-radius: 24px !important;
 }
 
-.dashboard-trending-section .btn-primary,
-.dashboard-trending-section .btn-primary:hover {
+/* Filled at rest, outlined on hover. !important because the site-wide button
+   hover forces page colours, which match this band and hide the label. */
+.dashboard-trending-section .btn-primary {
   background: var(--action-card2-text);
   color: var(--action-card2-bg);
   border-color: var(--action-card2-text);
 }
 
-.dashboard-trending-section .btn-primary svg,
-.dashboard-trending-section .btn-primary:hover svg {
+.dashboard-trending-section .btn-primary svg {
+  stroke: var(--action-card2-bg);
   color: var(--action-card2-bg);
+}
+
+.dashboard-trending-section .btn-primary:hover {
+  background: transparent !important;
+  color: var(--action-card2-text) !important;
+  border-color: var(--action-card2-text) !important;
+}
+
+.dashboard-trending-section .btn-primary:hover svg {
+  stroke: var(--action-card2-text) !important;
+  color: var(--action-card2-text) !important;
 }
 
 .dashboard-insight-card--style3 {

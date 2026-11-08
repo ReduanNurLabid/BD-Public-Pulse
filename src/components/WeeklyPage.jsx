@@ -20,7 +20,7 @@ export default function WeeklyPage({ lang = 'bn' }) {
   return (
     <div style={{ width: '100%', maxWidth: '860px', margin: '0 auto', padding: '2.5rem 1rem 4rem', boxSizing: 'border-box' }}>
       <h1 style={{ fontSize: 'clamp(2rem, 6vw, 3rem)', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 0.5rem' }}>
-        {isEnglish ? 'Weekly vote' : 'সাপ্তাহিক ভোট'}
+        {isEnglish ? 'Weekly vote on issues of public importance' : 'জনগুরুত্বপূর্ণ বিষয়ে সাপ্তাহিক ভোট'}
       </h1>
       <p style={{ fontSize: '1.05rem', lineHeight: 1.7, color: 'var(--text-secondary)', margin: 0 }}>
         {isEnglish

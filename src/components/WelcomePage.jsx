@@ -38,12 +38,12 @@ export const WELCOME_COPY = {
     heroSecondaryCta: 'সবাই কী ভাবছে দেখুন',
     lengthHint: 'সময় কম?',
     lengthShort: '২ মিনিটের ছোট সংস্করণ',
-    lengthLong: 'বা ৬ মিনিটের পূর্ণ সংস্করণ',
+    lengthLong: '৬ মিনিটের পূর্ণ সংস্করণ',
     quoteText: '“মানুষ স্বভাবতই একটি রাজনৈতিক জীব।”',
     quoteAuthor: '— অ্যারিস্টটল',
 
     statsEyebrow: '— সবাই কী ভাবছে',
-    statsTitle: 'এই মুহূর্তে মানুষ কী ভাবছে',
+    statsTitle: 'অংশগ্রহণকারীদের সামষ্টিক চিন্তাধারা',
     statsCta: 'পুরো ফলাফল দেখুন',
     totalLabel: 'এ পর্যন্ত অংশ নিয়েছেন',
     verifiedLine: (verified, total, isAll) => (
@@ -66,8 +66,8 @@ export const WELCOME_COPY = {
     surveyTitleSub: 'অবস্থান জানুন',
     surveyBody:
       'দেশের বড় প্রশ্নগুলোতে আপনার মত দিন। সাথে সাথে পাবেন নিজের ফলাফল কার্ড — শেয়ার করুন, বন্ধুদের সাথে মিলিয়ে দেখুন।',
-    surveyTime: '২, ৪ বা ৬ মিনিট — আপনার পছন্দ',
-    surveyCta: 'শুরু করি',
+    surveyTime: 'কতক্ষণ সময় দেবেন?',
+    surveyLengths: { short: ['২ মিনিট', '১৬ প্রশ্ন'], medium: ['৪ মিনিট', '২৪ প্রশ্ন'], long: ['৬ মিনিট', '৩২ প্রশ্ন'] },
 
     dashBadge: 'অংশগ্রহণকারীদের মতামত',
     dashTitle: 'লাইভ',
@@ -77,10 +77,10 @@ export const WELCOME_COPY = {
     dashCta: 'ড্যাশবোর্ড দেখুন',
 
     proposalBadge: 'আপনার প্রস্তাব',
-    proposalTitle: 'পরের প্রশ্ন',
+    proposalTitle: 'পরের সাপ্তাহিক ভোট',
     proposalTitleSub: 'আপনিই ঠিক করুন',
     proposalBody:
-      'কোন বিষয়ে দেশের মানুষের মত জানা দরকার? আপনার প্রস্তাব জমা দিন — জনপ্রিয় প্রস্তাবগুলো পরের জরিপে আসতে পারে।',
+      'কোন বিষয়ে দেশের মানুষের মত জানা দরকার? আপনার প্রস্তাব জমা দিন। ভালো প্রস্তাবগুলো থেকেই আসবে পরের সাপ্তাহিক ভোটের প্রশ্ন।',
     proposalCta: 'প্রস্তাব দিন',
 
     footerTransparencyTitle: 'কেন আমাদের ওপর ভরসা করবেন',
@@ -98,7 +98,7 @@ export const WELCOME_COPY = {
         body: 'কীভাবে হিসাব হয়, তার পুরোটা খোলা — যে কেউ যাচাই করতে পারেন।'
       }
     ],
-    footerFeedbackTitle: 'কোনো প্রশ্ন একপেশে মনে হলো?',
+    footerFeedbackTitle: 'কোনো প্রশ্ন একপাক্ষিক মনে হলো?',
     footerFeedbackNote: 'আমরা চাই প্রতিটি প্রশ্ন সব পক্ষের কাছে ন্যায্য হোক। কোথাও পক্ষপাত, ভুল বা অসংগতি চোখে পড়লে জানান — আমরা শুধরে নেব।',
     footerFeedbackCta: 'আমাদের জানান',
   },
@@ -114,13 +114,13 @@ export const WELCOME_COPY = {
     heroPrimaryCta: 'Take the test now',
     heroSecondaryCta: 'See live dashboard',
     lengthHint: 'Short on time?',
-    lengthShort: 'Take the 2-minute version',
-    lengthLong: 'or the full 6-minute one',
+    lengthShort: '2-minute short version',
+    lengthLong: '6-minute full version',
     quoteText: '“Man is by nature a political animal.”',
     quoteAuthor: '— Aristotle',
 
     statsEyebrow: '— Latest figures',
-    statsTitle: 'Explore real-time public opinion',
+    statsTitle: 'The collective view of participants',
     statsCta: 'Explore live data',
     totalLabel: 'Participants so far',
     verifiedLine: (verified, total, isAll) => (
@@ -143,8 +143,8 @@ export const WELCOME_COPY = {
     surveyTitleSub: 'survey',
     surveyBody:
       'Pick 16, 24 or 32 questions; there are no right or wrong answers. Review your results and choose what to include if you make a share card.',
-    surveyTime: '2, 4 or 6 minutes: your choice',
-    surveyCta: 'Take the survey',
+    surveyTime: 'How much time do you have?',
+    surveyLengths: { short: ['2 min', '16 questions'], medium: ['4 min', '24 questions'], long: ['6 min', '32 questions'] },
 
     dashBadge: 'Participant responses',
     dashTitle: 'Live',
@@ -154,10 +154,10 @@ export const WELCOME_COPY = {
     dashCta: 'Open dashboard',
 
     proposalBadge: 'Citizen proposal',
-    proposalTitle: 'Shape the',
-    proposalTitleSub: 'next topic',
+    proposalTitle: 'Next weekly vote',
+    proposalTitleSub: 'You decide',
     proposalBody:
-      'What pressing national issue should we explore next? Submit your ideas to help map out upcoming civic discussions.',
+      'What should the country be asked next? Send your idea. The best suggestions become future weekly vote questions.',
     proposalCta: 'Suggest a topic',
 
     footerTransparencyTitle: 'Transparency & Trust',
@@ -340,10 +340,12 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
             </button>
           </div>
 
-          <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginTop: '-0.5rem', marginBottom: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'baseline' }}>
-            <span>{t.lengthHint}</span>
-            <button type="button" onClick={() => onStartTest('short')} style={{ background: 'none', border: 'none', padding: 0, color: 'var(--hero-accent)', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px', cursor: 'pointer', fontSize: 'inherit' }}>{t.lengthShort}</button>
-            <button type="button" onClick={() => onStartTest('long')} style={{ background: 'none', border: 'none', padding: 0, color: 'var(--text-secondary)', textDecoration: 'underline', textUnderlineOffset: '3px', cursor: 'pointer', fontSize: 'inherit' }}>{t.lengthLong}</button>
+          <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginTop: '-0.5rem', marginBottom: '1.25rem' }}>
+            <div style={{ marginBottom: '0.5rem' }}>{t.lengthHint}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <button type="button" className="btn-secondary" style={{ padding: '0.55rem 1.1rem', minHeight: '44px', fontSize: '0.95rem' }} onClick={() => onStartTest('short')}>{t.lengthShort}</button>
+              <button type="button" className="btn-secondary" style={{ padding: '0.55rem 1.1rem', minHeight: '44px', fontSize: '0.95rem' }} onClick={() => onStartTest('long')}>{t.lengthLong}</button>
+            </div>
           </div>
 
           <div className="font-latin" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, marginBottom: '2.5rem' }}>
@@ -568,41 +570,45 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
               </p>
 
               <div style={{ fontSize: '0.9rem', color: 'var(--action-card1-text)', opacity: 0.8, fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                <span className="font-latin">⏱ {t.surveyTime}</span>
+                <span>{t.surveyTime}</span>
               </div>
 
-              <button
-                onClick={() => onStartTest()}
-                className="font-latin"
-                style={{
-                  background: 'var(--action-card1-btn-bg)',
-                  color: 'var(--action-card1-btn-text)',
-                  border: '1.5px solid var(--action-card1-btn-bg)',
-                  borderRadius: '999px',
-                  padding: '1rem',
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  whiteSpace: 'nowrap'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'var(--action-card1-btn-bg)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--action-card1-btn-bg)';
-                  e.currentTarget.style.color = 'var(--action-card1-btn-text)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                {t.surveyCta} <ArrowRight size={18} />
-              </button>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '0.5rem' }}>
+                {['short', 'medium', 'long'].map((length) => (
+                  <button
+                    key={length}
+                    type="button"
+                    onClick={() => onStartTest(length)}
+                    style={{
+                      background: 'var(--action-card1-btn-bg)',
+                      color: 'var(--action-card1-btn-text)',
+                      border: '1.5px solid var(--action-card1-btn-bg)',
+                      borderRadius: '16px',
+                      padding: '0.7rem 0.25rem',
+                      minHeight: '64px',
+                      fontFamily: 'inherit',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = 'var(--action-card1-btn-bg)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'var(--action-card1-btn-bg)';
+                      e.currentTarget.style.color = 'var(--action-card1-btn-text)';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.05rem', fontWeight: 800 }}>{t.surveyLengths[length][0]}</span>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>{t.surveyLengths[length][1]}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* View Dashboard Card */}

@@ -92,10 +92,14 @@ const COPY = {
     tryUnit: 'পয়েন্ট',
     normalise: 'সব ধাক্কা যোগ করে সংশ্লিষ্ট অক্ষের সর্বোচ্চ সম্ভাব্য ধাক্কা দিয়ে ভাগ করা হয়। ফলে প্রতিটি অক্ষের স্কোর {neg} থেকে +১০০-এর মধ্যে পরিমাপ করা হয়। ±১০০ পেতে হলে প্রতিটি প্রশ্নে সর্বোচ্চ শক্তিতে একই দিকে ভোট দিতে হয়; তাই সিংহভাগ সচেতন নাগরিকের অবস্থান মধ্যবর্তী পরিমণ্ডলে আসে। এটি স্বাভাবিক এবং ভারসাম্যপূর্ণ নাগরিক চিন্তার পরিচায়ক।',
     axesTitle: 'কম্পাসের দুটি মূল অক্ষ',
-    axisX: 'অর্থনৈতিক অক্ষ (Horizontal)',
+    axisX: 'অর্থনীতির অক্ষ (বাম থেকে ডান)',
+    axisXLeftShort: 'রাষ্ট্র',
+    axisXRightShort: 'বাজার',
+    axisYTopShort: 'স্বাধীনতা',
+    axisYBottomShort: 'শৃঙ্খলা',
     axisXLeft: 'রাষ্ট্র-নিয়ন্ত্রিত অর্থনীতি, পুনর্বণ্টন ও মেগা প্রকল্প',
     axisXRight: 'উন্মুক্ত মুক্তবাজার, ব্যক্তিমালিকানা ও পুঁজিবাদী প্রবৃদ্ধি',
-    axisY: 'শাসনব্যবস্থার অক্ষ (Vertical)',
+    axisY: 'শাসনের অক্ষ (উপর থেকে নিচ)',
     axisYTop: 'আইনের শাসন, প্রাতিষ্ঠানিক বিকেন্দ্রীকরণ ও বাকস্বাধীনতা',
     axisYBottom: 'শক্তিশালী কেন্দ্রীয় নিয়ন্ত্রণ, নির্বাহী কর্তৃত্ব ও কঠোর নজরদারি',
     centreNote: 'কেন্দ্রবিন্দু থেকে {r} পয়েন্টের মধ্যে অবস্থানকে “মধ্যপন্থী” (Centrist) বিবেচনা করা হয়।',
@@ -217,11 +221,15 @@ const COPY = {
     tryNone: 'No movement',
     tryUnit: 'points',
     normalise: 'All statement nudges are summed and divided by the theoretical maximum possible push on each axis, mapping results between {neg} and +100. Achieving ±100 requires extreme uniform answers on all items; naturally, most nuanced citizens land in moderate bands.',
-    axesTitle: 'The Two Foundation Axes',
-    axisX: 'Economic Axis (Horizontal)',
+    axesTitle: 'The two axes of the compass',
+    axisX: 'Economic axis (left to right)',
+    axisXLeftShort: 'State',
+    axisXRightShort: 'Market',
+    axisYTopShort: 'Liberty',
+    axisYBottomShort: 'Order',
     axisXLeft: 'State-led economy, redistribution, public mega-infrastructure',
     axisXRight: 'Free markets, private enterprise, capitalist growth incentives',
-    axisY: 'Governance Axis (Vertical)',
+    axisY: 'Governance axis (top to bottom)',
     axisYTop: 'Rule of law, constitutional checks, free expression, devolution',
     axisYBottom: 'Strong central authority, executive primacy, state surveillance',
     centreNote: 'Within {r} points of the origin, positions are classified as Centrist.',
@@ -700,40 +708,35 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
 
             {/* Compass Map Explanation */}
             <h3 style={{ margin: '1.75rem 0 0.85rem', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{c.axesTitle}</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gridTemplateRows: 'auto 1fr auto', gap: '0.6rem', alignItems: 'center', margin: '0.5rem 0 1rem' }}>
-              <span />
-              <span style={{ fontSize: '0.85rem', lineHeight: 1.45, color: 'var(--text-secondary)', textAlign: 'center' }}>
-                <b style={{ color: 'var(--text-primary)' }}>{c.axisY}</b><br />{c.axisYTop}
-              </span>
-              <span />
-              <span style={{ fontSize: '0.85rem', lineHeight: 1.45, color: 'var(--text-secondary)', textAlign: 'center', maxWidth: '8rem' }}>
-                {c.axisXLeft}
-              </span>
-              <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', minHeight: '220px', border: '1px solid var(--border-subtle)', borderRadius: '16px', overflow: 'hidden' }}>
-                <div style={{ display: 'grid', placeItems: 'center', padding: '0.5rem', textAlign: 'center', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', borderRight: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
-                  {quadName('libertarian_left')}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '0.65rem', marginBottom: '1rem' }}>
+              {[
+                [c.axisX, c.axisXLeftShort, c.axisXLeft, c.axisXRightShort, c.axisXRight],
+                [c.axisY, c.axisYTopShort, c.axisYTop, c.axisYBottomShort, c.axisYBottom]
+              ].map(([title, firstName, firstText, secondName, secondText]) => (
+                <div key={title} style={{ padding: '0.9rem 1rem', borderRadius: '12px', background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', fontSize: '0.92rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}>
+                  <b style={{ display: 'block', fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.35rem' }}>{title}</b>
+                  <div><b style={{ color: 'var(--text-primary)' }}>{firstName}:</b> {firstText}</div>
+                  <div style={{ marginTop: '0.25rem' }}><b style={{ color: 'var(--text-primary)' }}>{secondName}:</b> {secondText}</div>
                 </div>
-                <div style={{ display: 'grid', placeItems: 'center', padding: '0.5rem', textAlign: 'center', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', background: 'var(--bg-primary)', borderBottom: '1px solid var(--border-subtle)' }}>
-                  {quadName('libertarian_right')}
-                </div>
-                <div style={{ display: 'grid', placeItems: 'center', padding: '0.5rem', textAlign: 'center', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', background: 'var(--bg-primary)', borderRight: '1px solid var(--border-subtle)' }}>
-                  {quadName('authoritarian_left')}
-                </div>
-                <div style={{ display: 'grid', placeItems: 'center', padding: '0.5rem', textAlign: 'center', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-                  {quadName('authoritarian_right')}
-                </div>
-                <span style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'grid', placeItems: 'center', width: '3.8rem', height: '3.8rem', borderRadius: '50%', background: 'var(--bg-secondary)', border: '1.5px dashed var(--accent-gold)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-gold)', textAlign: 'center', lineHeight: 1.2 }}>
-                  {c.compassMid}
+              ))}
+            </div>
+            <div style={{ maxWidth: '520px', margin: '0 auto 0.75rem', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', textAlign: 'center' }}>
+              <div style={{ marginBottom: '0.35rem' }}>{c.axisYTopShort} ↑</div>
+              <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '200px', border: '1px solid var(--border-medium)', borderRadius: '12px', overflow: 'hidden', color: 'var(--text-primary)' }}>
+                {['libertarian_left', 'libertarian_right', 'authoritarian_left', 'authoritarian_right'].map((key, index) => (
+                  <div key={key} style={{ display: 'grid', placeItems: 'center', padding: '0.75rem', fontSize: '0.95rem', borderRight: index % 2 === 0 ? '1px solid var(--border-subtle)' : 'none', borderBottom: index < 2 ? '1px solid var(--border-subtle)' : 'none' }}>
+                    {isEn ? QUADRANT_PROFILES[key].nameEn : QUADRANT_PROFILES[key].name}
+                  </div>
+                ))}
+                <span style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', padding: '0.2rem 0.65rem', borderRadius: '999px', background: 'var(--bg-card)', border: '1px solid var(--border-medium)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
+                  {isEn ? QUADRANT_PROFILES.centrist.nameEn : QUADRANT_PROFILES.centrist.name}
                 </span>
               </div>
-              <span style={{ fontSize: '0.85rem', lineHeight: 1.45, color: 'var(--text-secondary)', textAlign: 'center', maxWidth: '8rem' }}>
-                {c.axisXRight}
-              </span>
-              <span />
-              <span style={{ fontSize: '0.85rem', lineHeight: 1.45, color: 'var(--text-secondary)', textAlign: 'center' }}>
-                {c.axisYBottom}
-              </span>
-              <span />
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.35rem' }}>
+                <span>← {c.axisXLeftShort}</span>
+                <span>{c.axisYBottomShort} ↓</span>
+                <span>{c.axisXRightShort} →</span>
+              </div>
             </div>
             <p style={{ margin: '0 0 1.25rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               {f(c.centreNote)}

@@ -15,7 +15,7 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
   const quadrantTitles = {
     authoritarian_left: 'The Public Interest Guardian',
     authoritarian_right: 'The Guardian of Law',
-    libertarian_left: 'The Charter Soldier',
+    libertarian_left: 'The Reform Soldier',
     libertarian_right: 'The Free Citizen',
     centrist: 'The Impartial Judge'
   };
@@ -268,7 +268,7 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
 
           {/* Watermark Quadrant Titles - Increased font size for mobile readability */}
           <text x="138" y="74" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
-            {isEnglish ? 'CHARTER SOLDIER' : 'সনদের সৈনিক'}
+            {isEnglish ? 'REFORM SOLDIER' : 'সংস্কারের সৈনিক'}
           </text>
           <text x="342" y="74" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
             {isEnglish ? 'FREE CITIZEN' : 'স্বাধীন নাগরিক'}

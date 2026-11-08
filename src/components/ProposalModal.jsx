@@ -306,7 +306,7 @@ export default function ProposalModal({ isOpen, onClose, lang = 'bn' }) {
               </span>
             </div>
             <h2 id="proposal-modal-title" style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.01em', lineHeight: 1.2 }}>
-              {isEnglish ? 'Suggest a topic for the next survey' : 'পরবর্তী জরিপের বিষয় প্রস্তাব করুন'}
+              {isEnglish ? 'Suggest a question for the weekly vote' : 'সাপ্তাহিক ভোটের জন্য প্রশ্ন প্রস্তাব করুন'}
             </h2>
           </div>
           <button
@@ -350,8 +350,8 @@ export default function ProposalModal({ isOpen, onClose, lang = 'bn' }) {
             </h3>
             <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '2rem' }}>
               {isEnglish
-                ? 'Thank you! Your proposal will be reviewed. Popular proposals may be included as topics in a future public opinion survey.'
-                : 'ধন্যবাদ! আপনার প্রস্তাবটি পর্যালোচনা করা হবে। জনপ্রিয় প্রস্তাবগুলো পরবর্তী জনমত জরিপের বিষয় হিসেবে অন্তর্ভুক্ত হতে পারে।'}
+                ? 'Thank you! We will review your suggestion. The best ones become weekly vote questions.'
+                : 'ধন্যবাদ! আপনার প্রস্তাবটি আমরা দেখব। ভালো প্রস্তাবগুলো থেকেই সাপ্তাহিক ভোটের প্রশ্ন আসবে।'}
             </p>
             <button
               onClick={handleClose}
@@ -375,8 +375,8 @@ export default function ProposalModal({ isOpen, onClose, lang = 'bn' }) {
           <form onSubmit={handleSubmit}>
             <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1rem' }}>
               {isEnglish
-                ? 'What important national issue should the next public opinion survey cover? Share your idea.'
-                : 'জাতীয় পর্যায়ের কোন গুরুত্বপূর্ণ বিষয়ে পরবর্তী জনমত জরিপ হওয়া উচিত বলে আপনি মনে করেন? আপনার আইডিয়া জমা দিন।'}
+                ? 'What should the country be asked in the next weekly vote? Share your idea.'
+                : 'পরের সাপ্তাহিক ভোটে দেশের মানুষকে কোন প্রশ্নটি করা উচিত? আপনার ভাবনা জানান।'}
             </p>
 
             {/* Real participation counter — all-time, never a fake 24h figure */}
@@ -589,8 +589,8 @@ export default function ProposalModal({ isOpen, onClose, lang = 'bn' }) {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={isEnglish
-                  ? 'Why do you think a public opinion survey on this topic is important?'
-                  : 'এই বিষয়ে জনমত জরিপ কেন গুরুত্বপূর্ণ বলে আপনি মনে করেন?'}
+                  ? 'Why should people vote on this now?'
+                  : 'এই বিষয়ে এখন ভোট হওয়া কেন দরকার বলে মনে করেন?'}
                 rows={4}
                 maxLength={DESCRIPTION_MAX}
                 style={{
@@ -643,8 +643,8 @@ export default function ProposalModal({ isOpen, onClose, lang = 'bn' }) {
             }}>
               <span aria-hidden="true">📌</span>
               <span>{isEnglish
-                ? 'Popular topics may be considered for a future survey. No name or contact details are requested; a pseudonymous device identifier may be stored to prevent duplicate submissions.'
-                : 'জনপ্রিয় বিষয় ভবিষ্যৎ জরিপে বিবেচনা করা হতে পারে। নাম বা যোগাযোগের তথ্য চাওয়া হয় না; পুনরাবৃত্ত জমা ঠেকাতে ছদ্মনামী ডিভাইস আইডি সংরক্ষিত হতে পারে।'}</span>
+                ? 'The best suggestions may become weekly vote questions. No name or contact details are requested; a pseudonymous device identifier may be stored to prevent duplicate submissions.'
+                : 'ভালো প্রস্তাবগুলো সাপ্তাহিক ভোটের প্রশ্ন হতে পারে। নাম বা যোগাযোগের তথ্য চাওয়া হয় না; পুনরাবৃত্ত জমা ঠেকাতে ছদ্মনামী ডিভাইস আইডি সংরক্ষিত হতে পারে।'}</span>
             </p>
 
             {/* Submit */}
