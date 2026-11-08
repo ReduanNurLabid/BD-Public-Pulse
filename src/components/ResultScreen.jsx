@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { readableColor } from '../lib/format';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import confetti from 'canvas-confetti';
 import {
   Award,
@@ -13,13 +15,16 @@ import {
   Sliders,
   Landmark,
   Briefcase,
-  Feather
+  Feather,
+  ChevronDown,
+  Share2
 } from 'lucide-react';
 import CompassChart from './CompassChart';
-import CertificateCard from './CertificateCard';
-import PersonalityCard from './PersonalityCard';
+import PersonalityCard, { SHARE_CARD_EVENT } from './PersonalityCard';
+import LeaderMatches from './LeaderMatches';
 import BlocLogo from './BlocLogo';
 import { ENGLISH_THEMATIC_BLOCKS } from '../data/questions';
+
 
 const ENGLISH_PROFILE_COPY = {
   Student: {
@@ -75,7 +80,6 @@ const ENGLISH_PROFILE_COPY = {
 export default function ResultScreen({
   analysis,
   sessionId,
-  demographics,
   onRetake,
   onGoDashboard,
   lang = 'bn'
@@ -91,12 +95,27 @@ export default function ResultScreen({
     coherenceScore
   } = analysis;
 
+  const topLeader = (analysis.leaderMatches || []).find((m) => m.share !== null);
+
   const [scoreMode, setScoreMode] = useState('match'); // 'match' = Individual Policy Agreement (default), 'share' = 100% Proportional Share
   const primaryDisplayPct = scoreMode === 'share' ? primaryBloc.relativeShare : primaryBloc.percentage;
   const secondaryDisplayPct = scoreMode === 'share' ? secondaryBloc.relativeShare : secondaryBloc.percentage;
   const primaryProfileCopy = ENGLISH_PROFILE_COPY[primaryBloc.key];
 
   const enToBn = (num) => String(num).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+
+  const cardEndRef = useRef(null);
+  const [showStickyShare, setShowStickyShare] = useState(false);
+  useEffect(() => {
+    const el = cardEndRef.current;
+    if (!el || !('IntersectionObserver' in window)) return undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      // Show the bar only after the user has scrolled past the card's buttons.
+      setShowStickyShare(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // Trigger celebration confetti on mount
   useEffect(() => {
@@ -128,21 +147,30 @@ export default function ResultScreen({
             fontSize: '0.92rem'
           }}>
             <Award size={18} />
-            <span>{isEnglish ? 'Assessment complete • Your results are ready' : 'মূল্যায়ন সমাপ্ত • আপনার ফলাফল প্রস্তুত'}</span>
+            <span>{isEnglish ? 'Assessment complete • Your results are ready' : 'এই হলো আপনার রাজনৈতিক অবস্থান'}</span>
           </div>
         </div>
 
-        <h1 style={{ fontSize: 'clamp(1.9rem, 4vw, 2.85rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-          {primaryBloc.key === 'Mixed'
-            ? (isEnglish ? 'A mixed response profile' : 'মিশ্র উত্তর প্রোফাইল')
-            : primaryBloc.key === 'NoMatch'
-              ? (isEnglish ? 'No clear profile match' : 'স্পষ্ট প্রোফাইল মিল নেই')
-              : (isEnglish ? 'Your political profile comparison' : 'আপনার রাজনৈতিক প্রোফাইলের তুলনা')}
+        <h1 style={{ fontSize: 'clamp(2.1rem, 7vw, 3.2rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.6rem', lineHeight: 1.15 }}>
+          {isEnglish ? 'You are ' : 'আপনি '}
+          <span style={{ color: readableColor(quadrantProfile?.color) || 'var(--hero-accent)' }}>
+            {isEnglish ? analysis.identity?.nameEn : analysis.identity?.name}
+          </span>
         </h1>
-        <p style={{ fontSize: '1.05rem', color: 'var(--text-muted)' }}>
+        <p style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+          {isEnglish ? analysis.identity?.taglineEn : analysis.identity?.tagline}
+        </p>
+        {topLeader && (
+          <p style={{ fontSize: '1.08rem', color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>
+            {isEnglish
+              ? <>Among today's leaders, you think most like <strong style={{ color: readableColor(topLeader.color) }}>{topLeader.nameEn}</strong>.</>
+              : <>বর্তমান নেতাদের মধ্যে আপনার সাথে সবচেয়ে বেশি মিল <strong style={{ color: readableColor(topLeader.color) }}>{topLeader.nameBn}</strong>-এর।</>}
+          </p>
+        )}
+        <p style={{ fontSize: '0.98rem', color: 'var(--text-muted)' }}>
           {isEnglish
-            ? 'Your answers are compared with profiles in this survey’s scoring model. This is not a diagnosis or a measure of party support.'
-            : 'এই জরিপের স্কোরিং মডেলের প্রোফাইলগুলোর সঙ্গে আপনার উত্তরের তুলনা করা হয়েছে। এটি রোগনির্ণয় বা দলীয় সমর্থনের পরিমাপ নয়।'}
+            ? 'Your card is ready below. Share it and see where your friends stand.'
+            : 'নিচে আপনার কার্ড তৈরি। শেয়ার করে দেখুন বন্ধুরা কোন পন্থী।'}
         </p>
       </div>
 
@@ -150,12 +178,9 @@ export default function ResultScreen({
       <div style={{ marginBottom: '2.5rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
           <h3 style={{ fontSize: '1.4rem', color: 'var(--text-primary)', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-            <Award size={24} color="#8B5CF6" />
-            <span>{isEnglish ? 'Your Ideological Personality & Comparable State Models' : 'আপনার আদর্শিক ব্যক্তিত্ব ও তুলনামূলক রাষ্ট্রীয় মডেল'}</span>
+            <Award size={24} color="var(--accent-green)" />
+            <span>{isEnglish ? 'Your card' : 'আপনার কার্ড'}</span>
           </h3>
-          <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)' }}>
-            {isEnglish ? 'Save and share a card featuring the global leader and state models most compatible with your policy positions.' : 'আপনার নীতিগত অবস্থানের সাথে সর্বাধিক সামঞ্জস্যপূর্ণ বৈশ্বিক নেতা ও রাষ্ট্রব্যবস্থার শেয়ারযোগ্য কার্ডটি সংরক্ষণ ও সোশ্যাল মিডিয়ায় শেয়ার করুন'}
-          </p>
         </div>
 
         <PersonalityCard
@@ -163,7 +188,11 @@ export default function ResultScreen({
           sessionId={sessionId}
           lang={lang}
         />
+        <div ref={cardEndRef} aria-hidden="true" style={{ height: 1 }} />
       </div>
+
+      {/* Answer-by-answer match with living leaders */}
+      <LeaderMatches matches={analysis.leaderMatches} lang={lang} />
 
       {/* Main Highlights: Top Bloc Match + 2D Compass stacked vertically */}
       <div style={{
@@ -186,12 +215,12 @@ export default function ResultScreen({
         >
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-              <span className="badge-tag" style={{ borderColor: primaryBloc.profile.color, color: primaryBloc.profile.color }}>
+              <span className="badge-tag" style={{ borderColor: primaryBloc.profile.color, color: readableColor(primaryBloc.profile.color) }}>
                 {primaryBloc.key === 'Mixed'
                   ? (isEnglish ? 'Mixed responses' : 'মিশ্র উত্তর')
                   : primaryBloc.key === 'NoMatch'
-                    ? (isEnglish ? 'No clear profile match' : 'স্পষ্ট প্রোফাইল মিল নেই')
-                    : (isEnglish ? 'Closest profile similarity' : 'সবচেয়ে কাছাকাছি প্রোফাইলের সাদৃশ্য')}
+                    ? (isEnglish ? 'No clear profile match' : 'কোনো এক ধারায় পড়েন না')
+                    : (isEnglish ? 'Closest profile similarity' : 'সবচেয়ে কাছের ধারার সাথে মিল')}
               </span>
 
               {/* Policy Match Score Indicator Badge */}
@@ -208,7 +237,7 @@ export default function ResultScreen({
                 color: 'var(--text-secondary)'
               }}>
                 <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: primaryBloc.profile.color }} />
-                <span>{isEnglish ? 'Similarity to a survey profile' : 'জরিপের প্রোফাইলের সঙ্গে সাদৃশ্য'}</span>
+                <span>{isEnglish ? 'Similarity to a survey profile' : 'বিভিন্ন ধারার সাথে মিল'}</span>
               </span>
             </div>
 
@@ -218,7 +247,7 @@ export default function ResultScreen({
                 style={{
                   fontSize: 'clamp(2.6rem, 5vw, 3.4rem)',
                   fontWeight: 800,
-                  color: primaryBloc.profile.color,
+                  color: readableColor(primaryBloc.profile.color),
                   fontVariantNumeric: 'tabular-nums',
                   lineHeight: 1
                 }}
@@ -256,23 +285,23 @@ export default function ResultScreen({
               <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 {isEnglish
                   ? (primaryBloc.profile.keyPillars ? 'Core Pillars of Your Position:' : 'Core Features of Your Position:')
-                  : (primaryBloc.profile.keyPillars ? 'আপনার অবস্থানের ৩টি মূল স্তম্ভ:' : 'আপনার অবস্থানের মূল বৈশিষ্ট্যসমূহ:')}
+                  : (primaryBloc.profile.keyPillars ? 'আপনার ভাবনার ৩টি মূল দিক:' : 'আপনার ভাবনার মূল দিকগুলো:')}
               </div>
 
               {primaryBloc.profile.keyPillars ? (
                 <>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                    <span style={{ color: '#0284C7', marginTop: '2px' }}><Landmark size={17} /></span>
+                    <span style={{ color: 'var(--accent-green)', marginTop: '2px' }}><Landmark size={17} /></span>
                     <span><strong>{isEnglish ? 'State & Governance:' : 'রাষ্ট্র ও শাসন:'}</strong> {isEnglish ? primaryProfileCopy?.pillars.state : primaryBloc.profile.keyPillars.state}</span>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                    <span style={{ color: '#D97706', marginTop: '2px' }}><Briefcase size={17} /></span>
+                    <span style={{ color: 'var(--accent-green)', marginTop: '2px' }}><Briefcase size={17} /></span>
                     <span><strong>{isEnglish ? 'Economy & Markets:' : 'অর্থনীতি ও বাজার:'}</strong> {isEnglish ? primaryProfileCopy?.pillars.market : primaryBloc.profile.keyPillars.market}</span>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                    <span style={{ color: '#059669', marginTop: '2px' }}><Feather size={17} /></span>
+                    <span style={{ color: 'var(--accent-green)', marginTop: '2px' }}><Feather size={17} /></span>
                     <span><strong>{isEnglish ? 'Civil Liberties:' : 'নাগরিক অধিকার:'}</strong> {isEnglish ? primaryProfileCopy?.pillars.liberty : primaryBloc.profile.keyPillars.liberty}</span>
                   </div>
                 </>
@@ -281,7 +310,7 @@ export default function ResultScreen({
                   ? (primaryProfileCopy?.coreValues || ['A distinctive mix of policy views'])
                   : primaryBloc.profile.coreValues).map((val, idx) => (
                     <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
-                      <CheckCircle2 size={16} style={{ color: primaryBloc.profile.color, flexShrink: 0 }} />
+                      <CheckCircle2 size={16} style={{ color: readableColor(primaryBloc.profile.color), flexShrink: 0 }} />
                       <span>{val}</span>
                     </div>
                   ))
@@ -299,11 +328,11 @@ export default function ResultScreen({
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <span style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                   <BarChart2 size={16} style={{ color: 'var(--text-gold)' }} />
-                  <span>{isEnglish ? 'Relative profile-similarity distribution' : 'প্রোফাইল-সাদৃশ্যের আপেক্ষিক বণ্টন'}</span>
-                  <span style={{ fontSize: '0.76rem', color: 'var(--text-gold)', fontWeight: 600 }}>{isEnglish ? '(normalized to 100%)' : '(মোট ১০০%-এ স্বাভাবিকীকৃত)'}</span>
+                  <span>{isEnglish ? 'Relative profile-similarity distribution' : 'প্রতিটি ধারার সাথে মিল'}</span>
+                  <span style={{ fontSize: '0.76rem', color: 'var(--text-gold)', fontWeight: 600 }}>{isEnglish ? '(normalized to 100%)' : '(সব মিলিয়ে ১০০%)'}</span>
                 </span>
                 <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  {isEnglish ? 'A model comparison, not party support or voting intent.' : 'এটি মডেলভিত্তিক তুলনা—দলীয় সমর্থন বা ভোট দেওয়ার ইচ্ছা নয়।'}
+                  {isEnglish ? 'A model comparison, not party support or voting intent.' : 'এটা উত্তরের মিলের হিসাব — দলীয় সমর্থন বা ভোটের ইচ্ছা নয়।'}
                 </span>
               </div>
 
@@ -343,7 +372,7 @@ export default function ResultScreen({
                     <div key={bloc.key} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                       <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: bloc.profile.color, display: 'inline-block' }} />
                       <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>{isEnglish ? (bloc.profile.englishName || bloc.profile.name) : bloc.profile.name}:</span>
-                      <strong className="font-latin" style={{ color: bloc.profile.color, fontVariantNumeric: 'tabular-nums' }}>
+                      <strong className="font-latin" style={{ color: readableColor(bloc.profile.color), fontVariantNumeric: 'tabular-nums' }}>
                         {share}%
                       </strong>
                     </div>
@@ -363,10 +392,10 @@ export default function ResultScreen({
               alignItems: 'center',
               fontSize: '0.92rem'
             }}>
-              <span style={{ color: 'var(--text-secondary)' }}>{isEnglish ? 'Second-Highest Match:' : 'দ্বিতীয় সর্বোচ্চ সাদৃশ্য:'}</span>
+              <span style={{ color: 'var(--text-secondary)' }}>{isEnglish ? 'Second-Highest Match:' : 'এরপরই মিল:'}</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <BlocLogo blocKey={secondaryBloc.key} size={22} />
-                <strong className="font-latin" style={{ color: secondaryBloc.profile.color, fontVariantNumeric: 'tabular-nums' }}>
+                <strong className="font-latin" style={{ color: readableColor(secondaryBloc.profile.color), fontVariantNumeric: 'tabular-nums' }}>
                   {typeof secondaryDisplayPct === 'number' ? `${secondaryDisplayPct}%` : '—'} {isEnglish ? (secondaryBloc.profile.englishName || secondaryBloc.profile.name) : secondaryBloc.profile.name}
                 </strong>
               </div>
@@ -382,12 +411,12 @@ export default function ResultScreen({
               color: 'var(--text-muted)'
             }}>
               <span>{primaryBloc.key === 'Mixed'
-                ? (isEnglish ? 'Result type:' : 'ফলাফলের ধরন:')
-                : (isEnglish ? 'Profile comparison:' : 'প্রোফাইল তুলনা:')}</span>
+                ? (isEnglish ? 'Result type:' : 'ফলাফল:')
+                : (isEnglish ? 'Profile comparison:' : 'ধারার সাথে মিল:')}</span>
               <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
                 {primaryBloc.key === 'Mixed'
-                  ? (isEnglish ? 'Many responses were neutral or skipped.' : 'অনেক উত্তর নিরপেক্ষ ছিল বা বাদ দেওয়া হয়েছে।')
-                  : (isEnglish ? 'No profile reached the similarity threshold.' : 'কোনো প্রোফাইলের সাদৃশ্য নির্ধারিত সীমায় পৌঁছায়নি।')}
+                  ? (isEnglish ? 'Many responses were neutral or skipped.' : 'অনেক প্রশ্নে আপনি নিশ্চিত ছিলেন না বা উত্তর দেননি।')
+                  : (isEnglish ? 'No profile reached the similarity threshold.' : 'কোনো একটি ধারার সাথে স্পষ্ট মিল পাওয়া যায়নি।')}
               </span>
             </div>
           )}
@@ -397,11 +426,11 @@ export default function ResultScreen({
         <div className="glass-panel" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ width: '100%', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-              <Compass size={21} color="#0284C7" />
-              <span>{isEnglish ? '2D Political Compass' : '২ডি রাজনৈতিক কম্পাস মানচিত্র'}</span>
+              <Compass size={21} color="var(--accent-green)" />
+              <span>{isEnglish ? '2D Political Compass' : 'কম্পাসে আপনি'}</span>
             </h3>
             <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              {isEnglish ? 'Precise position on both axes' : 'উভয় অক্ষের নিখুঁত অবস্থান'}
+              {isEnglish ? 'Precise position on both axes' : 'অর্থনীতি (বাম–ডান) আর রাষ্ট্রক্ষমতা (উদার–শৃঙ্খলা) — দুই দিকেই আপনার অবস্থান'}
             </span>
           </div>
 
@@ -409,17 +438,24 @@ export default function ResultScreen({
             coordinates={coordinates}
             quadrantProfile={quadrantProfile}
             primaryBloc={primaryBloc}
+            leaders={analysis.leaderMatches}
             lang={lang}
           />
           <p style={{ marginTop: '0.8rem', color: 'var(--text-muted)', fontSize: '0.82rem', lineHeight: 1.5, textAlign: 'center' }}>
             {isEnglish
               ? 'The compass position is calculated separately and does not imply a match to a political profile.'
-              : 'কম্পাসের অবস্থান আলাদাভাবে হিসাব করা হয়; এটি কোনো রাজনৈতিক প্রোফাইলের সঙ্গে মিল বোঝায় না।'}
+              : 'কম্পাসের অবস্থান আলাদাভাবে হিসাব হয়; এটা কোনো দলের সাথে মিল বোঝায় না।'}
           </p>
         </div>
 
       </div>
 
+      <details className="glass-panel result-more-details" style={{ marginBottom: '2.5rem', padding: '0' }}>
+        <summary style={{ cursor: 'pointer', padding: '1.25rem 1.5rem', fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+          <span>{isEnglish ? 'See the full breakdown (8 topics)' : 'পুরো বিশ্লেষণ দেখুন (৮টি বিষয়)'}</span>
+          <ChevronDown size={20} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+        </summary>
+        <div style={{ padding: '0 1rem 1rem' }}>
       {/* Ideological Coherence Score */}
       <div className="glass-panel" style={{
         padding: '1.75rem 2rem',
@@ -432,24 +468,24 @@ export default function ResultScreen({
       }}>
         <div style={{ flex: '1 1 300px' }}>
           <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-            <Layers size={22} color="#059669" />
-            <span>{isEnglish ? 'Ideological Coherence Score' : 'মতাদর্শিক সংহতি সূচক (Ideological Coherence)'}</span>
+            <Layers size={22} color="var(--accent-green)" />
+            <span>{isEnglish ? 'Ideological Coherence Score' : 'আপনার মত কতটা সামঞ্জস্যপূর্ণ'}</span>
           </h3>
           <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
-            {isEnglish ? 'Measures how consistently your policy positions fit together. A higher score indicates greater alignment across your views on governance, the economy, and civil liberties.' : 'আপনার বিভিন্ন নীতিগত অবস্থানের পারস্পরিক সামঞ্জস্যের হার। উচ্চতর সংহতি সূচক নির্দেশ করে আপনার রাষ্ট্রচিন্তা, অর্থব্যবস্থা ও নাগরিক অধিকার সংক্রান্ত অবস্থান পরস্পর যৌক্তিক ও সুসংহত।'}
+            {isEnglish ? 'Measures how consistently your policy positions fit together. A higher score indicates greater alignment across your views on governance, the economy, and civil liberties.' : 'রাষ্ট্র, অর্থনীতি আর নাগরিক অধিকার নিয়ে আপনার মতগুলো একে অপরের সাথে কতটা মেলে। স্কোর বেশি মানে আপনার ভাবনা একই সুতোয় গাঁথা।'}
           </p>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexShrink: 0 }}>
           <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="110" height="110" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#E2E8F0" strokeWidth="8" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke="var(--data-track)" strokeWidth="8" />
               <circle
                 cx="50"
                 cy="50"
                 r="42"
                 fill="none"
-                stroke={coherenceScore >= 80 ? '#059669' : coherenceScore >= 60 ? '#D97706' : '#EF4444'}
+                stroke={coherenceScore >= 80 ? 'var(--accent-green)' : coherenceScore >= 60 ? 'var(--accent-gold)' : 'var(--accent-red)'}
                 strokeWidth="8"
                 strokeDasharray="264"
                 strokeDashoffset={264 - (264 * coherenceScore) / 100}
@@ -473,11 +509,11 @@ export default function ResultScreen({
       <div className="glass-panel" style={{ padding: '2rem', marginBottom: '3rem' }}>
         <div style={{ marginBottom: '1.5rem' }}>
           <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Sliders size={22} color="#059669" />
-            <span>{isEnglish ? 'Your Positions Across 8 Policy Areas' : '৮টি নীতিগত বিষয়ে আপনার দ্বিমুখী অবস্থান'}</span>
+            <Sliders size={22} color="var(--accent-green)" />
+            <span>{isEnglish ? 'Your Positions Across 8 Policy Areas' : '৮টি বিষয়ে আপনি কোন দিকে'}</span>
           </h3>
           <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)' }}>
-            {isEnglish ? 'Sliders show your position between the two poles for each policy area:' : 'প্রতিটি স্বতন্ত্র নীতিগত ব্লকে উভয় মেরুর বিপরীতে আপনার সুনির্দিষ্ট অবস্থান নির্দেশক স্লাইডার:'}
+            {isEnglish ? 'Sliders show your position between the two poles for each policy area:' : 'প্রতিটি বিষয়ের দুই প্রান্তের মাঝে আপনার অবস্থান:'}
           </p>
         </div>
 
@@ -513,8 +549,8 @@ export default function ResultScreen({
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                   {/* Labels Row */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 700 }}>
-                    <span style={{ color: '#EF4444', textAlign: 'left', flex: 1, paddingRight: '0.5rem' }}>{isEnglish ? (ENGLISH_THEMATIC_BLOCKS[block.id]?.leftShort || block.leftShort) : block.leftShort}</span>
-                    <span style={{ color: '#0284C7', textAlign: 'right', flex: 1, paddingLeft: '0.5rem' }}>{isEnglish ? (ENGLISH_THEMATIC_BLOCKS[block.id]?.rightShort || block.rightShort) : block.rightShort}</span>
+                    <span style={{ color: 'var(--axis-left-color)', textAlign: 'left', flex: 1, paddingRight: '0.5rem' }}>{isEnglish ? (ENGLISH_THEMATIC_BLOCKS[block.id]?.leftShort || block.leftShort) : block.leftShort}</span>
+                    <span style={{ color: 'var(--axis-right-color)', textAlign: 'right', flex: 1, paddingLeft: '0.5rem' }}>{isEnglish ? (ENGLISH_THEMATIC_BLOCKS[block.id]?.rightShort || block.rightShort) : block.rightShort}</span>
                   </div>
 
                   {/* The Bar */}
@@ -524,17 +560,17 @@ export default function ResultScreen({
                     height: '28px',
                     borderRadius: '14px',
                     overflow: 'hidden',
-                    background: '#E2E8F0', // fallback background
+                    background: 'var(--data-track)',
                     boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)'
                   }}>
                     {leftPct > 0 && (
                       <div style={{
                         width: `${leftPct}%`,
-                        background: 'linear-gradient(90deg, #DC2626, #EF4444)',
+                        background: 'var(--axis-left-color)',
                         display: 'flex',
                         alignItems: 'center',
                         paddingLeft: '10px',
-                        color: 'white',
+                        color: 'var(--bg-card)',
                         fontSize: '0.85rem',
                         fontWeight: 'bold',
                         transition: 'width 1s ease-out'
@@ -545,12 +581,12 @@ export default function ResultScreen({
                     {rightPct > 0 && (
                       <div style={{
                         width: `${rightPct}%`,
-                        background: 'linear-gradient(270deg, #2563EB, #0284C7)',
+                        background: 'var(--axis-right-color)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'flex-end',
                         paddingRight: '10px',
-                        color: 'white',
+                        color: 'var(--bg-card)',
                         fontSize: '0.85rem',
                         fontWeight: 'bold',
                         transition: 'width 1s ease-out'
@@ -566,28 +602,11 @@ export default function ResultScreen({
         </div>
       </div>
 
-      {/* Optional participation certificate */}
-      <div style={{ marginBottom: '3.5rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <h3 style={{ fontSize: '1.4rem', color: 'var(--text-primary)', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.55rem' }}>
-            <Award size={22} style={{ color: '#D4AF37' }} />
-            <span>{isEnglish ? 'Participation Certificate' : 'অংশগ্রহণ সনদ'}</span>
-          </h3>
-          <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)' }}>
-            {isEnglish ? 'Download or share a participation certificate. Political results are excluded unless you opt in below.' : 'অংশগ্রহণ সনদ ডাউনলোড বা শেয়ার করুন। নিচে সম্মতি না দিলে এতে রাজনৈতিক ফলাফল দেখানো হবে না।'}
-          </p>
         </div>
-
-        <CertificateCard
-          analysis={analysis}
-          sessionId={sessionId}
-          demographics={demographics}
-          lang={lang}
-        />
-      </div>
+      </details>
 
       {/* Action Footer Callouts */}
-      <div className="glass-panel glass-panel-green" style={{
+      <div className="glass-panel dashboard-trending-section" style={{
         padding: '2rem',
         textAlign: 'center',
         display: 'flex',
@@ -596,10 +615,10 @@ export default function ResultScreen({
         gap: '1.25rem'
       }}>
         <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
-          {isEnglish ? 'Want to explore how other survey participants responded?' : 'জরিপে অংশ নেওয়া অন্যরা কীভাবে উত্তর দিয়েছেন তা দেখতে চান?'}
+          {isEnglish ? 'Want to explore how other survey participants responded?' : 'অন্যরা কী বলেছে, দেখবেন?'}
         </h3>
         <p style={{ maxWidth: '640px', color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: 1.7 }}>
-          {isEnglish ? 'Explore the live dashboard for aggregate participant responses and available demographic comparisons.' : 'অংশগ্রহণকারীদের সমষ্টিগত উত্তর ও উপলভ্য জনতাত্ত্বিক তুলনা লাইভ ড্যাশবোর্ডে দেখুন।'}
+          {isEnglish ? 'Explore the live dashboard for aggregate participant responses and available demographic comparisons.' : 'কোন প্রশ্নে মানুষ একমত, কোথায় দুই ভাগ — লাইভ ড্যাশবোর্ডে দেখুন।'}
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -619,10 +638,24 @@ export default function ResultScreen({
             style={{ padding: '0.85rem 1.6rem' }}
           >
             <RefreshCw size={18} />
-            <span>{isEnglish ? 'Retake the Assessment' : 'আবার নতুন করে টেস্ট দিন'}</span>
+            <span>{isEnglish ? 'Retake the Assessment' : 'আবার দিই'}</span>
           </button>
         </div>
       </div>
+
+      {/* Portalled: the page wrapper's animation transform would otherwise trap position: fixed */}
+      {createPortal(<div className={`result-sticky-share${showStickyShare ? ' is-visible' : ''}`} aria-hidden={!showStickyShare}>
+        <button
+          type="button"
+          className="btn-primary"
+          tabIndex={showStickyShare ? 0 : -1}
+          onClick={() => window.dispatchEvent(new Event(SHARE_CARD_EVENT))}
+          style={{ width: '100%', minHeight: '52px', borderRadius: '999px', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+        >
+          <Share2 size={19} />
+          {isEnglish ? 'Share my card' : 'আমার কার্ড শেয়ার করুন'}
+        </button>
+      </div>, document.body)}
 
     </div>
   );

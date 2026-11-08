@@ -1,3 +1,4 @@
+import { readableColor } from '../lib/format';
 import React, { useState, useEffect, useRef } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { 
@@ -16,7 +17,7 @@ import {
   ChartBar
 } from 'lucide-react';
 import { useAggregateStats } from '../hooks/useAggregateStats';
-import { THEMATIC_BLOCKS } from '../data/questions';
+import { THEMATIC_BLOCKS, ageBucketLabel } from '../data/questions';
 import { buildFilteredDashboardStats, MIN_PUBLIC_COHORT_SIZE } from '../lib/firebase';
 import BlocLogo from './BlocLogo';
 import LastSubmissionTime from './LastSubmissionTime';
@@ -109,13 +110,10 @@ const ENGLISH_BLOCS = {
 };
 
 const ENGLISH_ISSUES = {
-  q9: '"Proportional representation (PR) should replace first-past-the-post (FPTP) in parliamentary elections so that seats reflect the popular vote share."',
-  q10: '"To prevent power from centralizing in a single individual for life, the constitution should cap prime ministerial tenure at two terms."',
-  q13: '"Regardless of family and religious customs, state law should guarantee equal inheritance rights for women and men in property."',
-  q19: '"Loss-making state-owned enterprises (such as jute and sugar mills) funded by taxpayers should be promptly privatized."',
-  q22: '"To overcome dependence on a single regional neighbor, Bangladesh should build diversified strategic partnerships with the US, China, and the West."',
-  q26: '"The Cyber Security Act should be repealed; suppressing dissent online under the pretext of defaming religion or state must end completely."',
-  q33: '"The Awami League should not be allowed to participate directly in upcoming national elections without visible remorse and accountability for July crimes."'
+  c25: '"The July Charter approved in the referendum must be implemented exactly as passed. A parliamentary committee cannot change it."',
+  c17: '"Without a guaranteed share of Ganges water, Bangladesh should not sign a new treaty with India, even if talks stall."',
+  c13: '"Spending the money on creating jobs matters more than cash support like the Family Card."',
+  c22: '"To restore law and order, the army should be deployed again with magistracy powers."'
 };
 
 const DashboardPoleIcon = ({ blockKey, side, style }) => {
@@ -143,7 +141,8 @@ const AnimatedNumber = ({
   decimals = 0, 
   prefix = '', 
   suffix = '',
-  delay = 0 
+  delay = 0,
+  bn = false
 }) => {
   const [displayVal, setDisplayVal] = useState(0);
   const currentRef = useRef(0);
@@ -183,13 +182,13 @@ const AnimatedNumber = ({
   }, [value, duration, delay]);
 
   const formatted = decimals > 0 
-    ? displayVal.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
-    : Math.round(displayVal).toLocaleString('en-US');
+    ? displayVal.toLocaleString(bn ? 'bn-BD' : 'en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+    : Math.round(displayVal).toLocaleString(bn ? 'bn-BD' : 'en-US');
 
   return <>{prefix}{formatted}{suffix}</>;
 };
 
-const AnimatedPercent = ({ value, active, delay = 0 }) => {
+const AnimatedPercent = ({ value, active, delay = 0, bn = false }) => {
   const [displayVal, setDisplayVal] = useState(0);
   const currentRef = useRef(0);
 
@@ -233,7 +232,7 @@ const AnimatedPercent = ({ value, active, delay = 0 }) => {
     };
   }, [value, active, delay]);
 
-  return <>{displayVal}%</>;
+  return <>{displayVal.toLocaleString(bn ? 'bn-BD' : 'en-US')}%</>;
 };
 
 export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
@@ -294,10 +293,32 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
     return (
       <div style={{ maxWidth: '1060px', margin: '4rem auto', textAlign: 'center', padding: '2rem' }}>
         <RefreshCw size={36} className="animate-spin" style={{ margin: '0 auto 1rem', color: 'var(--accent-gold)' }} />
-        <h2 style={{ color: 'var(--text-primary)' }}>{t('গবেষণামূলক পরিসংখ্যান লোড হচ্ছে', 'Loading research statistics')}</h2>
+        <h2 style={{ color: 'var(--text-primary)' }}>{t('ফলাফল আসছে…', 'Loading results…')}</h2>
       </div>
     );
   }
+
+  const num = (value, opts) => Number(value || 0).toLocaleString(isEnglish ? 'en-US' : 'bn-BD', opts);
+  const pct = (value) => `${num(value, { maximumFractionDigits: 1 })}%`;
+
+  // Privacy floor: any group smaller than MIN_PUBLIC_COHORT_SIZE is withheld,
+  // so one person's religion or division can never be read off a chart.
+  let hasSuppressedGroups = false;
+  const suppressSmall = (group) => Object.fromEntries(Object.entries(group || {}).map(([key, value]) => {
+    const count = value?.count || 0;
+    if (count > 0 && count < MIN_PUBLIC_COHORT_SIZE) {
+      hasSuppressedGroups = true;
+      return [key, { ...value, percentage: 0, suppressed: true }];
+    }
+    return [key, value];
+  }));
+  const safeDivisions = suppressSmall(stats.divisions);
+  const safeAgeRanges = suppressSmall(stats.ageRanges);
+  const safeReligions = suppressSmall(stats.religions);
+  const smallGroupNote = t(
+    `${num(MIN_PUBLIC_COHORT_SIZE)} জনের কম এমন গোষ্ঠী গোপনীয়তার জন্য দেখানো হয়নি।`,
+    `Groups with fewer than ${MIN_PUBLIC_COHORT_SIZE} people are withheld for privacy.`
+  );
 
   const DIVISION_MAP = {
     Dhaka: 'ঢাকা',
@@ -311,7 +332,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
   };
 
   const computeFilteredDivisions = () => {
-    const base = stats.divisions || {};
+    const base = safeDivisions;
 
     // Ordered by respondent count, largest first, so the table reads as a
     // ranking. Sorting reorders real counts only — no value is recomputed. The
@@ -327,7 +348,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
   };
 
   const computeFilteredAgeRanges = () => {
-    const base = stats.ageRanges || {};
+    const base = safeAgeRanges;
     const result = {};
 
     Object.entries(base).forEach(([label, data]) => {
@@ -371,7 +392,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
   const rankedIssues = rankTrendingIssues(currentIssues);
   const currentDivisions = computeFilteredDivisions();
   const currentAgeRanges = computeFilteredAgeRanges();
-  const religionEntries = Object.entries(stats.religions || {});
+  const religionEntries = Object.entries(safeReligions);
   const selectedCohortSize = filteredResult.sampleSize || 0;
 
   return (
@@ -392,13 +413,17 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
         </div>
 
         <h1 style={{ fontSize: 'clamp(1.9rem, 4vw, 2.85rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.6rem' }}>
-          {t('অংশগ্রহণকারীদের রাজনৈতিক দৃষ্টিভঙ্গি', 'Political views of survey participants')}
+          {t('সবাই কী ভাবছে', 'What everyone thinks')}
         </h1>
         <p style={{ fontSize: '1.05rem', color: 'var(--text-muted)', maxWidth: '780px', margin: '0 auto' }}>
-          {t('স্বেচ্ছায় অংশ নেওয়া ব্যক্তিদের উত্তর থেকে তৈরি সমষ্টিগত বিশ্লেষণ। এটি সারা দেশের প্রতিনিধিত্বশীল জরিপ নয়।', 'Aggregate analysis of voluntary participant responses. This is not a nationally representative survey.')}
+          {t('যাঁরা নিজে থেকে অংশ নিয়েছেন, তাঁদের উত্তরের সম্মিলিত চিত্র। এটা দেশের সবার প্রতিনিধিত্বমূলক জরিপ নয়।', 'Aggregate analysis of voluntary participant responses. This is not a nationally representative survey.')}
         </p>
       </div>
 
+      <>
+      <p style={{ textAlign: 'center', fontSize: '0.92rem', color: 'var(--text-secondary)', margin: '0 0 1.5rem' }}>
+        {t(`এ পর্যন্ত ${num(stats.totalResponses)} জনের মত। মানুষ বাড়লে ছবি বদলাবে।`, `Based on ${stats.totalResponses || 0} people so far. This will shift as more join.`)}
+      </p>
       {/* Top 4 KPI Metric Cards */}
       <div style={{
         display: 'grid',
@@ -410,7 +435,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
         <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--accent-cyan)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', color: 'var(--accent-cyan)' }}>
             <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
-              {t('বৈধ প্রতিক্রিয়া', 'Filtered Data Pool')}
+              {t('এ পর্যন্ত অংশ নিয়েছেন', 'Participants so far')}
             </span>
             {/* No color prop: lucide strokes with currentColor and a stroke
                 attribute cannot resolve a CSS var, so the icon inherits the
@@ -418,38 +443,36 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
             <Users size={20} />
           </div>
           <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)' }} className="font-latin">
-            <AnimatedNumber value={stats.totalResponses} duration={900} />
+            <AnimatedNumber bn={!isEnglish} value={stats.totalResponses} duration={900} />
           </div>
           <span style={{ fontSize: '0.78rem', color: 'var(--accent-green)', fontWeight: 600 }}>
-            {t('ফিল্টারমুক্ত ডাটা', 'Unaffected by filters · participant responses')}
+            {t('সম্পূর্ণ উত্তর', 'Completed responses')}
           </span>
         </div>
 
         {/* KPI 2: Average Completion Time */}
         <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--accent-green)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', color: 'var(--accent-green)' }}>
-            <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{t('গড় সমাপ্তির সময়', 'Avg Completion Time')}</span>
+            <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{t('গড়ে সময় লেগেছে', 'Average time taken')}</span>
             <Clock size={20} />
           </div>
           <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-green)' }} className="font-latin">
             {isEnglish 
               ? `${stats.avgDurationMinutes || '3.2'} Min` 
-              : `${Number(stats.avgDurationMinutes || 3.2).toLocaleString('bn-BD')} মিনিট`}
+              : `${num(Number(stats.avgDurationMinutes || 3.2), { maximumFractionDigits: 1 })} মিনিট`}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.2rem', flexWrap: 'wrap', gap: '0.4rem' }}>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              {t('২৪টি আদর্শিক প্রশ্ন সম্পন্ন', '24 core questions completed')}
-            </span>
-            <span style={{ fontSize: '0.76rem', color: 'var(--accent-red)', fontWeight: 700 }}>
-              {t(`বাতিল: ${(stats.rejectedResponses || 0).toLocaleString('bn-BD')}`, `Rejected: ${stats.rejectedResponses || 0}`)}
+              {t('সব দৈর্ঘ্যের কুইজ মিলিয়ে', 'across all quiz lengths')}
             </span>
           </div>
         </div>
 
+        <>
         {/* KPI 3 */}
         <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--accent-red)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', color: 'var(--accent-red)' }}>
-            <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{t('শীর্ষ রাজনৈতিক ঝোঁক', 'Leading tendency among participants')}</span>
+            <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{t('সবচেয়ে বেশি মিল', 'Most common match')}</span>
             <TrendingUp size={20} />
           </div>
           <div style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.3 }}>
@@ -461,7 +484,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
               // with a division. Doing so claimed a per-division winner that the
               // data does not contain.
               <>
-                <AnimatedNumber value={sortedBlocEntries[0]?.[1]?.percentage || 0} decimals={1} suffix="%" duration={900} /> {t('অংশগ্রহণকারীদের মধ্যে', 'among participants')}
+                <AnimatedNumber bn={!isEnglish} value={sortedBlocEntries[0]?.[1]?.percentage || 0} decimals={1} suffix="%" duration={900} /> {t('অংশগ্রহণকারীদের মধ্যে', 'among participants')}
               </>
             ) : (
               t('প্রথম মতামতের অপেক্ষা', 'Awaiting the first response')
@@ -469,10 +492,12 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
           </span>
         </div>
 
+        </>
+
         {/* KPI 4 */}
         <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--accent-gold)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{t('লাইভ অনলাইন পর্যবেক্ষক', 'Live visitors online')}</span>
+            <span style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{t('এখন অনলাইনে', 'Online now')}</span>
             {/* Only pulse once a real count exists, so the indicator never
                 advertises liveness for a number we have not measured yet. */}
             {liveVisitors !== null && <span className="pulse-indicator"></span>}
@@ -480,10 +505,10 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
           <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-gold)' }} className="font-latin">
             {liveVisitors === null
               ? <span style={{ fontSize: '1.1rem', fontWeight: 700, opacity: 0.7 }}>—</span>
-              : <AnimatedNumber value={liveVisitors} duration={1000} suffix={t(' জন', ' people')} />}
+              : <AnimatedNumber bn={!isEnglish} value={liveVisitors} duration={1000} suffix={t(' জন', ' people')} />}
           </div>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            {liveVisitors === null ? t('উপস্থিতি গণনা হচ্ছে…', 'Counting visitors…') : t('সরাসরি সক্রিয় ভিজিটর', 'Currently active visitors')}
+            {liveVisitors === null ? t('উপস্থিতি গণনা হচ্ছে…', 'Counting visitors…') : t('এই মুহূর্তে সাইটে আছেন', 'On the site right now')}
           </span>
           <LastSubmissionTime lastUpdated={stats?.lastUpdated} lang={lang} />
         </div>
@@ -512,7 +537,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
             <div className="filter-header-icon-box"><Filter size={20} /></div>
             <div>
               <h2 style={{ fontSize: '1.05rem', fontWeight: 750, marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                <span>{t('জনমিতিক গোষ্ঠীর ফলাফল', 'Explore results by demographic group')}</span>
+                <span>{t('বয়স, বিভাগ বা ধর্মভেদে দেখুন', 'Explore results by group')}</span>
                 {isDemographicFilterActive && (
                   <span
                     className="badge-tag font-latin"
@@ -534,7 +559,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                 {t(
                   isFilterExpanded
                     ? 'ফিল্টারগুলো রাজনৈতিক ধারা, ৮টি অক্ষ ও ট্রেন্ডিং ইস্যুর ফলাফল বদলায় (ক্লিক করে সংকুচিত করুন)।'
-                    : 'ফিল্টার বিকল্প দেখতে ক্লিক করুন (রাজনৈতিক ধারা, ৮টি অক্ষ ও ট্রেন্ডিং ইস্যুর ফলাফল বদলায়)।',
+                    : 'একটি গোষ্ঠী বেছে নিলে নিচের সব ফলাফল সেই গোষ্ঠীর হিসাবে বদলে যাবে।',
                   isFilterExpanded
                     ? 'Filters update political tendencies, all 8 axes, and trending issues (click to collapse).'
                     : 'Click to expand filters (updates political tendencies, axes, and trending issues).'
@@ -588,7 +613,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                 <span><MapPin size={15} className="filter-label-icon" />{t('বিভাগ', 'Division')}</span>
                 <div className="filter-select-wrapper">
                   <select value={selectedDivision} disabled={isDivisionFilterDisabled} onChange={event => setSelectedDivision(event.target.value)} className={`filter-select ${selectedDivision !== 'ALL' ? 'is-active' : ''}`}>
-                    <option value="ALL">{t('সকল বিভাগ', 'All divisions')}</option>
+                    <option value="ALL">{t('সব বিভাগ', 'All divisions')}</option>
                     <option value="Dhaka">{t('ঢাকা বিভাগ', 'Dhaka Division')}</option>
                     <option value="Chittagong">{t('চট্টগ্রাম বিভাগ', 'Chattogram Division')}</option>
                     <option value="Rajshahi">{t('রাজশাহী বিভাগ', 'Rajshahi Division')}</option>
@@ -602,23 +627,23 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                 </div>
               </label>
               <label className="filter-field-card filter-field-label">
-                <span><Users size={15} className="filter-label-icon" />{t('বয়স শ্রেণী', 'Age group')}</span>
+                <span><Users size={15} className="filter-label-icon" />{t('বয়স', 'Age')}</span>
                 <div className="filter-select-wrapper">
                   <select value={selectedAge} disabled={isAgeFilterDisabled} onChange={event => setSelectedAge(event.target.value)} className={`filter-select ${selectedAge !== 'ALL' ? 'is-active' : ''}`}>
-                    <option value="ALL">{t('সকল বয়স শ্রেণী', 'All age groups')}</option>
-                    <option value="18-25">{t('১৮-২৫ (তরুণ প্রজন্ম)', '18–25 (Young adults)')}</option>
-                    <option value="26-35">{t('২৬-৩৫ (যুবক ও পেশাজীবী)', '26–35 (Young professionals)')}</option>
-                    <option value="36-45">{t('৩৬-৪৫ (মধ্যবয়সী)', '36–45 (Middle-aged adults)')}</option>
-                    <option value="46+">{t('৪৬+ (জ্যেষ্ঠ নাগরিক)', '46+ (Seniors)')}</option>
+                    <option value="ALL">{t('সব বয়স', 'All ages')}</option>
+                    <option value="18-25">{t('১৮–২৫', '18–25')}</option>
+                    <option value="26-35">{t('২৬–৩৫', '26–35')}</option>
+                    <option value="36-45">{t('৩৬–৪৫', '36–45')}</option>
+                    <option value="46+">{t('৪৬+', '46+')}</option>
                   </select>
                   <ChevronDown size={17} className="filter-select-arrow" />
                 </div>
               </label>
               <label className="filter-field-card filter-field-label">
-                <span><Sparkles size={15} className="filter-label-icon" />{t('ধর্মীয় পরিচয়', 'Religion')}</span>
+                <span><Sparkles size={15} className="filter-label-icon" />{t('ধর্ম', 'Religion')}</span>
                 <div className="filter-select-wrapper">
                   <select value={selectedReligion} disabled={isReligionFilterDisabled} onChange={event => setSelectedReligion(event.target.value)} className={`filter-select ${selectedReligion !== 'ALL' ? 'is-active' : ''}`}>
-                    <option value="ALL">{t('সকল ধর্মাবলম্বী', 'All religions')}</option>
+                    <option value="ALL">{t('সব ধর্ম', 'All religions')}</option>
                     <option value="Muslim">{t('ইসলাম', 'Islam')}</option>
                     <option value="Hindu">{t('হিন্দু', 'Hinduism')}</option>
                     <option value="Others">{t('বৌদ্ধ, খ্রিস্টান ও অন্যান্য', 'Buddhism, Christianity, and other religions')}</option>
@@ -634,7 +659,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                     ? t('নির্বাচিত গোষ্ঠী', 'Selected group')
                     : selectedCohortSize > 0
                       ? t(`নির্ভরযোগ্য ফলাফলের জন্য এই গোষ্ঠীতে অন্তত ${MIN_PUBLIC_COHORT_SIZE}টি উত্তর প্রয়োজন।`, `At least ${MIN_PUBLIC_COHORT_SIZE} responses are required for this group.`)
-                      : t('এই গোষ্ঠীর ঐতিহাসিক ফলাফল প্রস্তুত নয়। Admin backfill চালানোর পর ফলাফল দেখা যাবে।', 'Historical results for this group are not ready yet. Run the Admin backfill to populate them.')}
+                      : t('এই গোষ্ঠীর ফলাফল এখনো তৈরি হয়নি।', 'Historical results for this group are not ready yet. Run the Admin backfill to populate them.')}
                 </span>
                 <button
                   onClick={() => {
@@ -712,7 +737,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
               flexWrap: 'wrap'
             }}>
               <TrendingUp size={19} style={{ color: 'var(--action-card2-text)', flexShrink: 0 }} />
-              <span>{isDemographicFilterActive ? t('গোষ্ঠীর ট্রেন্ডিং ইস্যু', 'Trending issues in selected group') : t('শীর্ষ ট্রেন্ডিং ইস্যু', 'Trending issues')}</span>
+              <span>{isDemographicFilterActive ? t('এই গোষ্ঠীর আলোচিত প্রশ্ন', 'Most debated in this group') : t('সবচেয়ে আলোচিত প্রশ্ন', 'Most debated questions')}</span>
               {rankedIssues.length > 0 && (
                 <span
                   className="trending-count-badge font-latin"
@@ -725,14 +750,14 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                     color: 'var(--action-card2-text)'
                   }}
                 >
-                  {isEnglish ? `${rankedIssues.length} issues` : `${rankedIssues.length}টি ইস্যু`}
+                  {isEnglish ? `${rankedIssues.length} issues` : `${num(rankedIssues.length)}টি ইস্যু`}
                 </span>
               )}
             </h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0.25rem 0 0' }}>
               {isDemographicFilterActive
                 ? t('নির্বাচিত গোষ্ঠী', 'Selected group')
-                : t('তীব্র মতভেদের শীর্ষ সামাজিক ও রাজনৈতিক বিষয়সমূহ', 'Top polarized social & political issues')}
+                : t('যেসব প্রশ্নে দেশ দুই ভাগ', 'The questions that split people most')}
             </p>
           </div>
 
@@ -791,9 +816,9 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                   ) : (
                     <>
                       <div style={{ display: 'flex', height: '12px', borderRadius: '999px', overflow: 'hidden', background: 'var(--data-track)', marginBottom: '0.9rem' }}>
-                        <div style={{ width: `${issue.agree}%`, background: 'var(--data-agree)', transition: 'width 0.6s ease' }} title={`${t('একমত', 'Agree')}: ${issue.agree}%`} />
-                        <div style={{ width: `${issue.neutral}%`, background: 'var(--data-neutral)', transition: 'width 0.6s ease' }} title={`${t('নিরপেক্ষ', 'Neutral')}: ${issue.neutral}%`} />
-                        <div style={{ width: `${issue.disagree}%`, background: 'var(--data-disagree)', transition: 'width 0.6s ease' }} title={`${t('দ্বিমত', 'Disagree')}: ${issue.disagree}%`} />
+                        <div style={{ width: `${issue.agree}%`, background: 'var(--data-agree)', transition: 'width 0.6s ease' }} title={`${t('একমত', 'Agree')}: ${pct(issue.agree)}`} />
+                        <div style={{ width: `${issue.neutral}%`, background: 'var(--data-neutral)', transition: 'width 0.6s ease' }} title={`${t('নিরপেক্ষ', 'Neutral')}: ${pct(issue.neutral)}`} />
+                        <div style={{ width: `${issue.disagree}%`, background: 'var(--data-disagree)', transition: 'width 0.6s ease' }} title={`${t('দ্বিমত', 'Disagree')}: ${pct(issue.disagree)}`} />
                       </div>
                       {/* All three splits, in three equal columns that line up with the three bar segments above */}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.6rem', marginTop: 'auto' }}>
@@ -808,7 +833,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                               {label}
                             </span>
                             <span className="font-latin" style={{ fontSize: '1.05rem', fontWeight: 800, color, lineHeight: 1.1 }}>
-                              {value}%
+                              {pct(value)}
                             </span>
                           </div>
                         ))}
@@ -867,6 +892,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
         marginBottom: '2.5rem'
       }}>
         
+        <>
         {/* Political Blocs Live Distribution */}
         <div className="dashboard-insight-card dashboard-insight-card--style1" style={{ padding: '2.25rem 2rem' }}>
           <div style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -875,7 +901,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                 <ChartBar size={19} style={{ color: 'var(--accent-gold)' }} />
                 <span>{isDemographicFilterActive
                   ? t('নির্বাচিত গোষ্ঠীর রাজনৈতিক ধারা', 'Political tendencies in selected group')
-                  : t('অংশগ্রহণকারীদের রাজনৈতিক ধারার প্রবণতা', 'Distribution of participant political tendencies')}</span>
+                  : t('কোন ধারার সাথে কতজনের মিল', 'Closest political current among participants')}</span>
               </h3>
               <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                 {isDemographicFilterActive
@@ -898,10 +924,10 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                       {localizeBloc(blocKey, item.label)}
                     </span>
                     <span className="font-latin" style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                      {item.count.toLocaleString('en-US')}
+                      {num(item.count)}
                     </span>
-                    <span className="font-latin" style={{ fontSize: '1rem', fontWeight: 800, color: item.color, minWidth: '3.6rem', textAlign: 'right' }}>
-                      {item.percentage}%
+                    <span className="font-latin" style={{ fontSize: '1rem', fontWeight: 800, color: readableColor(item.color), minWidth: '3.6rem', textAlign: 'right' }}>
+                      {pct(item.percentage)}
                     </span>
                   </div>
                   <div style={{ height: '8px', background: 'var(--data-track)', borderRadius: '999px', overflow: 'hidden' }}>
@@ -920,6 +946,8 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
           )}
         </div>
 
+        </>
+
         {/* Demographics: Age and Religion merged into one card */}
         <div className="dashboard-insight-card dashboard-insight-card--style2" style={{ padding: '2.25rem 2rem' }}>
           
@@ -929,7 +957,8 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
               <span>{t('অংশগ্রহণ', 'Participation')}</span>
             </h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              {t('বয়স ও ধর্ম অনুযায়ী উত্তরদাতার বণ্টন', 'Distribution of respondents by age and religion')}
+              {t('কোন বয়স ও ধর্মের মানুষ কতজন', 'Participants by age and religion')}
+              {hasSuppressedGroups && <> · {smallGroupNote}</>}
             </p>
           </div>
 
@@ -940,7 +969,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
               <div style={{ marginBottom: '0.85rem' }}>
                 <h4 style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
                   <Clock size={16} style={{ color: 'var(--accent-cyan)' }} />
-                  <span>{t('বয়সভিত্তিক', 'Age-based')}</span>
+                  <span>{t('বয়স', 'Age')}</span>
                 </h4>
               </div>
 
@@ -948,8 +977,8 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                 <div style={{ width: '100%', height: '210px' }}>
                   <ResponsiveContainer width="100%" height={210}>
                     <BarChart 
-                      data={Object.entries(currentAgeRanges).map(([label, data]) => ({
-                        name: localizeAge(label).replace(/\s*\(.*?\)/, ''), // e.g. "18-25"
+                      data={Object.entries(currentAgeRanges).filter(([, data]) => !data.suppressed).map(([label, data]) => ({
+                        name: (isEnglish ? localizeAge(label) : ageBucketLabel(label)).replace(/\s*\(.*?\)/, ''), // e.g. "18-25"
                         fullName: localizeAge(label),
                         value: data.percentage,
                         isSelected: data.isSelected
@@ -957,15 +986,15 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                       margin={{ top: 10, right: 0, left: -20, bottom: 0 }}
                     >
                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text-muted)' }} interval="preserveStartEnd" />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text-muted)' }} tickFormatter={(val) => `${val}%`} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text-muted)' }} tickFormatter={(val) => pct(val)} />
                       <RechartsTooltip 
                         cursor={{ fill: 'rgba(148, 163, 184, 0.1)' }}
-                        formatter={(value) => [`${value}%`]}
+                        formatter={(value) => [pct(value)]}
                         labelFormatter={(label, payload) => payload?.[0]?.payload?.fullName || label}
                         contentStyle={{ borderRadius: '12px', border: '1px solid var(--border-subtle)', background: 'var(--bg-card)', color: 'var(--text-primary)', fontWeight: 600, boxShadow: 'var(--shadow-sm)', zIndex: 100 }}
                       />
                       <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                        {Object.entries(currentAgeRanges).map(([label, data], index) => (
+                        {Object.entries(currentAgeRanges).filter(([, data]) => !data.suppressed).map(([label, data], index) => (
                           <Cell key={`cell-${index}`} fill={data.isSelected ? 'var(--accent-cyan)' : 'var(--data-neutral)'} />
                         ))}
                       </Bar>
@@ -985,7 +1014,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
               <div style={{ marginBottom: '0.85rem' }}>
                 <h4 style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
                   <Layers size={16} style={{ color: 'var(--accent-purple)' }} />
-                  <span>{t('ধর্মীয়', 'Religious')}</span>
+                  <span>{t('ধর্ম', 'Religion')}</span>
                 </h4>
               </div>
 
@@ -1054,7 +1083,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                         <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: data.fill }} />
                                         <span className="font-latin" style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                                          {data.value}%
+                                          {pct(data.value)}
                                         </span>
                                       </div>
                                     </div>
@@ -1100,7 +1129,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                             />
                             <span>{localizeReligion(label)}</span>
                             <span className="font-latin" style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
-                              {data.percentage}%
+                              {pct(data.percentage)}
                             </span>
                           </div>
                         ))}
@@ -1132,19 +1161,19 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
               <span style={{ color: 'var(--accent-red)', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '0.08em' }} className="font-latin">
-                {t('— ৮টি আদর্শিক অক্ষ', '— 8 ideological axes')}
+                {t('— ৮টি বিষয়', '— 8 topics')}
               </span>
             </div>
             <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '0.2rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Layers size={20} style={{ color: 'var(--accent-red)' }} />
               <span>{isDemographicFilterActive
                 ? t('নির্বাচিত গোষ্ঠীর ৮টি অক্ষ', '8 axes in the selected group')
-                : t('অংশগ্রহণকারীদের ৮টি মাপকাঠির মতামত ভারসাম্য', 'Participant opinion balance across 8 dimensions')}</span>
+                : t('৮টি বিষয়ে মানুষ কোন দিকে', 'Where people lean on 8 topics')}</span>
             </h3>
             <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)' }}>
               {isDemographicFilterActive
                 ? t('প্রতিটি অক্ষের গোষ্ঠী-গড়', 'Group average on each axis')
-                : t('অংশগ্রহণকারীদের প্রতিটি অক্ষের দুই মেরুর গড় অবস্থান', 'Participant average across both poles of each axis')}
+                : t('প্রতিটি বিষয়ে দুই দিকের মধ্যে কোন দিকে বেশি মানুষ', 'Which side of each topic more people lean towards')}
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -1279,7 +1308,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                   {axisHasData ? (
                     <>
                       <div className="font-latin" style={{ fontSize: '1rem', fontWeight: 800, color: isRightDominant ? 'var(--axis-right-color)' : 'var(--axis-left-color)', lineHeight: 1.2 }}>
-                        <AnimatedPercent value={isRightDominant ? rightVal : leftVal} active={hasEnteredAxes} delay={idx * 45 + 70} />
+                        <AnimatedPercent bn={!isEnglish} value={isRightDominant ? rightVal : leftVal} active={hasEnteredAxes} delay={idx * 45 + 70} />
                       </div>
                       <div
                         title={isEnglish ? ENGLISH_BLOCKS[block.key]?.[isRightDominant ? 'right' : 'left'] : isRightDominant ? block.rightShort : block.leftShort}
@@ -1303,14 +1332,14 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
           <div>
             <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <MapPin size={20} style={{ color: 'var(--accent-green)' }} />
-              <span>{t('বিভাগভিত্তিক অংশগ্রহণ', 'Respondent participation by division')}</span>
+              <span>{t('কোন বিভাগ থেকে কতজন', 'Participants by division')}</span>
             </h3>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-              {t('প্রতি বিভাগে উত্তরদাতার সংখ্যা ও অংশগ্রহণকারীদের মধ্যে অংশ', 'Response counts and share among participants')}
+              {t('প্রতিটি বিভাগ থেকে কতজন অংশ নিয়েছেন', 'How many people took part from each division')}
             </p>
           </div>
           <span className="badge-tag font-latin" style={{ color: 'var(--accent-green)', borderColor: 'var(--accent-green)' }}>
-            {t('Bangladesh 8 Divisions Survey', 'Bangladesh 8 Divisions Survey')}
+            {t('৮ বিভাগ', '8 divisions')}
           </span>
         </div>
 
@@ -1318,14 +1347,14 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '550px' }}>
             <thead>
               <tr style={{ borderBottom: '1.5px solid var(--border-medium)', color: 'var(--text-muted)', fontSize: '0.84rem' }}>
-                <th style={{ padding: '0.75rem 1rem' }}>{t('বিভাগ (Division)', 'Division')}</th>
+                <th style={{ padding: '0.75rem 1rem' }}>{t('বিভাগ', 'Division')}</th>
                 <th style={{ padding: '0.75rem 1rem' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-                    {t('মোট উত্তরদাতা', 'Total respondents')}
+                    {t('অংশগ্রহণকারী', 'Participants')}
                     <span aria-hidden="true" style={{ color: 'var(--accent-green)' }}>▼</span>
                   </span>
                 </th>
-                <th style={{ padding: '0.75rem 1rem' }}>{t('অংশগ্রহণকারীদের মধ্যে অংশ', 'Share of participant responses')}</th>
+                <th style={{ padding: '0.75rem 1rem' }}>{t('মোটের কত ভাগ', 'Share of total')}</th>
               </tr>
             </thead>
             <tbody>
@@ -1352,11 +1381,11 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                       </span>
                     </td>
                     <td style={{ padding: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} className="font-latin">
-                      {divData.count.toLocaleString()}
+                      {divData.suppressed ? t(`${num(MIN_PUBLIC_COHORT_SIZE)}-এর কম`, `Fewer than ${MIN_PUBLIC_COHORT_SIZE}`) : num(divData.count)}
                     </td>
                     <td style={{ padding: '1rem' }} className="font-latin">
                       <span className="badge-tag" style={{ color: isSelected ? 'var(--accent-gold)' : 'var(--text-secondary)', borderColor: isSelected ? 'var(--accent-gold)' : 'var(--border-subtle)' }}>
-                        {divData.percentage}%
+                        {divData.suppressed ? '—' : pct(divData.percentage)}
                       </span>
                     </td>
                   </tr>
@@ -1367,16 +1396,23 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
         </div>
       </div>
 
+      {hasSuppressedGroups && (
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textAlign: 'center', margin: '-1.5rem 0 2.5rem' }}>
+          {smallGroupNote}
+        </p>
+      )}
+      </>
+
       {/* CTA Banner */}
       <div className="glass-panel dashboard-assessment-cta">
         <span className="font-latin" style={{ color: 'var(--accent-green)', fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-          {t('— নিজের অবস্থান জানুন', '— Find your position')}
+          {t('— আপনার পালা', '— Your turn')}
         </span>
         <h3 style={{ color: 'var(--text-primary)' }}>
-          {t('আপনি কি এখনো আপনার নিজস্ব অবস্থান মূল্যায়ন করেননি?', 'Haven you assessed your own position yet?')}
+          {t('আপনি কোন পন্থী, জানেন?', 'Do you know where you stand?')}
         </h3>
         <p style={{ color: 'var(--text-secondary)' }}>
-          {t('মাত্র ৩-৪ মিনিটে ২৪টি প্রশ্নের উত্তর দিয়ে জেনে নিন ২০২৬-এর নতুন বাংলাদেশে আপনি কোন পন্থী।', 'Answer 24 questions in just 3-4 minutes to discover where you stand in the new Bangladesh of 2026.')}
+          {t('মাত্র ২ মিনিট থেকে শুরু। দেখুন রাজনীতির মানচিত্রে আপনি কোথায়।', 'From just 2 minutes. See where you land on the political map.')}
         </p>
 
         <button 
@@ -1407,7 +1443,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
               style={{ width: '100%', height: '100%', objectFit: 'contain', transform: 'scale(1.22)' }} 
             />
           </div>
-          <span>{t('জরিপে অংশ নিন', 'Take the survey')}</span>
+          <span>{t('শুরু করি', 'Start')}</span>
           <ArrowRight size={22} />
         </button>
       </div>

@@ -171,7 +171,7 @@ export default function FeedbackModal({ isOpen, onClose, lang = 'bn' }) {
               justifyContent: 'center',
               margin: '0 auto 1.5rem'
             }}>
-              <CheckCircle size={36} style={{ color: '#3B82F6' }} />
+              <CheckCircle size={36} style={{ color: 'var(--accent-green)' }} />
             </div>
             <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
               {isEnglish ? 'Thank you for your feedback!' : 'আপনার মতামতের জন্য ধন্যবাদ!'}
@@ -219,7 +219,7 @@ export default function FeedbackModal({ isOpen, onClose, lang = 'bn' }) {
                     fontSize: '0.72rem',
                     fontWeight: 600,
                     flexShrink: 0,
-                    color: message.length > FEEDBACK_MAX * 0.9 ? '#EF4444' : 'var(--text-muted)'
+                    color: message.length > FEEDBACK_MAX * 0.9 ? 'var(--accent-red)' : 'var(--text-muted)'
                   }}
                 >
                   {isEnglish ? message.length : enToBn(message.length)}/{isEnglish ? FEEDBACK_MAX : enToBn(FEEDBACK_MAX)}
@@ -258,7 +258,7 @@ export default function FeedbackModal({ isOpen, onClose, lang = 'bn' }) {
             {error && (
               <div role="alert" style={{
                 background: 'rgba(239, 68, 68, 0.1)',
-                color: '#EF4444',
+                color: 'var(--accent-red)',
                 padding: '0.75rem 1rem',
                 borderRadius: '12px',
                 fontSize: '0.9rem',

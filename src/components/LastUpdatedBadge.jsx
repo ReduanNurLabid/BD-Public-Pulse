@@ -3,6 +3,8 @@
  * Purely presentational — the timestamp itself comes from Firestore's
  * serverTimestamp() on stats/aggregates.
  */
+import { formatClockTime } from '../lib/format';
+
 export default function LastUpdatedBadge({ lastUpdated, live = false, tone = 'default', lang = 'bn' }) {
   if (!lastUpdated) return null;
 
@@ -18,10 +20,7 @@ export default function LastUpdatedBadge({ lastUpdated, live = false, tone = 'de
 
   const isEnglish = lang === 'en';
   const locale = isEnglish ? 'en-GB' : 'bn-BD';
-  const timeLabel = date.toLocaleTimeString(locale, {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const timeLabel = formatClockTime(date, isEnglish ? 'en' : 'bn');
   const fullDateLabel = date.toLocaleString(locale);
 
   return (
@@ -50,7 +49,7 @@ export default function LastUpdatedBadge({ lastUpdated, live = false, tone = 'de
           }}
         />
       )}
-      {isEnglish ? `Last updated ${timeLabel}` : `সর্বশেষ হালনাগাদ ${timeLabel}`}
+      {isEnglish ? `Last updated ${timeLabel}` : `শেষ আপডেট ${timeLabel}`}
     </span>
   );
 }

@@ -22,6 +22,7 @@ const SEGMENTS = [
  */
 export default function TrendingIssueCard({ issues, lang = 'bn' }) {
   const isEnglish = lang === 'en';
+  const num = (value) => Number(value || 0).toLocaleString(isEnglish ? 'en-US' : 'bn-BD');
   const [index, setIndex] = useState(0);
   // Bumped on manual selection so the interval restarts and a tap actually
   // resets the dwell time instead of racing the next auto-advance.
@@ -164,7 +165,7 @@ export default function TrendingIssueCard({ issues, lang = 'bn' }) {
                 <div
                   key={segment.key}
                   style={{ width: `${active[segment.key]}%`, background: `var(${segment.token})` }}
-                  title={`${segment.label[isEnglish ? 'en' : 'bn']}: ${active[segment.key]}%`}
+                  title={`${segment.label[isEnglish ? 'en' : 'bn']}: ${num(active[segment.key])}%`}
                 />
               ))}
             </div>
@@ -186,7 +187,7 @@ export default function TrendingIssueCard({ issues, lang = 'bn' }) {
                     style={{ width: '8px', height: '8px', borderRadius: '50%', background: `var(${segment.token})`, flexShrink: 0 }}
                   />
                   <span style={{ opacity: 0.85 }}>
-                    {segment.label[isEnglish ? 'en' : 'bn']} <span className="font-latin">{active[segment.key]}%</span>
+                    {segment.label[isEnglish ? 'en' : 'bn']} <span className="font-latin">{num(active[segment.key])}%</span>
                   </span>
                 </span>
               ))}
@@ -209,9 +210,9 @@ export default function TrendingIssueCard({ issues, lang = 'bn' }) {
             className="font-latin"
             style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: 'auto', paddingTop: '0.75rem' }}
           >
-            <span>{active.totalAnswers.toLocaleString('en-US')} {isEnglish ? 'answers' : 'টি উত্তর'}</span>
+            <span>{num(active.totalAnswers)} {isEnglish ? 'answers' : 'টি উত্তর'}</span>
             <span aria-hidden="true"> · </span>
-            {Math.min(index, ranked.length - 1) + 1} / {ranked.length}
+            {num(Math.min(index, ranked.length - 1) + 1)} / {num(ranked.length)}
           </div>
         </>
       )}

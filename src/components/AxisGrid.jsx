@@ -37,28 +37,9 @@ const POLE_ICONS = {
   }
 };
 
-// Explicit text-based mapping for direct pole matching
-const POLE_TEXT_TO_ICON = {
-  'কর্তৃত্ববাদী': 'pole-authoritarian',
-  'ভারসাম্যমুখী': 'pole-balance',
-  'দলীয় নিয়ন্ত্রণ': 'pole-party-control',
-  'নিরপেক্ষ ব্যবস্থা': 'pole-neutral-system',
-  'ধর্মীয় অনুশাসন': 'pole-religious-rule',
-  'ধর্মনিরপেক্ষতা': 'pole-secularism',
-  'সামষ্টিক / কল্যাণ': 'pole-public-welfare',
-  'মুক্তবাজার': 'pole-free-market',
-  'আঞ্চলিক আপস': 'pole-diplomacy',
-  'আপসহীন মর্যাদা': 'pole-sovereignty',
-  'কঠোর নিয়ন্ত্রণ': 'pole-surveillance',
-  'বাকস্বাধীনতা': 'pole-liberty',
-  'স্থিতাবস্থা': 'pole-status-quo',
-  'আমূল রূপান্তর': 'pole-transformation',
-  'অনিয়ন্ত্রিত বাজার': 'pole-unregulated',
-  'সামাজিক সমতা': 'pole-equality'
-};
 
-const PoleIcon = ({ blockKey, side, poleText, style }) => {
-  const iconId = POLE_TEXT_TO_ICON[poleText] || POLE_ICONS[blockKey]?.[side] || 'pole-balance';
+const PoleIcon = ({ blockKey, side, style }) => {
+  const iconId = POLE_ICONS[blockKey]?.[side] || 'pole-balance';
   return (
     <svg
       style={{
@@ -77,14 +58,14 @@ const PoleIcon = ({ blockKey, side, poleText, style }) => {
 };
 
 const AXIS_DESCRIPTIONS = {
-  state_power: "রাষ্ট্রীয় ক্ষমতা কীভাবে বণ্টিত হবে তা পরিমাপ করে। এটি কেন্দ্রীয় শক্তিশালী শাসন ও বিকেন্দ্রীকরণের মধ্যে পার্থক্য নির্দেশ করে।",
-  economy_market: "অর্থনীতিতে রাষ্ট্রীয় বনাম ব্যক্তিমালিকানার ভারসাম্য নির্ধারণ করে। সমাজতান্ত্রিক বনাম মুক্তবাজার নীতির পার্থক্য।",
-  civil_liberties: "রাষ্ট্রের আইনশৃঙ্খলার নামে ব্যক্তিস্বাধীনতায় হস্তক্ষেপ বনাম নিরঙ্কুশ ব্যক্তি অধিকারের মাত্রা নির্ণয় করে।",
-  religion_society: "রাষ্ট্রে ধর্মীয় অনুশাসনের ভূমিকা ও ধর্মনিরপেক্ষতার ভারসাম্য পরিমাপ করে।",
-  sovereignty: "আন্তর্জাতিক ক্ষেত্রে জাতীয়তাবাদী বিচ্ছিন্নতা বনাম বৈশ্বিক জোট ও বন্ধুত্বের নীতি।",
-  democracy: "নির্বাচন ও নির্বাহী ক্ষমতায় দলীয় নিয়ন্ত্রণ এবং নিরপেক্ষ তত্ত্বাবধানের মধ্যকার ভারসাম্য দেখায়।",
-  state_reform: "সাংবিধানিক স্থিতাবস্থা ও প্রাতিষ্ঠানিক সংস্কারের মধ্যকার অবস্থান দেখায়।",
-  social_justice: "বিদ্যমান কাঠামো এবং সামাজিক সমতা ও জবাবদিহির মধ্যকার অবস্থান দেখায়।"
+  state_power: "ক্ষমতা কি এক জায়গায় থাকবে, নাকি ভাগ হবে? শক্তিশালী কেন্দ্রীয় সরকার বনাম ক্ষমতার ভারসাম্য ও বিকেন্দ্রীকরণ।",
+  economy_market: "অর্থনীতি কে চালাবে — রাষ্ট্র না বাজার? ভর্তুকি ও রাষ্ট্রীয় মালিকানা বনাম বেসরকারি উদ্যোগ।",
+  civil_liberties: "নিরাপত্তা আর স্বাধীনতার টানাপোড়েনে আপনি কোন দিকে? আইনশৃঙ্খলা বনাম বাকস্বাধীনতা ও ন্যায্য বিচার।",
+  religion_society: "রাষ্ট্র ও আইনে ধর্মের জায়গা কতটুকু? ধর্মীয় মূল্যবোধ বনাম ধর্মনিরপেক্ষ রাষ্ট্র।",
+  sovereignty: "প্রতিবেশী ও বিশ্বের সাথে কেমন সম্পর্ক? সমঝোতার কূটনীতি বনাম কঠোর দর-কষাকষি।",
+  democracy: "নির্বাচন কার অধীনে, কোন পদ্ধতিতে? নির্বাচিত সরকারের অধীনে বনাম নির্দলীয় তত্ত্বাবধায়ক ও আনুপাতিক ভোট।",
+  state_reform: "সংবিধান ও প্রতিষ্ঠান — ধাপে ধাপে সংশোধন, নাকি আমূল সংস্কার?",
+  social_justice: "উন্নয়নের সুফল কার কাছে যাবে? বাজার ও মেধা বনাম শ্রমিক, নারী ও সংখ্যালঘুর সুরক্ষা।"
 };
 
 const AXIS_DESCRIPTIONS_EN = {
@@ -92,10 +73,10 @@ const AXIS_DESCRIPTIONS_EN = {
   economy_market: 'Describes the balance between public and private ownership, from socialist policies to free markets.',
   civil_liberties: 'Measures state interference in personal freedoms in the name of law and order against individual rights.',
   religion_society: 'Measures the balance between religious rules in the state and secularism.',
-  sovereignty: 'Contrasts nationalist isolation with international alliances and cooperation.',
+  sovereignty: 'How to deal with neighbours and the world: accommodation versus hard bargaining.',
   democracy: 'Shows the balance between party control of elections and executive power, and neutral oversight.',
   state_reform: 'Shows the balance between constitutional continuity and institutional reform.',
-  social_justice: 'Shows the balance between existing structures and social equality with accountability.'
+  social_justice: 'Who benefits from growth: markets and merit versus protection for workers, women and minorities.'
 };
 
 export default function AxisGrid({ lang = 'bn' }) {
@@ -108,11 +89,11 @@ export default function AxisGrid({ lang = 'bn' }) {
         <div style={{ marginBottom: '3rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
             <span style={{ color: 'var(--text-red)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.1em' }} className="font-latin">
-              {isEnglish ? '— ONGOING SURVEY' : '— চলমান জরিপ'}
+              {isEnglish ? '— WHAT WE ASK ABOUT' : '— কী নিয়ে প্রশ্ন'}
             </span>
           </div>
           <h2 style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
-            {isEnglish ? 'What are the 8 dimensions of this survey?' : 'এই জরিপের ৮টি মাপকাঠি কী কী?'}
+            {isEnglish ? 'Eight big questions, two sides each' : 'কোন ৮টি বিষয়ে প্রশ্ন?'}
           </h2>
         </div>
 
@@ -121,7 +102,7 @@ export default function AxisGrid({ lang = 'bn' }) {
             const englishBlock = ENGLISH_THEMATIC_BLOCKS[block.id];
             const title = isEnglish
               ? englishBlock?.title || block.title
-              : block.title.replace(/নীতি|বিষয়ক/g, '').trim();
+              : block.title;
             const leftShort = isEnglish ? englishBlock?.leftShort || block.leftShort : block.leftShort;
             const rightShort = isEnglish ? englishBlock?.rightShort || block.rightShort : block.rightShort;
             return (
@@ -175,7 +156,7 @@ export default function AxisGrid({ lang = 'bn' }) {
                     flexShrink: 0
                   }}
                 >
-                  <PoleIcon blockKey={block.key} side="left" poleText={block.leftShort} style={{ width: '14px', height: '14px' }} />
+                  <PoleIcon blockKey={block.key} side="left" style={{ width: '14px', height: '14px' }} />
                   <span>{leftShort}</span>
                 </div>
 
@@ -192,7 +173,7 @@ export default function AxisGrid({ lang = 'bn' }) {
                   }}
                 >
                   <span>{rightShort}</span>
-                  <PoleIcon blockKey={block.key} side="right" poleText={block.rightShort} style={{ width: '14px', height: '14px' }} />
+                  <PoleIcon blockKey={block.key} side="right" style={{ width: '14px', height: '14px' }} />
                 </div>
               </div>
 

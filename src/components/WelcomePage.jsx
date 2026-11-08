@@ -4,8 +4,6 @@ import {
   BarChart2,
   Layers,
   Users,
-  CheckCircle2,
-  ShieldCheck,
   ShieldOff,
   Coins,
   Unlock,
@@ -18,8 +16,9 @@ import FeedbackModal from './FeedbackModal';
 import LastUpdatedBadge from './LastUpdatedBadge';
 import TrendingIssueCard from './TrendingIssueCard';
 import { useAggregateStats } from '../hooks/useAggregateStats';
-import { isNewVisitor } from '../lib/visitorSession';
 import { BLOC_PROFILES } from '../data/questions';
+import WeeklyIssueCard from './WeeklyIssueCard';
+import HomeFaq from './HomeFaq';
 import BlocLogo from './BlocLogo';
 
 // ---------------------------------------------------------------------------
@@ -29,21 +28,24 @@ import BlocLogo from './BlocLogo';
 export const WELCOME_COPY = {
   bn: {
     eyebrow: 'বাংলাদেশ রাজনৈতিক কম্পাস ২০২৬',
-    heroTitleLead: 'জাতীয় রাজনীতিতে',
-    heroTitleAccent: 'জনমতের প্রতিফলন',
+    heroTitleLead: 'আপনি',
+    heroTitleAccent: 'কোন পন্থী?',
     heroBody:
-      '২৪টি গুরুত্বপূর্ণ জাতীয় ইস্যুতে আপনার মতামত প্রকাশ করুন এবং তৈরি করুন একটি কাস্টম ওপিনিয়ন কার্ড। বন্ধুদের সাথে এটি শেয়ার করে দেখে নিন আপনাদের চিন্তাভাবনা কতটা মিলছে, আর আমাদের লাইভ ড্যাশবোর্ডে পর্যবেক্ষণ করুন দেশের সামগ্রিক জনমত।',
-    disclaimer: 'এই জরিপটি সম্পূর্ণ স্বেচ্ছামূলক এবং এর ফলাফল কেবল অংশগ্রহণকারীদের মতামতের ওপর ভিত্তি করে তৈরি। একে দেশের সামগ্রিক জনসংখ্যার প্রতিনিধি, জাতীয় জনমত কিংবা নির্বাচনী পূর্বাভাস হিসেবে গণ্য করার সুযোগ নেই।',
-    heroTags: ['সম্পূর্ণ বিনামূল্যে', 'জনমিতিক তথ্য ঐচ্ছিক', 'উন্মুক্ত প্ল্যাটফর্ম', 'নিরপেক্ষ মূল্যায়ন'],
-    heroPrimaryCta: 'আপনার মতামত দিন',
-    heroSecondaryCta: 'লাইভ ড্যাশবোর্ড দেখুন',
+      'দেশের বড় প্রশ্নগুলোতে আপনার মত দিন। মাত্র ২ মিনিটে জেনে নিন রাজনীতির মানচিত্রে আপনি কোথায় দাঁড়িয়ে — আর বন্ধুরা কোথায়।',
+    disclaimer: 'ফলাফল শুধু অংশগ্রহণকারীদের মত — দেশের সবার মত বা নির্বাচনের পূর্বাভাস নয়।',
+    heroTags: ['নাম-ফোন লাগবে না', 'কোনো দলের সাথে যুক্ত নই', 'হিসাবের পদ্ধতি উন্মুক্ত'],
+    heroPrimaryCta: 'শুরু করি',
+    heroSecondaryCta: 'সবাই কী ভাবছে দেখুন',
+    lengthHint: 'সময় কম?',
+    lengthShort: '২ মিনিটের ছোট সংস্করণ',
+    lengthLong: 'বা ৬ মিনিটের পূর্ণ সংস্করণ',
     quoteText: '“মানুষ স্বভাবতই একটি রাজনৈতিক জীব।”',
     quoteAuthor: '— অ্যারিস্টটল',
 
-    statsEyebrow: '— সর্বশেষ তথ্য',
-    statsTitle: 'জনমতের রিয়েল-টাইম প্রবণতা পর্যবেক্ষণ করুন',
-    statsCta: 'লাইভ ডাটা এক্সপ্লোর করুন',
-    totalLabel: 'মোট অংশগ্রহণকারী',
+    statsEyebrow: '— সবাই কী ভাবছে',
+    statsTitle: 'এই মুহূর্তে মানুষ কী ভাবছে',
+    statsCta: 'পুরো ফলাফল দেখুন',
+    totalLabel: 'এ পর্যন্ত অংশ নিয়েছেন',
     verifiedLine: (verified, total, isAll) => (
       isAll
         ? <>উত্তর যাচাইকৃত</>
@@ -51,73 +53,76 @@ export const WELCOME_COPY = {
     ),
     verifiedEmpty: 'যাচাইকৃত তথ্যের প্রক্রিয়া চলছে',
     verifiedShare: 'ডাটা ইন্টেগ্রিটি স্কোর',
-    blocsTitle: 'অংশগ্রহণকারীদের মধ্যে কাছাকাছি রাজনৈতিক ধারা',
+    blocsTitle: 'কোন ধারার সাথে মিল বেশি',
     noData: 'এখনো তথ্য নেই',
 
-    actionEyebrow: '— অংশগ্রহণ করুন',
-    actionTitle: 'পরবর্তী পদক্ষেপ',
+    actionEyebrow: '— আপনার পালা',
+    actionTitle: 'এরপর কী?',
     actionBody:
-      'আপনার মতামতই দেশের সামগ্রিক চিত্র ফুটিয়ে তুলবে। সম্মিলিত ফলাফল দেখুন, বন্ধুদের সাথে আপনার কাস্টম ওপিনিয়ন কার্ডটি শেয়ার করুন এবং পরবর্তী জরিপের জন্য গুরুত্বপূর্ণ জাতীয় ইস্যুর প্রস্তাব দিন।',
+      'আপনার একটা উত্তরও ছবিটা বদলে দেয়। প্রশ্নের উত্তর দিন, ফলাফল কার্ড শেয়ার করুন, আর পরের জরিপের বিষয় আপনিই ঠিক করুন।',
 
     surveyBadge: 'চলমান জরিপ',
-    surveyTitle: 'জনমত',
-    surveyTitleSub: 'জরিপ',
+    surveyTitle: 'নিজের',
+    surveyTitleSub: 'অবস্থান জানুন',
     surveyBody:
-      '২৪টি গুরুত্বপূর্ণ জাতীয় ইস্যুতে আপনার মতামত দিন। আপনার দৃষ্টিভঙ্গি পর্যালোচনা করে অন্যদের সাথে শেয়ার করার জন্য তাৎক্ষণিকভাবে একটি কাস্টম কার্ড তৈরি করুন।',
-    surveyTime: 'সময় লাগবে প্রায় ৩–৪ মিনিট',
-    surveyCta: 'আপনার মতামত দিন',
+      'দেশের বড় প্রশ্নগুলোতে আপনার মত দিন। সাথে সাথে পাবেন নিজের ফলাফল কার্ড — শেয়ার করুন, বন্ধুদের সাথে মিলিয়ে দেখুন।',
+    surveyTime: '২, ৪ বা ৬ মিনিট — আপনার পছন্দ',
+    surveyCta: 'শুরু করি',
 
     dashBadge: 'অংশগ্রহণকারীদের মতামত',
     dashTitle: 'লাইভ',
     dashTitleSub: 'ড্যাশবোর্ড',
     dashBody:
-      'সারা দেশের রিয়েল-টাইম ডাটা এক্সপ্লোর করুন, সুনির্দিষ্ট ইস্যুতে জনমতের বিভাজন ফিল্টার করুন এবং আঞ্চলিক জনমিতির বিস্তারিত তথ্য বিশ্লেষণ করুন।',
+      'অন্যরা কী বলছে দেখুন — কোন প্রশ্নে মানুষ একমত, কোথায় দুই ভাগ, আর বয়স বা বিভাগভেদে মত কীভাবে বদলায়।',
     dashCta: 'ড্যাশবোর্ড দেখুন',
 
-    proposalBadge: 'নাগরিক প্রস্তাবনা',
-    proposalTitle: 'প্রস্তাব করুন',
-    proposalTitleSub: 'নতুন বিষয়',
+    proposalBadge: 'আপনার প্রস্তাব',
+    proposalTitle: 'পরের প্রশ্ন',
+    proposalTitleSub: 'আপনিই ঠিক করুন',
     proposalBody:
-      'পরবর্তীতে কোন গুরুত্বপূর্ণ জাতীয় বিষয়টি আমাদের অন্বেষণ করা উচিত? আগামী দিনের নাগরিক আলোচনাগুলো সাজাতে আপনার মূল্যবান আইডিয়া সাবমিট করুন।',
-    proposalCta: 'বিষয় প্রস্তাব করুন',
+      'কোন বিষয়ে দেশের মানুষের মত জানা দরকার? আপনার প্রস্তাব জমা দিন — জনপ্রিয় প্রস্তাবগুলো পরের জরিপে আসতে পারে।',
+    proposalCta: 'প্রস্তাব দিন',
 
-    footerTransparencyTitle: 'স্বচ্ছতা ও নির্ভরযোগ্যতা',
+    footerTransparencyTitle: 'কেন আমাদের ওপর ভরসা করবেন',
     footerTransparencyCards: [
       {
-        title: 'সম্পূর্ণ স্বাধীন',
-        body: 'যেকোনো রাজনৈতিক দল, সরকারি প্রতিষ্ঠান কিংবা নির্বাচনী প্রচারণার সাথে সম্পূর্ণ সম্পৃক্ততাহীন।'
+        title: 'কোনো দলের নই',
+        body: 'কোনো দল, সরকার বা নির্বাচনী প্রচারণার সাথে আমাদের কোনো সম্পর্ক নেই।'
       },
       {
-        title: 'নিরপেক্ষ ফলাফল',
-        body: 'সম্পূর্ণ উপাত্ত-ভিত্তিক এবং সব ধরনের বাণিজ্যিক প্রভাব কিংবা পেইড প্লেসমেন্ট মুক্ত।'
+        title: 'ফলাফল বিক্রি হয় না',
+        body: 'টাকা দিয়ে কেউ ফলাফল বদলাতে পারে না। যা দেখছেন, তা শুধুই উত্তরের হিসাব।'
       },
       {
-        title: 'উন্মুক্ত মেথডোলজি',
-        body: 'আমাদের গাণিতিক ও বিশ্লেষণাত্মক স্কোরিং কাঠামো সম্পূর্ণ স্বচ্ছ এবং সবার জন্য উন্মুক্তভাবে নথিবদ্ধ।'
+        title: 'হিসাব খোলা',
+        body: 'কীভাবে হিসাব হয়, তার পুরোটা খোলা — যে কেউ যাচাই করতে পারেন।'
       }
     ],
-    footerFeedbackTitle: 'কোনো প্রশ্নে পক্ষপাত বা প্রোফাইলে অসামঞ্জস্য লক্ষ্য করেছেন?',
-    footerFeedbackNote: 'এই স্বাধীন গবেষণা প্রকল্পটি সম্পূর্ণ নিরপেক্ষভাবে জনমত মানচিত্রায়ন করে। আমরা কোনো রাজনৈতিক দলের সাথে সম্পৃক্ত নই এবং কঠোর আদর্শিক ভারসাম্য বজায় রাখতে প্রতিশ্রুতিবদ্ধ। আমাদের প্ল্যাটফর্মকে আরও নিখুঁত করতে সাহায্য করুন।',
-    footerFeedbackCta: 'উন্নয়নের জন্য মতামত দিন',
+    footerFeedbackTitle: 'কোনো প্রশ্ন একপেশে মনে হলো?',
+    footerFeedbackNote: 'আমরা চাই প্রতিটি প্রশ্ন সব পক্ষের কাছে ন্যায্য হোক। কোথাও পক্ষপাত, ভুল বা অসংগতি চোখে পড়লে জানান — আমরা শুধরে নেব।',
+    footerFeedbackCta: 'আমাদের জানান',
   },
 
   en: {
     eyebrow: '— Bangladesh Political Compass · 2026',
-    heroTitleLead: 'National Politics',
-    heroTitleAccent: 'Public Opinion',
+    heroTitleLead: 'Where do you',
+    heroTitleAccent: 'stand?',
     heroBody:
       'Share your voice on 24 critical national issues and generate a custom opinion card. Pass it along to friends to see how your thoughts align, and track real-time public sentiment on our live dashboard.',
     disclaimer: 'Participation is voluntary. As a self-selected survey, the results represent the participants rather than the wider population, and should not be used as a national poll or election forecast.',
-    heroTags: ['Free', 'Optional demographics', 'For every view', 'No right or wrong answers'],
+    heroTags: ['No name or phone needed', 'Not tied to any party', 'Open methodology'],
     heroPrimaryCta: 'Take the test now',
     heroSecondaryCta: 'See live dashboard',
+    lengthHint: 'Short on time?',
+    lengthShort: 'Take the 2-minute version',
+    lengthLong: 'or the full 6-minute one',
     quoteText: '“Man is by nature a political animal.”',
     quoteAuthor: '— Aristotle',
 
     statsEyebrow: '— Latest figures',
     statsTitle: 'Explore real-time public opinion',
     statsCta: 'Explore live data',
-    totalLabel: 'Total participants',
+    totalLabel: 'Participants so far',
     verifiedLine: (verified, total, isAll) => (
       isAll
         ? <>Verified Responses</>
@@ -137,8 +142,8 @@ export const WELCOME_COPY = {
     surveyTitle: 'Opinion',
     surveyTitleSub: 'survey',
     surveyBody:
-      'Answer 24 questions; there are no right or wrong answers. Review your results and choose what to include if you make a share card.',
-    surveyTime: 'About 3–4 minutes',
+      'Pick 16, 24 or 32 questions; there are no right or wrong answers. Review your results and choose what to include if you make a share card.',
+    surveyTime: '2, 4 or 6 minutes: your choice',
     surveyCta: 'Take the survey',
 
     dashBadge: 'Participant responses',
@@ -183,23 +188,12 @@ const BLOC_LABEL_EN = {
   BNP: 'BNP',
   JI: 'Jamaat-e-Islami',
   Student: 'NCP',
-  Sushil: 'Civil society',
+  Sushil: 'Non-partisan governance',
 };
 
-export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' }) {
+export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, lang = 'bn' }) {
   const [isProposalOpen, setProposalOpen] = useState(false);
   const [isFeedbackOpen, setFeedbackOpen] = useState(false);
-  const [isNew, setIsNew] = useState(isNewVisitor);
-
-  useEffect(() => {
-    const handleStatus = () => setIsNew(isNewVisitor());
-    window.addEventListener('bdc_submission_status_changed', handleStatus);
-    window.addEventListener('storage', handleStatus);
-    return () => {
-      window.removeEventListener('bdc_submission_status_changed', handleStatus);
-      window.removeEventListener('storage', handleStatus);
-    };
-  }, []);
 
   const L = lang === 'en' ? 'en' : 'bn';
   const t = WELCOME_COPY[L];
@@ -215,11 +209,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
   const { stats: liveStats } = useAggregateStats('once');
 
   const totalResponses = liveStats?.totalResponses || 0;
-  const verifiedResponses = liveStats?.verifiedResponses || 0;
-  const rejectedResponses = liveStats?.rejectedResponses || 0;
   const hasLiveData = totalResponses > 0;
-  const verifiedPercent = hasLiveData ? Math.round((verifiedResponses / totalResponses) * 100) : 0;
-  const activeDivisionsCount = Object.values(liveStats?.divisions || {}).filter(d => (d.count || 0) > 0).length;
 
   const allBlocs = liveStats
     ? Object.keys(BLOC_PROFILES).map((key) => {
@@ -241,7 +231,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
     <div className="animate-fade-in" lang={L} style={{ width: '100%' }}>
 
       {/* s Style Hero Section */}
-      <div style={{ width: '100%', boxSizing: 'border-box', maxWidth: '1360px', margin: '0 auto', padding: '4rem 1.5rem 6rem', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4rem' }}>
+      <div style={{ width: '100%', boxSizing: 'border-box', maxWidth: '1360px', margin: '0 auto', padding: 'clamp(1.75rem, 5vw, 4rem) 1rem clamp(3rem, 8vw, 6rem)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'clamp(2.5rem, 6vw, 4rem)' }}>
 
         {/* Left Column: Typography */}
         <div style={{ flex: '1 1 440px', minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -250,14 +240,14 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
             fontWeight: 800,
             fontSize: '0.85rem',
             letterSpacing: '0.1em',
-            marginBottom: '1.5rem',
+            marginBottom: '1rem',
             textTransform: 'uppercase'
           }} className="font-latin">
             {t.eyebrow}
           </div>
 
           <h1 style={{
-            fontSize: 'clamp(2.8rem, 6vw, 4.2rem)',
+            fontSize: 'clamp(2.6rem, 8vw, 4.6rem)',
             fontWeight: 800,
             color: 'var(--text-primary)',
             lineHeight: 1.05,
@@ -292,7 +282,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
             <button
-              onClick={onStartTest}
+              onClick={() => onStartTest()}
               className="btn-hero-start font-latin"
               style={{
                 background: 'var(--bg-card-hover)',
@@ -317,7 +307,6 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
                 e.currentTarget.style.color = 'var(--text-primary)';
               }}
             >
-              {isNew && <span className="hero-cta-guide-dot" title={L === 'en' ? 'Start test here' : 'মূল্যায়ন শুরু করুন'} />}
               {t.heroPrimaryCta} <ArrowRight size={18} />
             </button>
 
@@ -351,75 +340,18 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
             </button>
           </div>
 
+          <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginTop: '-0.5rem', marginBottom: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'baseline' }}>
+            <span>{t.lengthHint}</span>
+            <button type="button" onClick={() => onStartTest('short')} style={{ background: 'none', border: 'none', padding: 0, color: 'var(--hero-accent)', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px', cursor: 'pointer', fontSize: 'inherit' }}>{t.lengthShort}</button>
+            <button type="button" onClick={() => onStartTest('long')} style={{ background: 'none', border: 'none', padding: 0, color: 'var(--text-secondary)', textDecoration: 'underline', textUnderlineOffset: '3px', cursor: 'pointer', fontSize: 'inherit' }}>{t.lengthLong}</button>
+          </div>
+
           <div className="font-latin" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, marginBottom: '2.5rem' }}>
             {t.heroTags.map((tag) => (
               <span key={tag}>• {tag}</span>
             ))}
           </div>
 
-          {/* Aristotle Quote Block */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1.5rem',
-            background: '#0f2c1bff', // Dark elegant background
-            border: '1px solid rgba(255,255,255,0.1)',
-            padding: '0.5rem 0.5rem 0.5rem',
-            borderRadius: '20px 20px 20px 0px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
-            position: 'relative',
-            overflow: 'hidden',
-            maxWidth: '800px'
-          }}>
-            {/* Ambient glow behind image */}
-            <div style={{
-              position: 'absolute',
-              left: '-20px',
-              bottom: '-20px',
-              width: '150px',
-              height: '150px',
-              background: 'var(--hero-accent)',
-              filter: 'blur(45px)',
-              opacity: 0.1,
-              zIndex: 0
-            }} />
-
-            <img
-              src="/aristotle.png"
-              alt="Aristotle"
-              style={{
-                width: '110px',
-                height: '110px',
-                objectFit: 'contain',
-                position: 'relative',
-                zIndex: 0,
-                filter: 'drop-shadow(3px 5px 8px rgba(0,0,0,0.4))',
-                margin: '-1rem 0 -1rem -1rem' // Let it slightly break out of the padding constraint
-              }}
-            />
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <p style={{
-                fontFamily: 'serif',
-                fontSize: '1.29rem',
-                fontStyle: 'italic',
-                color: '#ffe9baff',
-                margin: '0 0 0 0',
-                lineHeight: 1.75
-              }}>
-                {t.quoteText}
-              </p>
-              <p style={{
-                fontSize: '0.95rem',
-                fontWeight: 700,
-                color: '#94A3B8',
-                margin: 0,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase'
-              }}>
-                {t.quoteAuthor}
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Right Column: Collage of Example Results (Story Card + Certificate) */}
@@ -476,7 +408,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
             </button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '2rem' }}>
 
             {/* Stat Card 1 */}
             <div style={{
@@ -512,82 +444,14 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
                 <div style={{ fontSize: '3.4rem', fontWeight: 800, color: 'var(--action-card1-text)', marginBottom: '0.5rem', lineHeight: 1 }} className="font-latin">
                   {hasLiveData ? fmt(totalResponses) : '—'}
                 </div>
-
-                <div style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  color: 'var(--action-card1-text)',
-                  opacity: 0.9,
-                  fontSize: '0.88rem',
-                  fontWeight: 600,
-                  marginBottom: '1.5rem'
-                }}>
-                  <CheckCircle2 size={16} style={{ color: '#059669', flexShrink: 0 }} />
-                  <span>
-                    {hasLiveData
-                      ? t.verifiedLine(fmt(verifiedResponses), fmt(totalResponses), verifiedResponses >= totalResponses)
-                      : t.verifiedEmpty}
-                  </span>
-                </div>
-
-                {/* 3-Metric Highlight Grid with Verified, Rejected, and Coverage */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '0.65rem',
-                  padding: '0.85rem',
-                  background: 'rgba(16, 46, 36, 0.04)',
-                  borderRadius: '16px',
-                  border: '1px solid rgba(16, 46, 36, 0.08)',
-                  marginBottom: '1.25rem'
-                }}>
-                  <div>
-                    <div style={{ fontSize: '0.7rem', opacity: 0.65, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
-                      {L === 'en' ? 'Verified' : 'যাচাইকৃত'}
-                    </div>
-                    <div style={{ fontSize: '1.7rem', fontWeight: 800, color: 'var(--action-card1-text)', marginTop: '2px' }} className="font-latin">
-                      {fmt(verifiedResponses)}
-                    </div>
-                    <div style={{ fontSize: '0.68rem', opacity: 0.65, marginTop: '2px' }}>
-                      {L === 'en' ? 'Valid Responses' : 'মানসম্মত'}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--accent-red)' }}>
-                      {L === 'en' ? 'Rejected' : 'বাতিলকৃত'}
-                    </div>
-                    <div style={{ fontSize: '1.7rem', fontWeight: 800, color: 'var(--accent-red)', marginTop: '2px' }} className="font-latin">
-                      {fmt(rejectedResponses)}
-                    </div>
-                    <div style={{ fontSize: '0.68rem', opacity: 0.65, marginTop: '2px' }}>
-                      {L === 'en' ? 'Filtered Out' : 'ফিল্টার্ড'}
-                    </div>
-                  </div>
-
-                </div>
+                <p style={{ fontSize: '0.88rem', opacity: 0.75, margin: 0, lineHeight: 1.55 }}>
+                  {L === 'en' ? 'People who chose to take part. Not a representative national sample.' : 'যাঁরা নিজে থেকে অংশ নিয়েছেন। দেশের সবার প্রতিনিধিত্বমূলক নমুনা নয়।'}
+                </p>
               </div>
-
-              {/* Verified share of the total */}
-              {hasLiveData && (
-                <div style={{ marginTop: 'auto', paddingTop: '0.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem', fontSize: '0.8rem', fontWeight: 700 }}>
-                    <span style={{ opacity: 0.75 }}>{t.verifiedShare}</span>
-                    <span className="font-latin" style={{ fontWeight: 800 }}>{fmt(verifiedPercent)}%</span>
-                  </div>
-                  <div style={{ height: '7px', background: 'rgba(16, 46, 36, 0.1)', borderRadius: '999px', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${verifiedPercent}%`, background: 'var(--action-card1-text)', opacity: 0.9, borderRadius: '999px', transition: 'width 0.6s var(--ease-smooth)' }} />
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.6rem', fontSize: '0.72rem', opacity: 0.65 }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <ShieldCheck size={12} /> {L === 'en' ? '100% Anonymous' : '১০০% গোপনীয়'}
-                    </span>
-                    <span>{L === 'en' ? 'Voluntary Poll' : 'স্বেচ্ছামূলক জরিপ'}</span>
-                  </div>
-                </div>
-              )}
             </div>
+
+            {/* Stat Card 2: founding progress until party matches unlock */}
+            
 
             {/* Stat Card 2 */}
             <div style={{ background: 'var(--action-card2-bg)', border: '2px solid var(--action-card2-border)', borderRadius: '24px', padding: '2.25rem 2rem', color: 'var(--action-card2-text)', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease' }}>
@@ -613,7 +477,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.25rem', gap: '0.75rem' }}>
                         <span style={{ minWidth: 0, fontWeight: 700, fontSize: '0.92rem', color: 'var(--action-card2-text)' }}>{blocLabel(blocKey, bloc)}</span>
-                        <span className="font-latin" style={{ flexShrink: 0, whiteSpace: 'nowrap', fontWeight: 800, color: bloc.color }}>{fmt(bloc.percentage)}%</span>
+                        <span className="font-latin" style={{ flexShrink: 0, whiteSpace: 'nowrap', fontWeight: 800, color: `color-mix(in srgb, ${bloc.color} 55%, var(--action-card2-text))` }}>{fmt(bloc.percentage)}%</span>
                       </div>
                       <div style={{ height: '6px', background: 'var(--stats-track-bg)', borderRadius: '999px', overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${Math.min(100, bloc.percentage)}%`, background: bloc.color, borderRadius: '999px' }} />
@@ -632,6 +496,8 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
           </div>
         </div>
       </div>
+
+      <WeeklyIssueCard lang={L} onSeeAll={onGoWeekly} />
 
       {/* Axis Grid Section */}
       <div id="axis-grid-section">
@@ -689,7 +555,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
                 alignItems: 'center',
                 gap: '0.35rem'
               }} className="font-latin">
-                <span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#4ADE80' }}></span> {t.surveyBadge}
+                {t.surveyBadge}
               </div>
 
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
@@ -706,7 +572,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
               </div>
 
               <button
-                onClick={onStartTest}
+                onClick={() => onStartTest()}
                 className="font-latin"
                 style={{
                   background: 'var(--action-card1-btn-bg)',
@@ -735,7 +601,6 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                {isNew && <span className="hero-cta-guide-dot" title={L === 'en' ? 'Start test here' : 'মূল্যায়ন শুরু করুন'} />}
                 {t.surveyCta} <ArrowRight size={18} />
               </button>
             </div>
@@ -984,6 +849,8 @@ export default function WelcomePage({ onStartTest, onGoDashboard, lang = 'bn' })
 
         </div>
       </div>
+
+      <HomeFaq lang={L} />
 
       {/* Transparency and Feedback Footer */}
       <div style={{ background: 'var(--bg-primary)', padding: '4rem 1.5rem', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>

@@ -75,7 +75,7 @@ const COPY = {
 
     scoreTitle: 'আপনার উত্তর কীভাবে স্কোর হয়',
     scoreIntro: 'প্রতিটি বিবৃতির পাশে পাঁচটি উত্তর থাকে। প্রতিটি উত্তরের একটি “ধাক্কা” আছে:',
-    scale: ['দৃঢ়ভাবে একমত', 'একমত', 'নিরপেক্ষ', 'দ্বিমত', 'দৃঢ়ভাবে দ্বিমত'],
+    scale: ['পুরোপুরি একমত', 'কিছুটা একমত', 'নিশ্চিত নই', 'কিছুটা দ্বিমত', 'একদমই না'],
     scaleHelp: '+২ মানে দ্বিগুণ জোরে সরানো, ০ মানে একেবারেই না সরানো।',
     directionNote: 'ধাক্কা কোন দিকে যাবে, তা নির্ভর করে বিবৃতিটি কোন দিক ঘেঁষা, তার ওপর। একই “একমত” উত্তর একটি বিবৃতিতে আপনাকে বাজারের দিকে, আরেকটিতে রাষ্ট্রের দিকে সরাতে পারে। প্রশ্নগুলো তাই ইচ্ছে করেই মিশিয়ে সাজানো।',
     tryTitle: 'একটি আসল প্রশ্নে চেষ্টা করে দেখুন',
@@ -150,7 +150,7 @@ const COPY = {
       { q: 'একই “একমত” কখনো বাজারের দিকে, কখনো রাষ্ট্রের দিকে সরায় কেন?', a: 'ইচ্ছে করেই। কিছু বিবৃতি এক দিকের, কিছু উল্টো দিকের। এতে সব প্রশ্নে “হ্যাঁ” বলে যাওয়ার প্রবণতা ধরা পড়ে এবং আপনার প্রকৃত অবস্থান স্পষ্ট হয়।' },
       { q: 'আমার অবস্থান প্রায় মাঝখানে কেন?', a: 'দুই অক্ষের যেকোনো একটিতে ±১০০ পেতে হলে ওই অক্ষের প্রতিটি প্রশ্নে সর্বোচ্চ জোরে একই দিকে উত্তর দিতে হয়। মিশ্র মতামত থাকলে বিন্দু স্বাভাবিকভাবেই মাঝের দিকে থাকে। মাঝামাঝি থাকা কোনো দুর্বলতা নয়।' },
       { q: '“স্পষ্ট মিল নেই” বা “মিশ্র” কেন দেখাল?', a: '“মিশ্র” দেখায় যখন {mixed}% বা তার বেশি উত্তর নিরপেক্ষ বা বাদ থাকে। “স্পষ্ট মিল নেই” দেখায় যখন কোনো ধারার স্কোরই {noMatch}%-এ পৌঁছায় না। দুটোই বলে যে আপনার মতামত এই পাঁচটি প্রোফাইলের কোনোটির সঙ্গে স্পষ্টভাবে মেলে না। এটি ত্রুটি নয়।' },
-      { q: 'কিছু প্রশ্নে দল বা ব্যক্তির নাম আছে কেন?', a: 'বেশির ভাগ প্রশ্নে নেই। যেখানে আছে (যেমন আওয়ামী লীগ, শেখ হাসিনা, শেখ মুজিবুর রহমান, তৌহিদি জনতা), সেখানে বিতর্কটাই ওই নামকে ঘিরে। নাম বাদ দিলে প্রশ্নটি বোঝা যেত না।' },
+      { q: 'কিছু প্রশ্নে দল বা ব্যক্তির নাম আছে কেন?', a: 'বেশির ভাগ প্রশ্নে নেই। যেখানে আছে (যেমন আওয়ামী লীগ, শেখ হাসিনা, ভারত, চীন), সেখানে বিতর্কটাই ওই নামকে ঘিরে। নাম বাদ দিলে প্রশ্নটি বোঝা যেত না।' },
       { q: 'আমার উত্তর কি কেউ দেখতে পায়?', a: 'না। কোনো ব্যবহারকারী বা ক্লায়েন্ট আলাদা উত্তর পড়তে পারে না। প্রকাশ হয় কেবল সমষ্টিগত সংখ্যা। আপনার নাম, ফোন বা ইমেইল সংগ্রহই করা হয় না।' },
       { q: 'একই ব্রাউজার থেকে আবার অংশ নিলে কী হয়?', a: 'পাবলিক পরিসংখ্যানে একটি ব্রাউজার থেকে একটি উত্তরই গোনা হয়। তাই একজনের বারবার অংশ নেওয়ায় ড্যাশবোর্ডের সংখ্যা ফুলে যায় না।' },
       { q: 'দল বা নেতাদের জন্য ধরা ওজন ভুল মনে হলে?', a: 'প্রতিটি ওজন নিচের “পুরো সূত্র” অংশে খোলা আছে। আপনি দেখতে ও CSV হিসেবে নামিয়ে নিতে পারেন। এগুলো সম্পাদকীয় অনুমান এবং নিয়মিত পর্যালোচনা হয়।' },
@@ -176,7 +176,7 @@ const COPY = {
     tableHead: { id: 'নং', statement: 'বিবৃতি', x: 'X', y: 'Y', dir: 'দিক' },
     tracker: 'সেন্টিমেন্ট',
     download: 'CSV নামিয়ে নিন',
-    shortBloc: { AL: 'আ.লীগ', BNP: 'বিএনপি', JI: 'জামায়াত', Student: 'NCP', Sushil: 'সুশীল' },
+    shortBloc: { AL: 'আ.লীগ', BNP: 'বিএনপি', JI: 'জামায়াত', Student: 'NCP', Sushil: 'সুশাসনপন্থী' },
     csvName: 'bd-compass-scoring-weights.csv'
   },
 
@@ -278,7 +278,7 @@ const COPY = {
       { q: 'Why does “agree” sometimes move me toward the market and sometimes toward the state?', a: 'On purpose. Some statements lean one way and some the opposite way. This catches the habit of saying “yes” to everything and brings out your actual position.' },
       { q: 'Why am I near the middle?', a: 'Reaching ±100 on an axis means answering as strongly as possible in the same direction on every question that affects it. Mixed views naturally land near the centre. Being in the middle is not a weakness.' },
       { q: 'Why did I get “No clear match” or “Mixed”?', a: '“Mixed” appears when {mixed}% or more of your answers are neutral or skipped. “No clear match” appears when no bloc reaches {noMatch}%. Both simply mean your views do not clearly line up with any of the five profiles. It is not an error.' },
-      { q: 'Why do some questions name a party or a person?', a: 'Most do not. Where they do (for example the Awami League, Sheikh Hasina, Sheikh Mujibur Rahman or the Tawhidi Janata), the dispute itself is about that name. The question could not be understood without it.' },
+      { q: 'Why do some questions name a party or a person?', a: 'Most do not. Where they do (for example the Awami League, Sheikh Hasina, India or China), the dispute itself is about that name. The question could not be understood without it.' },
       { q: 'Can anyone see my answers?', a: 'No. Nobody can read individual responses. Only aggregate totals are published. We do not collect your name, phone or email at all.' },
       { q: 'What if I take part again from the same browser?', a: 'The public statistics count one response per browser, so repeat attempts do not inflate the dashboard.' },
       { q: 'What if I think a weight for a bloc or leader is wrong?', a: 'Every weight is open in the “Full formula” section below. You can inspect it and download it as CSV. They are editorial estimates and are reviewed regularly.' },

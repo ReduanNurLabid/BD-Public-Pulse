@@ -7,6 +7,8 @@
  *
  * Renders nothing when no submission has been recorded yet.
  */
+import { formatClockTime } from '../lib/format';
+
 export default function LastSubmissionTime({ lastUpdated, lang }) {
   if (!lastUpdated) return null;
 
@@ -20,11 +22,7 @@ export default function LastSubmissionTime({ lastUpdated, lang }) {
   const date = toDate(lastUpdated);
   if (!date) return null;
 
-  const timeLabel = date.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  });
+  const timeLabel = formatClockTime(date, lang === 'en' ? 'en' : 'bn');
 
   return (
     <span
@@ -39,8 +37,8 @@ export default function LastSubmissionTime({ lastUpdated, lang }) {
       }}
       title={date.toLocaleString()}
     >
-      <span>{lang === 'en' ? 'Last successful submission' : 'সর্বশেষ সফল জমা'}</span>
-      <strong className="font-latin" style={{ color: '#D97706' }}>{timeLabel}</strong>
+      <span>{lang === 'en' ? 'Last successful submission' : 'শেষ উত্তর জমা পড়েছে'}</span>
+      <strong className="font-latin" style={{ color: 'var(--accent-gold)' }}>{timeLabel}</strong>
     </span>
   );
 }

@@ -13,7 +13,7 @@ const CRESTS = {
   AL: { src: alLogo, alt: 'Awami League Crest', inset: '84%' },
   BNP: { src: bnpLogo, alt: 'BNP Crest', inset: '84%' },
   JI: { src: jiLogo, alt: 'Jamaat-e-Islami Crest', inset: '82%' },
-  Sushil: { src: sushilLogo, alt: 'উদার সংবিধানবাদী সুশীল', inset: '84%' }
+  Sushil: { src: sushilLogo, alt: 'নির্দলীয় সুশাসনপন্থী', inset: '84%' }
 };
 
 /**

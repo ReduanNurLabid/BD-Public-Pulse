@@ -1,3 +1,4 @@
+import { readableColor } from '../lib/format';
 import React from 'react';
 
 /**
@@ -9,14 +10,14 @@ import React from 'react';
  * - Floating precision coordinate badge
  * - Fully responsive mini and full compass modes
  */
-export default function CompassChart({ coordinates, quadrantProfile, primaryBloc, isMini = false, miniMaxWidth = '280px', lang = 'bn' }) {
+export default function CompassChart({ coordinates, quadrantProfile, primaryBloc, leaders = [], isMini = false, miniMaxWidth = '280px', lang = 'bn' }) {
   const isEnglish = lang === 'en';
   const quadrantTitles = {
-    authoritarian_left: 'Authoritarian Left',
-    authoritarian_right: 'Authoritarian Right',
-    libertarian_left: 'Libertarian Left',
-    libertarian_right: 'Libertarian Right',
-    centrist: 'Centrist'
+    authoritarian_left: 'The Public Interest Guardian',
+    authoritarian_right: 'The Guardian of Law',
+    libertarian_left: 'The Charter Soldier',
+    libertarian_right: 'The Free Citizen',
+    centrist: 'The Impartial Judge'
   };
   const quadrantTitle = isEnglish
     ? (quadrantTitles[quadrantProfile?.key] || 'Political Quadrant')
@@ -105,13 +106,13 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
 
         {/* Mini Compass Axis Labels in High-Contrast Colors */}
         <div style={{ position: 'absolute', top: '-20px', left: '0', right: '0', textAlign: 'center', fontSize: '0.72rem', color: '#0369A1', fontWeight: 800 }}>
-          {isEnglish ? '▲ LIBERTARIAN' : '▲ স্বাধীনতাবাদী (LIBERTARIAN)'}
+          {isEnglish ? '▲ LIBERTARIAN' : '▲ উদারপন্থী'}
         </div>
         <div style={{ position: 'absolute', bottom: '-20px', left: '0', right: '0', textAlign: 'center', fontSize: '0.72rem', color: '#B91C1C', fontWeight: 800 }}>
-          {isEnglish ? '▼ AUTHORITARIAN' : '▼ কর্তৃত্ববাদী (AUTHORITARIAN)'}
+          {isEnglish ? '▼ AUTHORITARIAN' : '▼ শৃঙ্খলাপন্থী'}
         </div>
         <div style={{ position: 'absolute', left: '-26px', top: '50%', transform: 'translateY(-50%) rotate(-90deg)', fontSize: '0.68rem', color: '#047857', fontWeight: 800 }}>
-          {isEnglish ? '◄ COLLECTIVE' : '◄ সামষ্টিক'}
+          {isEnglish ? '◄ COLLECTIVE' : '◄ রাষ্ট্রীয় কল্যাণ'}
         </div>
         <div style={{ position: 'absolute', right: '-26px', top: '50%', transform: 'translateY(-50%) rotate(90deg)', fontSize: '0.68rem', color: '#B45309', fontWeight: 800 }}>
           {isEnglish ? 'FREE MARKET ►' : 'মুক্তবাজার ►'}
@@ -147,18 +148,18 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
           transform: 'translateX(-50%)',
           zIndex: 10,
           background: 'var(--bg-card)',
-          border: '1.5px solid #0284C7',
+          border: '1.5px solid var(--border-medium)',
           borderRadius: '9999px',
           padding: '0.2rem 0.6rem',
           fontSize: 'clamp(0.62rem, 2vw, 0.78rem)',
           fontWeight: 700,
-          color: '#0284C7',
+          color: 'var(--text-primary)',
           boxShadow: 'var(--shadow-sm)',
           whiteSpace: 'nowrap',
           maxWidth: '92%',
           textAlign: 'center'
         }}>
-          {isEnglish ? '▲ LIBERTARIAN & CIVIL LIBERTIES' : '▲ স্বাধীনতাবাদী ও নাগরিক অধিকার (LIBERTARIAN)'}
+          {isEnglish ? '▲ LIBERTARIAN & CIVIL LIBERTIES' : '▲ উদারপন্থী · নাগরিক স্বাধীনতা'}
         </div>
 
         {/* Horizontal Bottom Label Pill (Authoritarian) */}
@@ -169,18 +170,18 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
           transform: 'translateX(-50%)',
           zIndex: 10,
           background: 'var(--bg-card)',
-          border: '1.5px solid #DC2626',
+          border: '1.5px solid var(--border-medium)',
           borderRadius: '9999px',
           padding: '0.2rem 0.6rem',
           fontSize: 'clamp(0.62rem, 2vw, 0.78rem)',
           fontWeight: 700,
-          color: '#DC2626',
+          color: 'var(--text-primary)',
           boxShadow: 'var(--shadow-sm)',
           whiteSpace: 'nowrap',
           maxWidth: '92%',
           textAlign: 'center'
         }}>
-          {isEnglish ? '▼ AUTHORITARIAN & CENTRAL ORDER' : '▼ কর্তৃত্ববাদী ও কেন্দ্রীয় শৃঙ্খলা (AUTHORITARIAN)'}
+          {isEnglish ? '▼ AUTHORITARIAN & CENTRAL ORDER' : '▼ শৃঙ্খলাপন্থী · শক্তিশালী রাষ্ট্র'}
         </div>
 
         <svg 
@@ -239,7 +240,7 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
           {/* Origin Centrist Circle (r=38) */}
           <circle cx="240" cy="240" r="38" fill="rgba(2, 132, 199, 0.05)" stroke="rgba(2, 132, 199, 0.35)" strokeDasharray="4 4" />
           <text x="240" y="244" textAnchor="middle" fill="var(--text-muted)" fontSize="11" fontWeight="700">
-            {isEnglish ? 'CENTRIST' : 'সুশীল মধ্যপন্থা'}
+            {isEnglish ? 'CENTRIST' : 'নিরপেক্ষ বিচারক'}
           </text>
 
           {/* Crisp High-Contrast Crosshairs Axes at (0, 0) */}
@@ -267,16 +268,16 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
 
           {/* Watermark Quadrant Titles - Increased font size for mobile readability */}
           <text x="138" y="74" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
-            {isEnglish ? 'LIBERTARIAN LEFT' : 'সামাজিক প্রগতিশীল'}
+            {isEnglish ? 'CHARTER SOLDIER' : 'সনদের সৈনিক'}
           </text>
           <text x="342" y="74" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
-            {isEnglish ? 'LIBERTARIAN RIGHT' : 'উদার মুক্তবাজারপন্থী'}
+            {isEnglish ? 'FREE CITIZEN' : 'স্বাধীন নাগরিক'}
           </text>
           <text x="138" y="420" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
-            {isEnglish ? 'AUTHORITARIAN LEFT' : 'কর্তৃত্ববাদী সমাজকল্যাণ'}
+            {isEnglish ? 'PUBLIC GUARDIAN' : 'জনস্বার্থের প্রহরী'}
           </text>
           <text x="342" y="420" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
-            {isEnglish ? 'AUTHORITARIAN RIGHT' : 'জাতীয় ঐতিহ্যবাদী'}
+            {isEnglish ? 'GUARDIAN OF LAW' : 'আইনের পাহারাদার'}
           </text>
 
           {/* User's Plotted Coordinate Dot: Solid Dark Blue/Black (#0F172A) with Crisp White Border */}
@@ -291,6 +292,32 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
             <animate attributeName="r" values="8;20;8" dur="2.4s" begin="0.4s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="0.35;0.05;0.35" dur="2.4s" begin="0.4s" repeatCount="indefinite" />
           </circle>
+
+          {/* Living leaders, computed with the same scoring (drawn under the user's dot) */}
+          {leaders.filter((l) => l.position).map((l) => {
+            const lx = mapCoordinateToSvg(l.position.x);
+            const ly = 240 - (l.position.y / 100) * 200;
+            const label = isEnglish ? l.shortEn : l.shortBn;
+            const anchorEnd = lx > 360;
+            return (
+              <g key={l.id} opacity="0.9">
+                <circle cx={lx} cy={ly} r="8" fill="#FFFFFF" stroke={l.color} strokeWidth="3.5" />
+                <text
+                  x={anchorEnd ? lx - 13 : lx + 13}
+                  y={ly + 6}
+                  textAnchor={anchorEnd ? 'end' : 'start'}
+                  fontSize="17"
+                  fontWeight="700"
+                  fill={l.color}
+                  stroke="var(--bg-card)"
+                  strokeWidth="3"
+                  paintOrder="stroke"
+                >
+                  {label}
+                </text>
+              </g>
+            );
+          })}
 
           {/* Solid Point: Dark Blue / Black with thick White border so it pops against light quadrant */}
           <circle 
@@ -353,8 +380,8 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
           fontSize: '0.94rem',
           boxShadow: 'var(--shadow-sm)'
         }}>
-          <span>{isEnglish ? 'Political Quadrant: ' : 'আদর্শিক চতুর্ভুজ: '}</span>
-          <strong style={{ color: quadrantProfile?.badgeColor || '#D97706' }}>
+          <span>{isEnglish ? 'Political Quadrant: ' : 'আপনার অবস্থান: '}</span>
+          <strong style={{ color: readableColor(quadrantProfile?.badgeColor || '#D97706') }}>
             {quadrantTitle}
           </strong>
         </div>

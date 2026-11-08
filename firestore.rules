@@ -2,6 +2,10 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
     
     // 1. Survey Responses Collection
     // - WRITE-ONLY: Citizens can submit their survey results.
@@ -9,7 +13,7 @@ service cloud.firestore {
     // - SINGLE SUBMISSION: Once a document with this ID is created, it cannot be overwritten or deleted.
     // - ANTI-BOT / SPAM: Validates required payload structure and minimal realistic duration.
     match /responses/{responseId} {
-      allow read: if false;
+      allow read: if isAdmin();
       
       allow create: if !exists(/databases/$(database)/documents/responses/$(responseId))
                     && request.resource.data.sessionId != null
@@ -44,7 +48,9 @@ service cloud.firestore {
     //   the known set, and requires the server timestamp so a client cannot
     //   backdate an entry to win a "first proposal" race.
     match /proposals/{proposalId} {
-      allow read: if false;
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
 
       allow create: if request.resource.data.keys().hasAll(
                       ['title', 'category', 'description', 'deviceId', 'createdAt', 'status']
@@ -61,8 +67,58 @@ service cloud.firestore {
                  && request.resource.data.deviceId is string
                  && request.resource.data.status == 'pending'
                  && request.resource.data.createdAt == request.time;
+    }
 
-      allow update, delete: if false;
+    // 5. Feedback from the site: anyone may send, only an admin may read.
+    match /feedback/{feedbackId} {
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+      allow create: if request.resource.data.keys().hasOnly(['message', 'deviceId', 'createdAt', 'status'])
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() >= 1
+                    && request.resource.data.message.size() <= 1000
+                    && request.resource.data.deviceId is string
+                    && request.resource.data.status == 'pending'
+                    && request.resource.data.createdAt == request.time;
+    }
+
+    // 6. Weekly questions. Drafts are private; a vote may only add one to one option.
+    match /weekly_issues/{issueId} {
+      function voteRef() {
+        return /databases/$(database)/documents/weekly_issues/$(issueId)/votes/$(request.auth.uid);
+      }
+      function total(data) {
+        return data.counts.agree + data.counts.neutral + data.counts.disagree;
+      }
+      function isOneVote() {
+        let choice = getAfter(voteRef()).data.choice;
+        return request.auth != null
+          && resource.data.status == 'live'
+          && !exists(voteRef())
+          && existsAfter(voteRef())
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['counts'])
+          && request.resource.data.counts[choice] == resource.data.counts[choice] + 1
+          && total(request.resource.data) == total(resource.data) + 1;
+      }
+
+      allow read: if isAdmin() || resource.data.status in ['live', 'closed'];
+      allow create: if isAdmin();
+      allow update: if isAdmin() || isOneVote();
+      allow delete: if isAdmin() && resource.data.status == 'draft';
+
+      match /votes/{voterId} {
+        allow read: if request.auth != null && request.auth.uid == voterId;
+        allow create: if request.auth != null
+                      && request.auth.uid == voterId
+                      && request.resource.data.keys().hasOnly(['choice', 'createdAt'])
+                      && request.resource.data.choice in ['agree', 'neutral', 'disagree']
+                      && request.resource.data.createdAt == request.time
+                      && get(/databases/$(database)/documents/weekly_issues/$(issueId)).data.status == 'live'
+                      && getAfter(/databases/$(database)/documents/weekly_issues/$(issueId)).data.counts[request.resource.data.choice]
+                         == get(/databases/$(database)/documents/weekly_issues/$(issueId)).data.counts[request.resource.data.choice] + 1;
+        allow update, delete: if false;
+      }
     }
 
     // Default deny for all other collections

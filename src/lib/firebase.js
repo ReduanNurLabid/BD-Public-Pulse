@@ -1,9 +1,9 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
 import { getAnalytics, isSupported as isAnalyticsSupported } from "firebase/analytics";
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { connectAuthEmulator, getAuth, signInAnonymously } from "firebase/auth";
 import {
-  getFirestore,
+  connectFirestoreEmulator, getFirestore,
   collection,
   addDoc,
   doc,
@@ -27,7 +27,8 @@ LIKERT_MIN,
 LIKERT_MAX,
 PROPOSAL_CATEGORIES,
 PROPOSAL_CATEGORY_VALUES,
-BLOC_PROFILES
+BLOC_PROFILES,
+QUADRANT_PROFILES
 } from "../data/questions.js";
 import { MODEL_VERSION } from "./scoring.js";
 import {
@@ -62,11 +63,13 @@ export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // Initialize Firestore
 export const db = getFirestore(app);
+if (import.meta.env.VITE_USE_EMULATORS === "true") connectFirestoreEmulator(db, "127.0.0.1", 8080);
 
 // Initialize Firebase Auth & Anonymous Session
 export const auth = getAuth(app);
+if (import.meta.env.VITE_USE_EMULATORS === "true") connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
 if (typeof window !== "undefined") {
-  signInAnonymously(auth).catch((err) => {
+  auth.authStateReady().then(() => (auth.currentUser ? null : signInAnonymously(auth))).catch((err) => {
     console.debug("Firebase Auth notice (anonymous sign-in optional):", err.message);
   });
 }
@@ -118,7 +121,10 @@ if (typeof window !== "undefined") {
 // Local storage key for offline session
 const LOCAL_STORAGE_SESSION_KEY = 'bd_compass_session_v1';
 const LOCAL_STORAGE_SUBMISSIONS_KEY = 'bd_compass_submissions_v1';
-export const MIN_PUBLIC_COHORT_SIZE = 1;
+// Privacy floor: any group (division, age band, religion, filtered cohort)
+// with fewer respondents than this is withheld everywhere it is displayed, so
+// a single person's answers can never be singled out.
+export const MIN_PUBLIC_COHORT_SIZE = 10;
 export const CURRENT_AGGREGATE_DOC_ID =
   `aggregates_${MODEL_VERSION}_${QUESTION_SET_VERSION}`;
 
@@ -172,13 +178,13 @@ blocs: Object.fromEntries(
   ),
 
   // Quadrant distribution percentages
-  quadrants: {
-    libertarian_left: { percentage: 0, label: 'সামাজিক প্রগতিশীল ও নাগরিক স্বাধীনতাবাদী', count: 0 },
-    libertarian_right: { percentage: 0, label: 'উদার ব্যক্তিস্বাধীনতাবাদী ও মুক্তবাজারপন্থী', count: 0 },
-    authoritarian_left: { percentage: 0, label: 'কর্তৃত্ববাদী সমাজকল্যাণ ও রাষ্ট্র নিয়ন্ত্রিত', count: 0 },
-    authoritarian_right: { percentage: 0, label: 'জাতীয় ঐতিহ্যবাদী ও শৃঙ্খলাকামী রক্ষণশীল', count: 0 },
-    centrist: { percentage: 0, label: 'মধ্যপন্থী ও বাস্তববাদী সংস্কারবাদী', count: 0 }
-  },
+  quadrants: Object.fromEntries(
+    Object.values(QUADRANT_PROFILES).map(profile => [
+      profile.key,
+      { percentage: 0, label: profile.name, count: 0 }
+    ])
+  ),
+
 
   // 8 Thematic Axes running totals.
   //

@@ -9,14 +9,16 @@ import {
   Languages
 } from 'lucide-react';
 import { 
-  QUESTIONS, 
+  getQuestionsForLength,
+  DEFAULT_QUIZ_LENGTH,
   THEMATIC_BLOCKS, 
   LIKERT_OPTIONS, 
   ENGLISH_QUESTION_TEXTS, 
   ENGLISH_THEMATIC_BLOCKS 
 } from '../data/questions';
 
-export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleLang }) {
+export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleLang, length = DEFAULT_QUIZ_LENGTH }) {
+  const QUESTIONS = React.useMemo(() => getQuestionsForLength(length), [length]);
   const [localLang, setLocalLang] = useState(lang);
 
   useEffect(() => {
@@ -139,9 +141,9 @@ export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleL
   const progressPercent = Math.round(((currentIndex + 1) / QUESTIONS.length) * 100);
 
   // Calculate question index inside current theme (e.g. 1 of 3)
-  const [startRange, endRange] = currentBlock.questionRange || [1, 3];
-  const questionNumInTheme = (currentIndex + 1) - (startRange - 1);
-  const totalInTheme = (endRange - startRange + 1);
+  const themeQuestions = QUESTIONS.filter(q => q.blockId === currentQ.blockId);
+  const questionNumInTheme = themeQuestions.findIndex(q => q.id === currentQ.id) + 1;
+  const totalInTheme = themeQuestions.length;
 
   // Clean redundant quotes from the raw question statement
   const rawQuestionText = isEnglish 
@@ -244,8 +246,8 @@ export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleL
 
             <span className="survey-eyebrow-step">
               {isEnglish 
-                ? `Statement ${questionNumInTheme} of ${totalInTheme} in this dimension` 
-                : `এই মাপকাঠির ${enToBn(questionNumInTheme)} / ${enToBn(totalInTheme)} নম্বর বক্তব্য`}
+                ? `${questionNumInTheme} of ${totalInTheme}` 
+                : `${enToBn(totalInTheme)}টির মধ্যে ${enToBn(questionNumInTheme)}`}
             </span>
 
             {/* Quick Toggle: View Question in English / Bangla */}
@@ -277,7 +279,7 @@ export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleL
             <span>
               {isEnglish
                 ? 'Choose the response that best reflects your view:'
-                : 'বক্তব্যটির সাথে আপনার সহমতের মাত্রা নির্বাচন করুন:'}
+                : 'আপনি কতটা একমত?'}
             </span>
           </div>
 
@@ -341,12 +343,12 @@ export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleL
           {selectedScore !== null ? (
             <span style={{ color: 'var(--accent-green)', fontWeight: 650, display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
               <span>✓</span>
-              <span>{isEnglish ? 'Answer recorded' : 'উত্তর সংরক্ষিত হয়েছে'}</span>
+              <span>{isEnglish ? 'Answer recorded' : 'উত্তর নেওয়া হয়েছে'}</span>
             </span>
           ) : (
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
               <span style={{ fontSize: '0.9rem' }}>💡</span>
-              <span>{isEnglish ? 'Keys 1–5 to answer · ◀ Back' : 'কিবোর্ডের ১–৫ চেপে উত্তর দিতে পারেন · ◀ আগের প্রশ্ন'}</span>
+              <span className="kbd-hint-text">{isEnglish ? 'Keys 1–5 to answer · ◀ Back' : 'কি-বোর্ডে ১–৫ চাপলেও চলবে · ◀ আগের প্রশ্ন'}</span>
             </span>
           )}
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowRight, ShieldCheck, ChevronRight, User } from 'lucide-react';
-import { AGE_BUCKETS, BLOC_PROFILES } from '../data/questions';
+import { Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { AGE_BUCKETS, BLOC_PROFILES, ageBucketLabel } from '../data/questions';
 
 const AGE_RANGES = AGE_BUCKETS;
 
@@ -71,11 +71,11 @@ const REFERENDUM_VOTES = [
 
 const OPTION_LABELS_EN = {
   ...Object.fromEntries(AGE_RANGES.map((value, index) => [value, [
-    '18–25 (younger generation)',
-    '26–35 (young adults / working age)',
-    '36–45 (middle-aged)',
-    '46–60 (experienced adults)',
-    '60+ (senior citizens)'
+    '18–25',
+    '26–35',
+    '36–45',
+    '46–60',
+    '60+'
   ][index]])),
   'ঢাকা বিভাগ': 'Dhaka Division',
   'চট্টগ্রাম বিভাগ': 'Chattogram Division',
@@ -106,8 +106,8 @@ const OPTION_LABELS_EN = {
   'গৃহিণী': 'Homemaker',
   'জাতীয় নাগরিক পার্টি': 'National Citizen Party (NCP)',
   'বিএনপি': 'Bangladesh Nationalist Party (BNP)',
-  'জামায়াত-ইসলামী': 'Bangladesh Jamaat-e-Islami',
-  'উদার সংবিধানবাদী সুশীল': 'Civil Society / Centrist Constitutionalist',
+  'জামায়াতে ইসলামী': 'Bangladesh Jamaat-e-Islami',
+  'নির্দলীয় সুশাসনপন্থী': 'Non-partisan good governance',
   'আওয়ামী লীগ': 'Awami League',
   'বামজোট / অন্যান্য': 'Left alliance / Other',
   'কাউকে সমর্থন করি না': 'I do not support anyone',
@@ -116,9 +116,18 @@ const OPTION_LABELS_EN = {
   'ভোট বর্জন করেছি / ভোট দিইনি': 'Boycotted / did not vote'
 };
 
+// Bangla display labels. Option values are stored and aggregated as-is, so
+// only what the person sees changes here.
+const OPTION_LABELS_BN = {
+  ...Object.fromEntries(AGE_RANGES.map(value => [value, ageBucketLabel(value)])),
+  'শিক্ষার্থী (ছাত্র/ছাত্রী)': 'শিক্ষার্থী',
+  'স্নাতক (অধ্যয়নরত / সম্পন্ন)': 'স্নাতক (পড়ছি / শেষ করেছি)',
+  'স্নাতকোত্তর ও তদূর্ধ্ব': 'স্নাতকোত্তর বা তার বেশি'
+};
+
 export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
   const isEnglish = lang === 'en';
-  const optionLabel = (value) => isEnglish ? (OPTION_LABELS_EN[value] || value) : value;
+  const optionLabel = (value) => isEnglish ? (OPTION_LABELS_EN[value] || value) : (OPTION_LABELS_BN[value] || value);
   const [formData, setFormData] = useState({
     ageRange: '',
     division: '',
@@ -127,9 +136,10 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
     education: '',
     occupation: '',
     partySupport: '',
-    referendumVote: '',
-    name: ''
+    referendumVote: ''
   });
+  // Consent only matters once the person has actually shared something.
+  const hasAnyAnswer = Object.values(formData).some(Boolean);
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -158,12 +168,12 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
         <div className="hero-badge-tag" style={{
           background: 'rgba(0, 168, 107, 0.15)',
           borderColor: 'rgba(0, 168, 107, 0.35)',
-          color: '#34D399',
+          color: 'var(--accent-green)',
           padding: '0.45rem 1.25rem',
           fontSize: '0.95rem'
         }}>
           <Sparkles size={16} />
-          <span>{isEnglish ? '🎉 You have successfully completed all 24 questions!' : '🎉 ২৪টি প্রশ্নের মূল্যায়ন সফলভাবে সম্পন্ন হয়েছে!'}</span>
+          <span>{isEnglish ? '🎉 Nice! All questions done' : '🎉 দারুণ! সব প্রশ্ন শেষ'}</span>
         </div>
       </div>
 
@@ -172,13 +182,21 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h2 style={{ fontSize: 'clamp(1.4rem, 2.5vw, 1.85rem)', marginBottom: '0.6rem', color: 'var(--text-primary)' }}>
-            {isEnglish ? 'Refine your results and contribute to the research' : 'আপনার ফলাফল নিখুঁত করুন ও গবেষণায় অবদান রাখুন'}
+            {isEnglish ? 'Refine your results and contribute to the research' : 'আর ২০ সেকেন্ড দেবেন?'}
           </h2>
           <p style={{ fontSize: '0.96rem', color: 'var(--text-secondary)', maxWidth: '620px', margin: '0 auto', lineHeight: 1.7 }}>
             {isEnglish
-              ? <>The information below is <strong style={{ color: '#D97706' }}>optional</strong>. Responses are stored with a pseudonymous session identifier; your name is not included in the stored response. Demographic answers may be used in aggregate comparisons on the live dashboard.</>
-              : <>নিচের তথ্যগুলো <strong style={{ color: '#D97706' }}>ঐচ্ছিক</strong>। উত্তর একটি ছদ্মনামী সেশন আইডির সঙ্গে সংরক্ষিত হয়; সংরক্ষিত উত্তরে আপনার নাম রাখা হয় না। জনতাত্ত্বিক উত্তর লাইভ ড্যাশবোর্ডে সমষ্টিগত তুলনায় ব্যবহৃত হতে পারে।</>}
+              ? <>The information below is <strong style={{ color: 'var(--accent-gold)' }}>optional</strong>. Responses are stored with a pseudonymous session identifier. Demographic answers may be used in aggregate comparisons on the live dashboard. We never ask for your name.</>
+              : <>নিচের সবকিছু <strong style={{ color: 'var(--accent-gold)' }}>ঐচ্ছিক</strong>। দিলে ড্যাশবোর্ডে বয়স, বিভাগ বা পেশাভেদে মতের পার্থক্য দেখানো যায়। আপনার নাম জানতে চাওয়া হয় না।</>}
           </p>
+          <button
+            type="button"
+            onClick={handleSkip}
+            disabled={isSubmitting}
+            style={{ marginTop: '0.9rem', background: 'none', border: 'none', padding: '0.4rem', color: 'var(--hero-accent)', fontWeight: 700, fontSize: '1rem', textDecoration: 'underline', textUnderlineOffset: '3px', cursor: 'pointer' }}
+          >
+            {isEnglish ? 'Skip these and see my result →' : 'এগুলো বাদ দিয়ে ফলাফল দেখি →'}
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -187,14 +205,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '1.25rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '1. Age group' : '১. আপনার বয়স সীমা (Age Group)'}
+                {isEnglish ? 'Age' : 'বয়স'}
               </label>
               <select
                 value={formData.ageRange}
                 onChange={(e) => handleChange('ageRange', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select age (optional) --' : '-- বয়স নির্বাচন করুন (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select age (optional) --' : 'বেছে নিন'}</option>
                 {AGE_RANGES.map(a => (
                   <option key={a} value={a}>{optionLabel(a)}</option>
                 ))}
@@ -203,14 +221,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '2. Division' : '২. আপনার বিভাগ (Division)'}
+                {isEnglish ? 'Division' : 'বিভাগ'}
               </label>
               <select
                 value={formData.division}
                 onChange={(e) => handleChange('division', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select division (optional) --' : '-- বিভাগ নির্বাচন করুন (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select division (optional) --' : 'বেছে নিন'}</option>
                 {DIVISIONS.map(d => (
                   <option key={d} value={d}>{optionLabel(d)}</option>
                 ))}
@@ -222,14 +240,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '1.25rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '3. Religion' : '৩. ধর্মীয় পরিচয় (Religion)'}
+                {isEnglish ? 'Religion' : 'ধর্ম'}
               </label>
               <select
                 value={formData.religion}
                 onChange={(e) => handleChange('religion', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select religion (optional) --' : '-- ধর্ম নির্বাচন করুন (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select religion (optional) --' : 'বেছে নিন'}</option>
                 {RELIGIONS.map(r => (
                   <option key={r} value={r}>{optionLabel(r)}</option>
                 ))}
@@ -238,14 +256,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '4. Gender' : '৪. লিঙ্গ পরিচয় (Gender)'}
+                {isEnglish ? 'Gender' : 'লিঙ্গ'}
               </label>
               <select
                 value={formData.gender}
                 onChange={(e) => handleChange('gender', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select gender (optional) --' : '-- লিঙ্গ নির্বাচন করুন (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select gender (optional) --' : 'বেছে নিন'}</option>
                 {GENDERS.map(g => (
                   <option key={g} value={g}>{optionLabel(g)}</option>
                 ))}
@@ -257,14 +275,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '1.25rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '5. Education' : '৫. শিক্ষাগত যোগ্যতা (Education)'}
+                {isEnglish ? 'Education' : 'পড়াশোনা'}
               </label>
               <select
                 value={formData.education}
                 onChange={(e) => handleChange('education', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select education (optional) --' : '-- শিক্ষাগত যোগ্যতা (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select education (optional) --' : 'বেছে নিন'}</option>
                 {EDUCATION_LEVELS.map(ed => (
                   <option key={ed} value={ed}>{optionLabel(ed)}</option>
                 ))}
@@ -273,14 +291,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '6. Occupation' : '৬. বর্তমান পেশা (Occupation)'}
+                {isEnglish ? 'Occupation' : 'পেশা'}
               </label>
               <select
                 value={formData.occupation}
                 onChange={(e) => handleChange('occupation', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select occupation (optional) --' : '-- পেশা নির্বাচন করুন (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select occupation (optional) --' : 'বেছে নিন'}</option>
                 {OCCUPATIONS.map(oc => (
                   <option key={oc} value={oc}>{optionLabel(oc)}</option>
                 ))}
@@ -292,14 +310,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '1.25rem', marginTop: '1.25rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '7. Party support (February 2026)' : '৭. দলীয় সমর্থন (Feb 2026 Party Support)'}
+                {isEnglish ? 'Which party did you support in the February 2026 election?' : 'ফেব্রুয়ারি ২০২৬-এর নির্বাচনে কোন দলকে সমর্থন করেছিলেন?'}
               </label>
               <select
                 value={formData.partySupport}
                 onChange={(e) => handleChange('partySupport', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select support (optional) --' : '-- সমর্থন নির্বাচন করুন (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select support (optional) --' : 'বেছে নিন'}</option>
                 {PARTY_SUPPORT.map(p => (
                   <option key={p} value={p}>{optionLabel(p)}</option>
                 ))}
@@ -308,14 +326,14 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                {isEnglish ? '8. Referendum vote' : '৮. গণভোট (Referendum) ভোটদান'}
+                {isEnglish ? 'How did you vote in the referendum?' : 'গণভোটে কী ভোট দিয়েছিলেন?'}
               </label>
               <select
                 value={formData.referendumVote}
                 onChange={(e) => handleChange('referendumVote', e.target.value)}
                 className="form-select-control"
               >
-                <option value="">{isEnglish ? '-- Select your vote (optional) --' : '-- কী ভোট দিয়েছেন (ঐচ্ছিক) --'}</option>
+                <option value="">{isEnglish ? '-- Select your vote (optional) --' : 'বেছে নিন'}</option>
                 {REFERENDUM_VOTES.map(v => (
                   <option key={v} value={v}>{optionLabel(v)}</option>
                 ))}
@@ -323,24 +341,8 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
             </div>
           </div>
 
-          {/* Row 5: Certificate Name */}
-          <div style={{ marginTop: '1.25rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-              <User size={16} style={{ color: 'var(--accent-gold)' }} />
-              <span>{isEnglish ? '9. Your name (optional — shown on your certificate)' : '৯. আপনার নাম (ঐচ্ছিক - সনদে প্রদর্শনের জন্য)'}</span>
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-              placeholder={isEnglish ? 'Enter your name...' : 'আপনার নাম লিখুন...'}
-              className="form-select-control"
-              style={{ width: '100%', padding: '0.75rem', borderRadius: '10px' }}
-            />
-          </div>
-
           {/* Privacy Note */}
-          <label style={{
+          {hasAnyAnswer && <label style={{
             display: 'flex',
             alignItems: 'flex-start',
             gap: '0.65rem',
@@ -354,9 +356,9 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
           }}>
             <input type="checkbox" required style={{ marginTop: '0.25rem', flexShrink: 0 }} />
             <span>{isEnglish
-              ? 'I agree that the optional demographic answers I provide (including religion, party support, and referendum vote) may be used in grouped dashboard statistics. A pseudonymous session identifier is stored with responses; my name is not stored with the response.'
-              : 'আমি সম্মত যে আমার দেওয়া ঐচ্ছিক জনতাত্ত্বিক উত্তর (ধর্ম, দলীয় সমর্থন ও গণভোটের উত্তরসহ) ড্যাশবোর্ডের সমষ্টিগত পরিসংখ্যানে ব্যবহৃত হতে পারে। উত্তরের সঙ্গে একটি ছদ্মনামী সেশন আইডি সংরক্ষিত হয়; উত্তরের সঙ্গে আমার নাম রাখা হয় না।'}</span>
-          </label>
+              ? 'I agree that the optional demographic answers I provide (including religion, party support, and referendum vote) may be used in grouped dashboard statistics. Only a pseudonymous session identifier is stored with responses, never a name.'
+              : 'আমি রাজি যে ওপরের তথ্যগুলো (ধর্ম, দলীয় সমর্থন ও গণভোটসহ) ড্যাশবোর্ডের সম্মিলিত হিসাবে ব্যবহার হতে পারে। উত্তরের সাথে শুধু একটি বেনামি সেশন আইডি থাকবে, কোনো নাম নয়।'}</span>
+          </label>}
 
           <div style={{ 
             display: 'flex', 
@@ -366,10 +368,10 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
             color: 'var(--text-muted)',
             marginTop: '0.5rem'
           }}>
-            <ShieldCheck size={18} color="#34D399" />
+            <ShieldCheck size={18} color="var(--accent-green)" />
             <span>{isEnglish
-              ? 'Please avoid entering identifying details. Published results are grouped; small groups are withheld.'
-              : 'শনাক্তকারী তথ্য দেবেন না। প্রকাশিত ফলাফল গোষ্ঠীভিত্তিক; ছোট গোষ্ঠীর তথ্য দেখানো হয় না।'}</span>
+              ? 'Please avoid identifying details such as phone numbers or addresses. Results are only shown in groups; any group under 10 people is withheld.'
+              : 'ফোন নম্বর বা ঠিকানার মতো তথ্য দেবেন না। ফলাফল শুধু দল বেঁধে দেখানো হয়; ১০ জনের কম হলে কোনো গোষ্ঠী দেখানো হয় না।'}</span>
           </div>
 
           {/* Action CTAs */}
@@ -386,7 +388,7 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
               className="btn-primary btn-gold"
               style={{ padding: '0.95rem 2.5rem', fontSize: '1.1rem', opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
             >
-              <span>{isSubmitting ? (isEnglish ? 'Processing...' : 'প্রসেস হচ্ছে...') : (isEnglish ? 'View results and your ideology certificate' : 'ফলাফল ও আদর্শ সনদ দেখুন')}</span>
+              <span>{isSubmitting ? (isEnglish ? 'Preparing your result…' : 'ফলাফল তৈরি হচ্ছে…') : (isEnglish ? 'See my result' : 'আমার ফলাফল দেখি')}</span>
               {!isSubmitting && <ArrowRight size={20} />}
             </button>
 
@@ -397,7 +399,7 @@ export default function DemographicsForm({ onSubmit, onSkip, lang = 'bn' }) {
               className="btn-secondary"
               style={{ padding: '0.95rem 1.8rem', fontSize: '1rem', opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
             >
-              <span>{isEnglish ? 'Skip / view results now' : 'বাদ দিন / সরাসরি ফলাফল দেখুন'}</span>
+              <span>{isEnglish ? 'Skip these and see my result' : 'এগুলো বাদ দিয়ে ফলাফল দেখি'}</span>
             </button>
           </div>
 

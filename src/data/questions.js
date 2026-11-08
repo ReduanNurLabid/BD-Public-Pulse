@@ -17,10 +17,10 @@ export const THEMATIC_BLOCKS = [
     "subtitle": "রাষ্ট্রীয় ক্ষমতা ও নির্বাহী কর্তৃত্ব",
     "icon": "Shield",
     "questionRange": [1, 3],
-    "leftPole": "কর্তৃত্ববাদী / কেন্দ্রীয় নিয়ন্ত্রণ",
+    "leftPole": "শক্তিশালী কেন্দ্রীয় নির্বাহী",
     "rightPole": "ক্ষমতার ভারসাম্য ও বিকেন্দ্রীকরণ",
-    "leftShort": "কেন্দ্রিক কর্তৃত্ব",
-    "rightShort": "ভারসাম্যমুখী"
+    "leftShort": "শক্তিশালী কেন্দ্র",
+    "rightShort": "ক্ষমতার ভাগাভাগি"
   },
   {
     "id": 2,
@@ -29,10 +29,10 @@ export const THEMATIC_BLOCKS = [
     "subtitle": "নির্বাচন ব্যবস্থা ও গণতন্ত্র",
     "icon": "Vote",
     "questionRange": [4, 6],
-    "leftPole": "দলীয় প্রভাব ও নির্বাহী নিয়ন্ত্রণ",
-    "rightPole": "নিরপেক্ষ তত্ত্বাবধায়ক ও আনুপাতিক প্রতিনিধিত্ব",
-    "leftShort": "দলীয় নিয়ন্ত্রণ",
-    "rightShort": "নিরপেক্ষ ব্যবস্থা"
+    "leftPole": "নির্বাচিত সরকারের অধীনে নির্বাচন ও বিদ্যমান পদ্ধতি",
+    "rightPole": "নির্দলীয় তত্ত্বাবধায়ক ও আনুপাতিক প্রতিনিধিত্ব",
+    "leftShort": "নির্বাচিত সরকারের অধীনে",
+    "rightShort": "নির্দলীয় তদারকিতে"
   },
   {
     "id": 3,
@@ -41,10 +41,10 @@ export const THEMATIC_BLOCKS = [
     "subtitle": "ধর্ম, ধর্মনিরপেক্ষতা ও নৈতিকতা",
     "icon": "Scale",
     "questionRange": [7, 9],
-    "leftPole": "ধর্মীয় অনুশাসন ও রাষ্ট্রধর্ম প্রাধান্য",
+    "leftPole": "রাষ্ট্র ও আইনে ধর্মীয় মূল্যবোধের প্রাধান্য",
     "rightPole": "ধর্মনিরপেক্ষতা ও সর্বজনীন সমতা",
-    "leftShort": "ধর্মীয় অনুশাসন",
-    "rightShort": "ধর্মনিরপেক্ষতা"
+    "leftShort": "ধর্মীয় মূল্যবোধে রাষ্ট্র",
+    "rightShort": "ধর্মনিরপেক্ষ রাষ্ট্র"
   },
   {
     "id": 4,
@@ -55,7 +55,7 @@ export const THEMATIC_BLOCKS = [
     "questionRange": [10, 12],
     "leftPole": "রাষ্ট্রীয় মালিকানা ও প্রগতিশীল কর",
     "rightPole": "উন্মুক্ত মুক্তবাজার ও পুঁজিবাদী প্রবৃদ্ধি",
-    "leftShort": "সামষ্টিক / কল্যাণ",
+    "leftShort": "রাষ্ট্রীয় কল্যাণ",
     "rightShort": "মুক্তবাজার"
   },
   {
@@ -65,10 +65,10 @@ export const THEMATIC_BLOCKS = [
     "subtitle": "জাতীয়তাবাদ ও সার্বভৌমত্ব",
     "icon": "Globe",
     "questionRange": [13, 15],
-    "leftPole": "কৌশলগত ছাড় ও একক নির্ভরশীলতা",
-    "rightPole": "আপসহীন সার্বভৌমত্ব ও বহুমুখী পররাষ্ট্রনীতি",
-    "leftShort": "কৌশলগত ছাড়",
-    "rightShort": "আপসহীন মর্যাদা"
+    "leftPole": "প্রতিবেশীর সাথে সমঝোতা ও ঘনিষ্ঠ সম্পর্ক",
+    "rightPole": "কঠোর দর-কষাকষি ও বহুমুখী পররাষ্ট্রনীতি",
+    "leftShort": "সমঝোতার কূটনীতি",
+    "rightShort": "কঠোর সার্বভৌম অবস্থান"
   },
   {
     "id": 6,
@@ -77,10 +77,10 @@ export const THEMATIC_BLOCKS = [
     "subtitle": "নাগরিক স্বাধীনতা ও মানবাধিকার",
     "icon": "UserCheck",
     "questionRange": [16, 18],
-    "leftPole": "নিয়ন্ত্রণ ও সাইবার নজরদারি",
-    "rightPole": "নিরঙ্কুশ বাকস্বাধীনতা ও প্রাতিষ্ঠানিক বিচার",
-    "leftShort": "কঠোর নিয়ন্ত্রণ",
-    "rightShort": "বাকস্বাধীনতা"
+    "leftPole": "আইনশৃঙ্খলা ও রাষ্ট্রীয় নিরাপত্তার অগ্রাধিকার",
+    "rightPole": "বাকস্বাধীনতা ও আইনি প্রক্রিয়ার সুরক্ষা",
+    "leftShort": "নিরাপত্তা আগে",
+    "rightShort": "স্বাধীনতা আগে"
   },
   {
     "id": 7,
@@ -89,10 +89,10 @@ export const THEMATIC_BLOCKS = [
     "subtitle": "প্রাতিষ্ঠানিক সংস্কার ও সাংবিধানিক রূপান্তর",
     "icon": "FileText",
     "questionRange": [19, 21],
-    "leftPole": "প্রচলিত সাংবিধানিক স্থিতাবস্থা",
-    "rightPole": "আমূল রূপান্তর ও বৈষম্যহীন ন্যায়বিচার",
-    "leftShort": "স্থিতাবস্থা",
-    "rightShort": "আমূল রূপান্তর"
+    "leftPole": "বিদ্যমান সংবিধানে ধাপে ধাপে সংশোধন",
+    "rightPole": "রাষ্ট্রকাঠামোর আমূল সংস্কার",
+    "leftShort": "ধাপে ধাপে সংশোধন",
+    "rightShort": "আমূল সংস্কার"
   },
   {
     "id": 8,
@@ -101,323 +101,287 @@ export const THEMATIC_BLOCKS = [
     "subtitle": "সামাজিক ন্যায়বিচার ও অন্তর্ভুক্তিমূলক উন্নয়ন",
     "icon": "HeartHandshake",
     "questionRange": [22, 24],
-    "leftPole": "বিদ্যমান ব্যবস্থা ও মালিকপক্ষের সুরক্ষা",
+    "leftPole": "বাজার, প্রতিযোগিতা ও মেধার অগ্রাধিকার",
     "rightPole": "সামাজিক সমতা, শ্রমিক অধিকার ও সংখ্যালঘু সুরক্ষা",
-    "leftShort": "বিদ্যমান কাঠামো",
-    "rightShort": "সামাজিক সমতা"
+    "leftShort": "বাজার ও মেধা",
+    "rightShort": "সামাজিক সুরক্ষা"
   }
 ];
 
-export const QUESTION_SET_VERSION = 'qset-2026-10-curated24';
+export const QUESTION_SET_VERSION = 'qset-2026-11-v4';
 
 export const QUESTIONS = [
-  // --- Block 1: রাষ্ট্র ও শাসনক্ষমতা (State Power & Executive Authority) ---
+  // --- Block 1: State power ---
   {
-    "id": "q4",
+    "id": "c1",
     "blockId": 1,
-    "text": "পাবলিক বিশ্ববিদ্যালয়ের ভিসি নিয়োগ এবং সিভিল প্রশাসনের শীর্ষ পদে সরকারের সরাসরি দলীয় পছন্দ বা নির্বাহী নিয়ন্ত্রণ থাকা উচিত, যাতে সরকারের উন্নয়ন পরিকল্পনা দ্রুত বাস্তবায়ন হয়।",
+    "tier": 1,
+    "text": "কেন্দ্রীয় ব্যাংকের গভর্নর, দুদক ও নির্বাচন কমিশনের প্রধান নিয়োগে বিরোধী দলের সম্মতি বাধ্যতামূলক হওয়া উচিত।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": -1,
+      "BNP": -2,
+      "JI": 2.5,
+      "Student": 2.5,
+      "Sushil": 2
+    }
+  },
+  {
+    "id": "c2",
+    "blockId": 1,
+    "tier": 1,
+    "text": "দুই-তৃতীয়াংশ আসন পাওয়া সরকারের সংবিধান সংশোধনে বিরোধী দলের সম্মতি লাগা উচিত নয় — মানুষ তো তাদেরই ভোট দিয়েছে।",
     "direction": -1,
     "x_weight": 0,
-    "y_weight": -2,
+    "y_weight": -0.5,
     "bloc_weights": {
-      "AL": 2.5,
-      "BNP": 1.5,
-      "JI": -1.5,
+      "AL": 1.5,
+      "BNP": 2.5,
+      "JI": -2.5,
       "Student": -2.5,
+      "Sushil": -1.5
+    }
+  },
+  {
+    "id": "c3",
+    "blockId": 1,
+    "tier": 2,
+    "text": "ভিসি নিয়োগ হোক স্বাধীন সার্চ কমিটির মাধ্যমে, সরকারের পছন্দে নয়।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": -2,
+      "BNP": 0,
+      "JI": 1.5,
+      "Student": 2.5,
+      "Sushil": 2.5
+    }
+  },
+  {
+    "id": "c4",
+    "blockId": 1,
+    "tier": 3,
+    "text": "রাস্তা, স্কুল আর হাসপাতালের বাজেট ঢাকার মন্ত্রণালয় নয়, এলাকার নির্বাচিত উপজেলা ও জেলা পরিষদের ঠিক করা উচিত।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": -1,
+      "BNP": 0.5,
+      "JI": 1.5,
+      "Student": 2,
+      "Sushil": 2
+    }
+  },
+  // --- Block 2: Democracy & elections ---
+  {
+    "id": "c5",
+    "blockId": 2,
+    "tier": 1,
+    "text": "বিরোধী দলের সংসদ বর্জন ভুল; দাবি যা-ই হোক, সংসদে থেকেই লড়াই করা উচিত।",
+    "direction": -1,
+    "x_weight": 0,
+    "y_weight": -0.5,
+    "bloc_weights": {
+      "AL": 0.5,
+      "BNP": 2.5,
+      "JI": -2.5,
+      "Student": -2,
+      "Sushil": 0.5
+    }
+  },
+  {
+    "id": "c6",
+    "blockId": 2,
+    "tier": 1,
+    "text": "স্থানীয় সরকার নির্বাচনে দলীয় প্রতীক থাকা উচিত নয়।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": -1,
+      "BNP": -1,
+      "JI": 1,
+      "Student": 1.5,
+      "Sushil": 2
+    }
+  },
+  {
+    "id": "c7",
+    "blockId": 2,
+    "tier": 2,
+    "text": "নির্বাচন কমিশনার নিয়োগ হোক সরকার ও বিরোধী দলের সমান সদস্য নিয়ে গঠিত কমিটির মাধ্যমে।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": 0.5,
+      "BNP": -1.5,
+      "JI": 2,
+      "Student": 2,
+      "Sushil": 2
+    }
+  },
+  {
+    "id": "c8",
+    "blockId": 2,
+    "tier": 3,
+    "kind": "sentiment",
+    "text": "আওয়ামী লীগের ওপর নিষেধাজ্ঞা আইন করে স্থায়ী করা উচিত।",
+    "x_weight": 0,
+    "y_weight": 0,
+    "bloc_weights": {
+      "AL": -3,
+      "BNP": 1.5,
+      "JI": 2.5,
+      "Student": 3,
+      "Sushil": -1
+    }
+  },
+  // --- Block 3: Religion & society ---
+  {
+    "id": "c9",
+    "blockId": 3,
+    "tier": 1,
+    "text": "রাষ্ট্রের কোনো নির্দিষ্ট ধর্ম থাকা উচিত নয়।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 2.5,
+    "bloc_weights": {
+      "AL": -0.5,
+      "BNP": -2,
+      "JI": -3,
+      "Student": -1,
+      "Sushil": 1.5
+    }
+  },
+  {
+    "id": "c10",
+    "blockId": 3,
+    "tier": 1,
+    "text": "এলাকার আলেমরা আপত্তি করলে বাউল গান, মেলা বা মাজারের অনুষ্ঠান বন্ধ করে দেওয়া প্রশাসনের দায়িত্ব।",
+    "direction": -1,
+    "x_weight": 0,
+    "y_weight": -3,
+    "bloc_weights": {
+      "AL": -1.5,
+      "BNP": -0.5,
+      "JI": 2,
+      "Student": -0.5,
       "Sushil": -2.5
     }
   },
   {
-    "id": "q10",
-    "blockId": 1,
-    "text": "বাংলাদেশের সংবিধানে একজন ব্যক্তির প্রধানমন্ত্রীর দায়িত্ব পালনের সর্বোচ্চ মেয়াদ দুই মেয়াদে নির্দিষ্ট করা উচিত।",
+    "id": "c11",
+    "blockId": 3,
+    "tier": 2,
+    "text": "বাবা-মায়ের সম্পত্তিতে ছেলে ও মেয়ের সমান ভাগ পাওয়ার আইন করা উচিত, ধর্ম যা-ই হোক।",
     "direction": 1,
-    "x_weight": 0,
-    "y_weight": 2,
-    "bloc_weights": {
-      "AL": -2.5,
-      "BNP": -1.0,
-      "JI": 2.0,
-      "Student": 2.5,
-      "Sushil": 2.5
-    }
-  },
-  {
-    "id": "q11",
-    "blockId": 1,
-    "text": "বিচারক নিয়োগে প্রধান বিচারপতি ও স্বাধীন জুডিশিয়াল কমিশনের সিদ্ধান্তই চূড়ান্ত হওয়া উচিত; আইন মন্ত্রণালয় বা প্রধানমন্ত্রীর কোনো ভেটো ক্ষমতা থাকা উচিত নয়।",
-    "direction": 1,
-    "x_weight": 0,
+    "x_weight": -0.5,
     "y_weight": 2.5,
     "bloc_weights": {
-      "AL": -2.5,
-      "BNP": 1.0,
-      "JI": 2.0,
-      "Student": 2.5,
-      "Sushil": 2.5
-    }
-  },
-
-  // --- Block 2: গণতন্ত্র ও নির্বাচনব্যবস্থা (Democracy & Electoral System) ---
-  {
-    "id": "q6",
-    "blockId": 2,
-    "text": "আওয়ামী লীগের অনুপস্থিতিতে সংসদে বা রাজনীতিতে কার্যকর শক্তিশালী বিরোধী দল না থাকা বর্তমান সরকারের জবাবদিহিতা মারাত্মকভাবে ক্ষতিগ্রস্ত করছে।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 1.5,
-    "bloc_weights": {
-      "AL": 2.5,
-      "BNP": 2.0,
-      "JI": 0.5,
+      "AL": 0.5,
+      "BNP": -1.5,
+      "JI": -3,
       "Student": -0.5,
-      "Sushil": 1.5
-    }
-  },
-  {
-    "id": "q8",
-    "blockId": 2,
-    "text": "একটি নিরপেক্ষ নির্দলীয় তত্ত্বাবধায়ক সরকার ছাড়া বাংলাদেশে কোনো ক্ষমতাসীন দলীয় সরকারের অধীনে নিরপেক্ষ জাতীয় নির্বাচন কখনোই সম্ভব নয়।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 2,
-    "bloc_weights": {
-      "AL": -3.0,
-      "BNP": 2.5,
-      "JI": 2.5,
-      "Student": 2.0,
-      "Sushil": 2.0
-    }
-  },
-  {
-    "id": "q9",
-    "blockId": 2,
-    "text": "সংসদ নির্বাচনে একক সংখ্যাগরিষ্ঠতার (FPTP) বদলে আনুপাতিক প্রতিনিধিত্ব (PR) পদ্ধতি চালু করা উচিত, যাতে প্রাপ্ত ভোটের অনুপাতে সব দলের প্রতিনিধিত্ব থাকে।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 2,
-    "bloc_weights": {
-      "AL": -2.0,
-      "BNP": -2.5,
-      "JI": 2.5,
-      "Student": 2.5,
-      "Sushil": 1.5
-    }
-  },
-
-  // --- Block 3: ধর্মনিরপেক্ষতা ও সমাজ (Religion, Ethics & Society) ---
-  {
-    "id": "q12",
-    "blockId": 3,
-    "text": "শিক্ষার্থীদের মাঝে নৈতিকতা বৃদ্ধি ও দুর্নীতি রোধের ক্ষেত্রে কেবল ধর্মীয় আচার ও তত্ত্ব শিক্ষার চেয়ে সর্বজনীন মানবিক মূল্যবোধ এবং ব্যবহারিক নীতিশিক্ষা (Ethics) বাধ্যতামূলক করা বেশি কার্যকর।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 1.5,
-    "bloc_weights": {
-      "AL": 1.5,
-      "BNP": -1.0,
-      "JI": -2.5,
-      "Student": 1.5,
       "Sushil": 2.5
     }
   },
   {
-    "id": "q13",
+    "id": "c12",
     "blockId": 3,
-    "text": "পারিবারিক ও ধর্মীয় প্রথা যা-ই হোক না কেন, সম্পত্তিতে নারী ও পুরুষের সমান উত্তরাধিকার অধিকার নিশ্চিত করতে রাষ্ট্রীয় আইন প্রণয়ন করা উচিত।",
-    "direction": 1,
-    "x_weight": -1,
-    "y_weight": 2,
-    "bloc_weights": {
-      "AL": 1.0,
-      "BNP": -1.5,
-      "JI": -3.0,
-      "Student": 1.0,
-      "Sushil": 2.5
-    }
-  },
-  {
-    "id": "q14",
-    "blockId": 3,
-    "text": "রাজনীতিতে ধর্মের অপব্যবহার ও সাম্প্রদায়িক বিভাজন রোধ করতে সংবিধানে ধর্মভিত্তিক রাজনৈতিক দল গঠন সম্পূর্ণ নিষিদ্ধ করা উচিত।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": -1,
-    "bloc_weights": {
-      "AL": 2.5,
-      "BNP": -1.5,
-      "JI": -3.0,
-      "Student": -1.0,
-      "Sushil": 1.5
-    }
-  },
-
-  // --- Block 4: অর্থনীতি ও বাজার (Economy & Markets) ---
-  {
-    "id": "q17",
-    "blockId": 4,
-    "text": "জ্বালানি খাতে বেসরকারি ও বিদেশি বিদ্যুৎকেন্দ্রগুলোকে উৎপাদন না করলেও হাজার কোটি টাকার 'ক্যাপাসিটি চার্জ' বা কেন্দ্রভাড়া দেওয়ার অসম চুক্তিগুলো অবিলম্বে বাতিল বা পুনর্বিবেচনা করা উচিত।",
-    "direction": 1,
-    "x_weight": -2,
-    "y_weight": 1,
-    "bloc_weights": {
-      "AL": -2.5,
-      "BNP": 2.0,
-      "JI": 2.0,
-      "Student": 2.5,
-      "Sushil": 2.0
-    }
-  },
-  {
-    "id": "q18",
-    "blockId": 4,
-    "text": "কৃষকদের স্বার্থে ধান ও নিত্যপণ্যের ন্যূনতম সহায়ক মূল্য নির্ধারণ ও সার-ডিজেলে বিপুল ভর্তুকি অব্যাহত রাখা উচিত, এমনকি তা যদি মুক্তবাজার নীতি ভঙ্গ করে।",
+    "tier": 3,
+    "text": "স্কুলে ধর্মশিক্ষা বাধ্যতামূলক থাকা উচিত, কারণ নৈতিকতার মূল ভিত্তি ধর্ম।",
     "direction": -1,
-    "x_weight": -2,
-    "y_weight": -1,
+    "x_weight": 0,
+    "y_weight": -2.5,
     "bloc_weights": {
-      "AL": 1.0,
-      "BNP": 1.0,
-      "JI": 1.5,
-      "Student": 2.0,
-      "Sushil": -0.5
+      "AL": 0.5,
+      "BNP": 1.5,
+      "JI": 3,
+      "Student": 0.5,
+      "Sushil": -2
     }
   },
+  // --- Block 4: Economy ---
   {
-    "id": "q19",
+    "id": "c13",
     "blockId": 4,
-    "text": "পাটকল ও চিনিকলের মতো লোকসানে থাকা রাষ্ট্রায়ত্ত কলকারখানাগুলো পুরোপুরি বেসরকারি খাতে ছেড়ে দেওয়া উচিত।",
+    "tier": 1,
+    "text": "ফ্যামিলি কার্ডের মতো নগদ সহায়তার চেয়ে সেই টাকা কর্মসংস্থান তৈরিতে খরচ করা বেশি জরুরি।",
     "direction": 1,
-    "x_weight": 2.5,
+    "x_weight": 1.5,
     "y_weight": 0,
     "bloc_weights": {
-      "AL": -1.0,
-      "BNP": 2.5,
-      "JI": 1.0,
-      "Student": -1.5,
-      "Sushil": 2.0
-    }
-  },
-
-  // --- Block 5: জাতীয়তাবাদ ও সার্বভৌমত্ব (Nationalism & Sovereignty) ---
-  {
-    "id": "q21",
-    "blockId": 5,
-    "text": "জুলাই হত্যাকাণ্ডের বিচারের জন্য শেখ হাসিনাকে ফিরিয়ে আনার দাবি আদায়ে ভারতের সাথে বাণিজ্যিক ও কৌশলগত সম্পর্কে টানাপোড়েন হলেও বাংলাদেশ সরকারকে অনড় থাকতে হবে।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 1,
-    "bloc_weights": {
-      "AL": -3.0,
-      "BNP": 2.5,
-      "JI": 2.5,
-      "Student": 2.5,
-      "Sushil": 1.0
-    }
-  },
-  {
-    "id": "q22",
-    "blockId": 5,
-    "text": "একটি একক আঞ্চলিক প্রতিবেশীর ওপর নির্ভরশীলতা কাটিয়ে উঠতে বাংলাদেশের উচিত যুক্তরাষ্ট্র, চীন ও পশ্চিমা বিশ্বের সাথে বহুমুখী কৌশলগত ও প্রতিরক্ষা অংশীদারিত্ব গড়ে তোলা।",
-    "direction": 1,
-    "x_weight": 1,
-    "y_weight": 1,
-    "bloc_weights": {
-      "AL": -2.0,
-      "BNP": 2.0,
-      "JI": 2.0,
-      "Student": 2.0,
-      "Sushil": 2.0
-    }
-  },
-  {
-    "id": "q25",
-    "blockId": 5,
-    "text": "নিজস্ব জাতীয় নিরাপত্তা ও রাজস্ব নিশ্চিত না করে এবং তিস্তার মতো অভিন্ন নদীর হিস্যা না পেয়ে ভারতকে চট্টগ্রাম-মোংলা বন্দর ব্যবহারের অবাধ ট্রানজিট সুবিধা দেওয়া উচিত নয়।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 1,
-    "bloc_weights": {
-      "AL": -2.5,
-      "BNP": 2.5,
-      "JI": 2.5,
-      "Student": 2.5,
+      "AL": 0.5,
+      "BNP": -2.5,
+      "JI": 1,
+      "Student": 1,
       "Sushil": 1.5
     }
   },
-
-  // --- Block 6: স্বাধীনতা ও মানবাধিকার (Civil Liberties & Human Rights) ---
   {
-    "id": "q20",
-    "blockId": 6,
-    "text": "ব্যাংক খাত ধ্বংসকারী শীর্ষ ইচ্ছাকৃত ঋণখেলাপি ও অর্থপাচারকারীদের স্থাবর-অস্থাবর সম্পদ কোনো আইনি দীর্ঘসূত্রতা ছাড়াই অবিলম্বে রাষ্ট্রের অনুকূলে বাজেয়াপ্ত করা উচিত।",
-    "direction": 1,
+    "id": "c14",
+    "blockId": 4,
+    "tier": 1,
+    "text": "চাল, ডাল, ডিম, পেঁয়াজের মতো নিত্যপণ্যের দাম সরকারের বেঁধে দেওয়া উচিত।",
+    "direction": -1,
     "x_weight": -2,
-    "y_weight": -1,
+    "y_weight": -0.5,
     "bloc_weights": {
-      "AL": -2.0,
-      "BNP": 1.5,
-      "JI": 2.0,
-      "Student": 2.5,
-      "Sushil": 1.0
+      "AL": 0.5,
+      "BNP": 0.5,
+      "JI": 1.5,
+      "Student": 1.5,
+      "Sushil": -1.5
     }
   },
   {
-    "id": "q26",
-    "blockId": 6,
-    "text": "সাইবার নিরাপত্তা আইন বা এ জাতীয় বিশেষ আইন বাতিল করা উচিত; ধর্ম বা রাষ্ট্রের অবমাননার অজুহাতে অনলাইনে ভিন্নমত দমন সম্পূর্ণ বন্ধ হওয়া উচিত।",
+    "id": "c15",
+    "blockId": 4,
+    "tier": 2,
+    "text": "বিদ্যুৎ ও জ্বালানিতে ভর্তুকি কমিয়ে দাম বাড়ানো উচিত, যাতে সেই টাকা শিক্ষা আর স্বাস্থ্যে খরচ হয়।",
+    "direction": 1,
+    "x_weight": 2,
+    "y_weight": 0,
+    "bloc_weights": {
+      "AL": 0.5,
+      "BNP": -0.5,
+      "JI": -1.5,
+      "Student": -1,
+      "Sushil": 1.5
+    }
+  },
+  {
+    "id": "c16",
+    "blockId": 4,
+    "tier": 3,
+    "text": "কষ্ট হলেও আইএমএফের শর্ত মেনে ঋণ নেওয়া বন্ধ করা উচিত।",
+    "direction": -1,
+    "x_weight": -1,
+    "y_weight": 0,
+    "bloc_weights": {
+      "AL": -0.5,
+      "BNP": -1.5,
+      "JI": 1.5,
+      "Student": 1,
+      "Sushil": -2
+    }
+  },
+  // --- Block 5: Sovereignty ---
+  {
+    "id": "c17",
+    "blockId": 5,
+    "tier": 1,
+    "text": "গঙ্গার পানির নিশ্চিত হিস্যার গ্যারান্টি না পেলে ভারতের সাথে নতুন চুক্তি সই করা উচিত নয়, আলোচনা আটকে গেলেও।",
     "direction": 1,
     "x_weight": 0,
-    "y_weight": 2.5,
+    "y_weight": 0,
     "bloc_weights": {
       "AL": -2.5,
-      "BNP": 1.5,
-      "JI": -0.5,
-      "Student": 2.5,
-      "Sushil": 2.5
-    }
-  },
-  {
-    "id": "q32",
-    "blockId": 6,
-    "text": "বিগত দেড় দশকে সংঘটিত গুম ও বিচারবহির্ভূত হত্যাকাণ্ডে জড়িত নিরাপত্তা বাহিনীর সদস্যদের বিচার বিশেষ ট্রাইব্যুনালে প্রকাশ্যে হওয়া উচিত, বাহিনীর মনোবল যা-ই হোক।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 2,
-    "bloc_weights": {
-      "AL": -3.0,
-      "BNP": 2.5,
-      "JI": 2.5,
-      "Student": 2.5,
-      "Sushil": 2.5
-    }
-  },
-
-  // --- Block 7: সংস্কার ও সংবিধান (State Reform & Constitution) ---
-  {
-    "id": "q23",
-    "blockId": 7,
-    "text": "ভারতের আপত্তির তোয়াক্কা না করে উত্তরবঙ্গের লাখ লাখ কৃষকের স্বার্থে তিস্তা মহাপরিকল্পনা চীনের অর্থায়ন ও কারিগরি সহায়তায় দ্রুত বাস্তবায়ন করা উচিত।",
-    "direction": 1,
-    "x_weight": -1,
-    "y_weight": 1,
-    "bloc_weights": {
-      "AL": -2.0,
-      "BNP": 2.0,
-      "JI": 2.5,
-      "Student": 2.5,
-      "Sushil": 1.0
-    }
-  },
-  {
-    "id": "q33",
-    "blockId": 7,
-    "text": "জুলাই অভ্যুত্থানের অপরাধের সুরাহা ও দৃশ্যমান অনুশোচনা ছাড়া আওয়ামী লীগকে আসন্ন জাতীয় নির্বাচনে সরাসরি অংশ নিতে দেওয়া উচিত নয়।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 1,
-    "bloc_weights": {
-      "AL": -3.0,
       "BNP": 1.5,
       "JI": 2.5,
       "Student": 2.5,
@@ -425,105 +389,316 @@ export const QUESTIONS = [
     }
   },
   {
-    "id": "q34",
-    "blockId": 7,
-    "text": "সংসদে ক্ষমতার একচ্ছত্র আধিপত্য রোধ করতে বাংলাদেশে উচ্চকক্ষ ও নিম্নকক্ষ বিশিষ্ট দ্বিকক্ষবিশিষ্ট সংসদীয় ব্যবস্থা প্রবর্তন করা উচিত।",
+    "id": "c18",
+    "blockId": 5,
+    "tier": 1,
+    "text": "ভারতের সাথে সম্পর্ক খারাপ রাখলে দেশেরই ক্ষতি; বাণিজ্য আর চিকিৎসা-ভিসার স্বার্থে সম্পর্ক দ্রুত স্বাভাবিক করা উচিত।",
+    "direction": -1,
+    "x_weight": 0,
+    "y_weight": -0.5,
+    "bloc_weights": {
+      "AL": 2.5,
+      "BNP": 0,
+      "JI": -2,
+      "Student": -2,
+      "Sushil": 1
+    }
+  },
+  {
+    "id": "c19",
+    "blockId": 5,
+    "tier": 2,
+    "text": "যুক্তরাষ্ট্রের শুল্ক কমাতে তাদের শর্ত — যেমন বেশি মার্কিন পণ্য কেনা — মেনে নেওয়া ঠিক।",
+    "direction": -1,
+    "x_weight": 1,
+    "y_weight": 0,
+    "bloc_weights": {
+      "AL": 1,
+      "BNP": 1.5,
+      "JI": -1.5,
+      "Student": -1.5,
+      "Sushil": 0.5
+    }
+  },
+  {
+    "id": "c20",
+    "blockId": 5,
+    "tier": 3,
+    "text": "শেখ হাসিনাকে ফেরত না দিলে ভারতের সাথে বাণিজ্য ও ট্রানজিট সুবিধা কমিয়ে দেওয়া উচিত।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0,
+    "bloc_weights": {
+      "AL": -3,
+      "BNP": 1.5,
+      "JI": 2.5,
+      "Student": 2.5,
+      "Sushil": 0
+    }
+  },
+  // --- Block 6: Civil liberties ---
+  {
+    "id": "c21",
+    "blockId": 6,
+    "tier": 1,
+    "text": "সরকারের সমালোচনা করার জন্য — অনলাইনে হোক বা রাস্তায় — কাউকে গ্রেপ্তার করা যাবে না।",
     "direction": 1,
     "x_weight": 0,
     "y_weight": 2,
     "bloc_weights": {
-      "AL": -2.5,
-      "BNP": 2.5,
-      "JI": 1.5,
-      "Student": 2.0,
-      "Sushil": 2.0
-    }
-  },
-
-  // --- Block 8: ন্যায়বিচার ও সমতা (Social Justice & Inclusion) ---
-  {
-    "id": "q15",
-    "blockId": 8,
-    "text": "বিশ্ববিদ্যালয় ও অন্যান্য শিক্ষাপ্রতিষ্ঠানে জাতীয় রাজনৈতিক দলের ব্যানারে ছাত্ররাজনীতি বন্ধ করে কেবল নিয়মিত ছাত্র সংসদ নির্বাচন চালু রাখা উচিত।",
-    "direction": 1,
-    "x_weight": 0,
-    "y_weight": 1.5,
-    "bloc_weights": {
-      "AL": -2.0,
-      "BNP": -1.5,
-      "JI": -0.5,
+      "AL": 0.5,
+      "BNP": -1,
+      "JI": 2,
       "Student": 2.5,
       "Sushil": 2.5
     }
   },
   {
-    "id": "q27",
-    "blockId": 8,
-    "text": "গার্মেন্টস ও শিল্প শ্রমিকদের জীবনধারণের উপযোগী ন্যূনতম মজুরি এবং মালিকপক্ষের চাপমুক্ত স্বাধীন ট্রেড ইউনিয়ন গঠনের অধিকার আইনে বাধ্যতামূলক করা উচিত।",
-    "direction": 1,
-    "x_weight": -2.5,
-    "y_weight": 1.5,
+    "id": "c22",
+    "blockId": 6,
+    "tier": 1,
+    "text": "আইনশৃঙ্খলা ফেরাতে সেনাবাহিনীকে আবার ম্যাজিস্ট্রেসি ক্ষমতা দিয়ে মাঠে নামানো উচিত।",
+    "direction": -1,
+    "x_weight": 0,
+    "y_weight": -2,
     "bloc_weights": {
       "AL": 0.5,
       "BNP": 0.5,
-      "JI": 1.0,
-      "Student": 2.5,
-      "Sushil": 2.0
+      "JI": 0,
+      "Student": -1,
+      "Sushil": -2
     }
   },
   {
-    "id": "q39",
-    "blockId": 8,
-    "text": "ধর্মীয় ও ক্ষুদ্র নৃগোষ্ঠীর উপাসনালয় এবং সম্পত্তির ওপর সহিংসতা প্রতিরোধে আলাদা বিশেষ সুরক্ষা আইন ও দ্রুত বিচার সেল গঠন করা জরুরি।",
+    "id": "c23",
+    "blockId": 6,
+    "tier": 2,
+    "text": "পুলিশকে সরকারের সরাসরি নিয়ন্ত্রণ থেকে সরিয়ে একটি স্বাধীন পুলিশ কমিশনের অধীনে নেওয়া উচিত।",
     "direction": 1,
-    "x_weight": -1,
-    "y_weight": 2,
+    "x_weight": 0,
+    "y_weight": 1.5,
     "bloc_weights": {
-      "AL": 2.0,
-      "BNP": 1.0,
-      "JI": 0.5,
-      "Student": 2.0,
+      "AL": -1,
+      "BNP": -1,
+      "JI": 2,
+      "Student": 2.5,
       "Sushil": 2.5
+    }
+  },
+  {
+    "id": "c24",
+    "blockId": 6,
+    "tier": 3,
+    "text": "ধর্মীয় অনুভূতিতে আঘাত দেয় এমন পোস্ট দিলে সঙ্গে সঙ্গে গ্রেপ্তার করা উচিত, যাতে এলাকায় উত্তেজনা না ছড়ায়।",
+    "direction": -1,
+    "x_weight": 0,
+    "y_weight": -2.5,
+    "bloc_weights": {
+      "AL": 0.5,
+      "BNP": 1,
+      "JI": 2.5,
+      "Student": 0,
+      "Sushil": -2
+    }
+  },
+  // --- Block 7: Reform & constitution ---
+  {
+    "id": "c25",
+    "blockId": 7,
+    "tier": 1,
+    "text": "গণভোটে পাস হওয়া জুলাই সনদ হুবহু বাস্তবায়ন করতে হবে — সংসদের কমিটি তা বদলাতে পারবে না।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": -1,
+      "BNP": -2.5,
+      "JI": 2.5,
+      "Student": 3,
+      "Sushil": 1.5
+    }
+  },
+  {
+    "id": "c26",
+    "blockId": 7,
+    "tier": 1,
+    "text": "মানুষ চাইলে একজন জনপ্রিয় নেতা যতবার খুশি প্রধানমন্ত্রী হতে পারবেন; মেয়াদের সীমা নয়, সিদ্ধান্ত নেবে ভোটার।",
+    "direction": -1,
+    "x_weight": 0,
+    "y_weight": -0.5,
+    "bloc_weights": {
+      "AL": 2,
+      "BNP": 0,
+      "JI": -2,
+      "Student": -2.5,
+      "Sushil": -2.5
+    }
+  },
+  {
+    "id": "c27",
+    "blockId": 7,
+    "tier": 2,
+    "text": "উচ্চকক্ষের সদস্য হওয়া উচিত দলগুলোর মোট ভোটের অনুপাতে (PR)।",
+    "direction": 1,
+    "x_weight": 0,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": -0.5,
+      "BNP": -2.5,
+      "JI": 2.5,
+      "Student": 2,
+      "Sushil": 1.5
+    }
+  },
+  {
+    "id": "c28",
+    "blockId": 7,
+    "tier": 3,
+    "text": "নতুন সংবিধান লেখার দরকার নেই; বর্তমান সংবিধানে প্রয়োজনীয় সংশোধন করলেই যথেষ্ট।",
+    "direction": -1,
+    "x_weight": 0,
+    "y_weight": -0.5,
+    "bloc_weights": {
+      "AL": 2,
+      "BNP": 2,
+      "JI": -0.5,
+      "Student": -3,
+      "Sushil": 0
+    }
+  },
+  // --- Block 8: Social justice ---
+  {
+    "id": "c29",
+    "blockId": 8,
+    "tier": 1,
+    "text": "পোশাকশ্রমিকের ন্যূনতম মজুরি এমন হওয়া উচিত যাতে একটা পরিবার চলে, তাতে কিছু কারখানা বন্ধ হলেও।",
+    "direction": 1,
+    "x_weight": -2.5,
+    "y_weight": 0.5,
+    "bloc_weights": {
+      "AL": -0.5,
+      "BNP": -0.5,
+      "JI": 1,
+      "Student": 2,
+      "Sushil": 1
+    }
+  },
+  {
+    "id": "c30",
+    "blockId": 8,
+    "tier": 1,
+    "text": "শ্রমিক বিক্ষোভে কারখানা ভাঙচুর হলে সন্ত্রাসবিরোধী আইনে মামলা দেওয়া যৌক্তিক।",
+    "direction": -1,
+    "x_weight": 1,
+    "y_weight": -0.5,
+    "bloc_weights": {
+      "AL": 0.5,
+      "BNP": 1.5,
+      "JI": -1,
+      "Student": -2,
+      "Sushil": -2
+    }
+  },
+  {
+    "id": "c31",
+    "blockId": 8,
+    "tier": 2,
+    "text": "পূজামণ্ডপ, গির্জা বা আদিবাসী গ্রামে হামলার বিচারে আলাদা দ্রুত বিচার ট্রাইব্যুনাল ও বিশেষ সুরক্ষা আইন থাকা উচিত।",
+    "direction": 1,
+    "x_weight": -0.5,
+    "y_weight": 1.5,
+    "bloc_weights": {
+      "AL": 2,
+      "BNP": 1,
+      "JI": 0,
+      "Student": 1.5,
+      "Sushil": 2.5
+    }
+  },
+  {
+    "id": "c32",
+    "blockId": 8,
+    "tier": 3,
+    "text": "সরকারি চাকরিতে নারী, প্রতিবন্ধী বা পিছিয়ে পড়া এলাকার জন্যও কোটা থাকা উচিত নয়; নিয়োগ হবে শুধু মেধায়।",
+    "direction": -1,
+    "x_weight": 1,
+    "y_weight": 0,
+    "bloc_weights": {
+      "AL": -1,
+      "BNP": 0.5,
+      "JI": 1,
+      "Student": 0.5,
+      "Sushil": -1.5
     }
   }
 ];
 
+// Quiz lengths. Every length covers all 8 topics: short asks 2 per topic,
+// medium 3, long 4. Medium is the default.
+export const QUIZ_LENGTHS = {
+  short: { key: 'short', maxTier: 1, minutes: 2 },
+  medium: { key: 'medium', maxTier: 2, minutes: 4 },
+  long: { key: 'long', maxTier: 3, minutes: 6 }
+};
+export const DEFAULT_QUIZ_LENGTH = 'medium';
+
+export function getQuestionsForLength(length = DEFAULT_QUIZ_LENGTH) {
+  const maxTier = (QUIZ_LENGTHS[length] || QUIZ_LENGTHS[DEFAULT_QUIZ_LENGTH]).maxTier;
+  return QUESTIONS.filter((q) => (q.tier || 1) <= maxTier);
+}
+
+// The shortest length that contains every given question id (used when a
+// caller does not say which length was taken).
+export function inferQuizLength(questionIds = []) {
+  const ids = new Set(questionIds);
+  const maxTier = QUESTIONS.reduce((m, q) => (ids.has(q.id) ? Math.max(m, q.tier || 1) : m), 1);
+  return Object.values(QUIZ_LENGTHS).find((l) => l.maxTier >= maxTier)?.key || 'long';
+}
+
 export const ENGLISH_QUESTION_TEXTS = {
-  q4: "The government should retain direct executive control over the appointment of university Vice-Chancellors and civil administration heads to ensure rapid policy implementation.",
-  q6: "The absence of a formidable, viable opposition party in current politics severely undermines the accountability of the government.",
-  q8: "A credible national election is impossible under an incumbent political party; a non-partisan caretaker government is indispensable.",
-  q9: "Bangladesh should adopt Proportional Representation (PR) instead of First-Past-The-Post, ensuring smaller parties gain parliamentary seats proportional to their national vote share.",
-  q10: "The Constitution of Bangladesh should limit an individual to a maximum of two terms as Prime Minister.",
-  q11: "The decision of the Chief Justice and an independent Judicial Commission on judicial appointments should be final, without any veto power from the Law Ministry or Prime Minister.",
-  q12: "In fostering morality among students and preventing corruption, making universal human values and practical ethics education mandatory is more effective than focusing solely on religious rituals and doctrines.",
-  q13: "The state should enact laws guaranteeing equal inheritance rights for women, regardless of traditional or religious personal laws.",
-  q14: "To prevent the misuse of faith and sectarian polarization, religion-based political parties should be strictly barred by the constitution.",
-  q15: "Student politics under the banner of national political parties should be banned in universities and other educational institutions, allowing only regular and democratic student councils.",
-  q17: "Unfair energy contracts that pay billions in 'capacity charges' to private and foreign power plants without electricity generation must be cancelled or renegotiated.",
-  q18: "The state should guarantee minimum support prices for crops and heavily subsidize agricultural inputs, even if it widens the fiscal deficit.",
-  q19: "State-owned factories that are running at a loss, such as jute and sugar mills, should be fully privatized.",
-  q20: "The assets of chronic bank loan defaulters and money launderers should be seized immediately by the state without procedural delays.",
-  q21: "Bangladesh must relentlessly demand the extradition of Sheikh Hasina for trial over the July killings, even if it strains diplomatic and trade relations with India.",
-  q22: "To overcome dependence on a single regional neighbor, Bangladesh should diversify its strategic, economic, and defense partnerships with the US, the West, and China.",
-  q23: "The government should expedite the Teesta River comprehensive project with Chinese funding for Northern farmers, without waiting for Indian clearance.",
-  q25: "Unrestricted transit through Bangladeshi ports and territory should not be granted without reciprocal benefits, fair water-sharing treaties, and guaranteed revenue.",
-  q26: "Draconian cyber security laws should be repealed; online dissent and critical journalism should never be criminalized under the guise of defamation or state security.",
-  q27: "A living wage and the right to form independent trade unions without management intimidation must be legally mandated for RMG and industrial workers.",
-  q32: "Security personnel implicated in enforced disappearances and extrajudicial killings must face public trial in special tribunals, regardless of institutional pushback.",
-  q33: "The Awami League should be barred from contesting the upcoming national elections until comprehensive accountability for the July uprising is achieved.",
-  q34: "To prevent monopoly of power in parliament, Bangladesh should introduce a bicameral legislature with an upper and a lower house.",
-  q39: "Special legislation and dedicated fast-track judicial cells are urgently needed to protect the lives, lands, and worship places of religious and ethnic minorities."
+  c1: "Appointing the central bank governor and the heads of the Anti-Corruption Commission and Election Commission should require the opposition's consent.",
+  c2: "A government with a two-thirds majority should not need the opposition's consent to amend the constitution. People voted for it.",
+  c3: "University vice-chancellors should be chosen by an independent search committee, not by the government.",
+  c4: "Budgets for local roads, schools and hospitals should be decided by elected upazila and district councils, not by ministries in Dhaka.",
+  c5: "Opposition walkouts from parliament are wrong. Whatever the demand, they should fight from inside parliament.",
+  c6: "Local government elections should not use party symbols.",
+  c7: "Election commissioners should be appointed by a committee with equal members from the government and the opposition.",
+  c8: "The ban on the Awami League should be made permanent by law.",
+  c9: "The state should not have an official religion.",
+  c10: "If local clerics object, the administration should shut down Baul music events, fairs or shrine festivals.",
+  c11: "There should be a law giving sons and daughters equal shares of their parents' property, whatever their religion.",
+  c12: "Religious education should stay compulsory in schools, because religion is the foundation of morality.",
+  c13: "Spending the money on creating jobs matters more than cash support like the Family Card.",
+  c14: "The government should fix the prices of everyday essentials like rice, lentils, eggs and onions.",
+  c15: "Electricity and fuel subsidies should be cut and prices raised, so the money goes to education and health.",
+  c16: "Even if it hurts, Bangladesh should stop taking IMF loans that come with conditions.",
+  c17: "Without a guaranteed share of Ganges water, Bangladesh should not sign a new treaty with India, even if talks stall.",
+  c18: "Bad relations with India hurt Bangladesh itself. For trade and medical visas, relations should be normalised quickly.",
+  c19: "To get US tariffs lowered, it is right to accept their conditions, such as buying more American goods.",
+  c20: "If India does not return Sheikh Hasina, Bangladesh should scale back trade and transit access for India.",
+  c21: "No one should be arrested for criticising the government, whether online or on the street.",
+  c22: "To restore law and order, the army should be deployed again with magistracy powers.",
+  c23: "The police should be taken out of direct government control and placed under an independent police commission.",
+  c24: "Anyone who posts something that hurts religious sentiment should be arrested immediately, so tension does not spread.",
+  c25: "The July Charter approved in the referendum must be implemented exactly as passed. A parliamentary committee cannot change it.",
+  c26: "If people want, a popular leader should be able to serve as prime minister as many times as they win. Voters, not term limits, should decide.",
+  c27: "Members of the upper house should be allocated by each party's share of the total vote (PR).",
+  c28: "There is no need to write a new constitution. Amending the current one where needed is enough.",
+  c29: "The minimum wage for garment workers should be enough to support a family, even if some factories close.",
+  c30: "When factories are vandalised during worker protests, filing cases under the Anti-Terrorism Act is justified.",
+  c31: "Attacks on puja mandaps, churches or Indigenous villages should be tried by dedicated fast-track tribunals under a special protection law.",
+  c32: "Government jobs should have no quotas at all, not even for women, people with disabilities or lagging regions. Hiring on merit alone."
 };
 
 export const ENGLISH_THEMATIC_BLOCKS = {
-  1: { title: "State and Executive Power", subtitle: "State power and executive authority", leftPole: "Centralized executive control", rightPole: "Checks and balances / decentralization", leftShort: "Centralized", rightShort: "Balanced" },
-  2: { title: "Democracy and Elections", subtitle: "Elections and democracy", leftPole: "Party influence and FPTP control", rightPole: "Neutral caretaker government & PR", leftShort: "Party rule", rightShort: "Neutral" },
-  3: { title: "Secularism and Society", subtitle: "Religion, secularism, and ethics", leftPole: "Religious rules and state religion", rightPole: "Secularism and universal equality", leftShort: "Religious rule", rightShort: "Secularism" },
-  4: { title: "Economy and Markets", subtitle: "Markets and distribution of resources", leftPole: "State ownership and agricultural subsidies", rightPole: "Open markets and privatization", leftShort: "Welfare", rightShort: "Free market" },
-  5: { title: "Nationalism and Sovereignty", subtitle: "Nationalism and sovereignty", leftPole: "Strategic concessions and single-neighbor reliance", rightPole: "Uncompromising sovereignty & diversification", leftShort: "Compromise", rightShort: "Sovereignty" },
-  6: { title: "Liberty and Human Rights", subtitle: "Civil liberties and human rights", leftPole: "Surveillance and security immunity", rightPole: "Unrestricted free speech & accountability", leftShort: "Strict control", rightShort: "Free speech" },
-  7: { title: "Reform and the Constitution", subtitle: "Institutional reform and historical pluralism", leftPole: "Constitutional status quo", rightPole: "Radical transformation and lustration", leftShort: "Status quo", rightShort: "Reform" },
-  8: { title: "Justice and Equality", subtitle: "Social justice and inclusive development", leftPole: "Status quo and employer dominance", rightPole: "Social equality, labor rights & minority safety", leftShort: "Order", rightShort: "Equality" }
+  1: { title: "State and Executive Power", subtitle: "State power and executive authority", leftPole: "Centralized executive control", rightPole: "Checks and balances / decentralization", leftShort: "Strong centre", rightShort: "Shared power" },
+  2: { title: "Democracy and Elections", subtitle: "Elections and democracy", leftPole: "Party influence and FPTP control", rightPole: "Neutral caretaker government & PR", leftShort: "Elected government", rightShort: "Non-partisan oversight" },
+  3: { title: "Secularism and Society", subtitle: "Religion, secularism, and ethics", leftPole: "Religious rules and state religion", rightPole: "Secularism and universal equality", leftShort: "Faith-guided state", rightShort: "Secular state" },
+  4: { title: "Economy and Markets", subtitle: "Markets and distribution of resources", leftPole: "State ownership and agricultural subsidies", rightPole: "Open markets and privatization", leftShort: "State welfare", rightShort: "Free market" },
+  5: { title: "Nationalism and Sovereignty", subtitle: "Nationalism and sovereignty", leftPole: "Accommodation and close ties with neighbours", rightPole: "Hard bargaining and diversified partners", leftShort: "Accommodating diplomacy", rightShort: "Hard-line sovereignty" },
+  6: { title: "Liberty and Human Rights", subtitle: "Civil liberties and human rights", leftPole: "Law, order and state security first", rightPole: "Free speech and due process", leftShort: "Security first", rightShort: "Liberty first" },
+  7: { title: "Reform and the Constitution", subtitle: "Institutional reform and historical pluralism", leftPole: "Gradual amendment of the constitution", rightPole: "Sweeping structural reform", leftShort: "Gradual amendment", rightShort: "Sweeping reform" },
+  8: { title: "Justice and Equality", subtitle: "Social justice and inclusive development", leftPole: "Markets, competition and merit first", rightPole: "Social equality, labor rights & minority safety", leftShort: "Market & merit", rightShort: "Social protection" }
 };
 
 export const AGE_BUCKETS = [
@@ -533,6 +708,10 @@ export const AGE_BUCKETS = [
   '৪৬-৬০ (অভিজ্ঞ নাগরিক)',
   '৬০+ (জ্যেষ্ঠ নাগরিক)'
 ];
+
+// AGE_BUCKETS values are stored in responses and used as aggregate keys, so
+// they must never change. Show this shorter label instead.
+export const ageBucketLabel = (bucket) => String(bucket || '').replace(/\s*\(.*\)\s*$/, '').replace('-', '–');
 
 export const PROPOSAL_CATEGORIES = [
   { value: 'economy', label: 'অর্থনীতি ও বাজার', icon: 'free-market', color: '#16A34A' },
@@ -552,40 +731,28 @@ export const PROPOSAL_CATEGORY_VALUES = PROPOSAL_CATEGORIES.map(c => c.value);
 export const PROPOSAL_TITLE_IDEAS = [
   'পুলিশ প্রশাসনের বিকেন্দ্রীকরণ...',
   'সংবিধানে প্রধানমন্ত্রীর ক্ষমতা হ্রাস...',
-  'সার্বজনীন স্বাস্থ্য বীমা...',
+  'সর্বজনীন স্বাস্থ্য বীমা...',
   'ডিপ্লোমা কোটা পুনর্বিবেচনা...',
-  'জেলায় জেলায় হাওসিং প্রকল্প...'
+  'জেলায় জেলায় হাউজিং প্রকল্প...'
 ];
 
 // Wedge issues tracked individually on the national aggregate
 export const TRACKED_WEDGE_ISSUES = [
   {
-    questionId: 'q9',
-    title: '"সংসদ নির্বাচনে একক সংখ্যাগরিষ্ঠতার (FPTP) বদলে আনুপাতিক প্রতিনিধিত্ব (PR) পদ্ধতি চালু করা উচিত, যাতে প্রাপ্ত ভোটের অনুপাতে সব দলের প্রতিনিধিত্ব থাকে।"'
+    questionId: 'c25',
+    title: "\"গণভোটে পাস হওয়া জুলাই সনদ হুবহু বাস্তবায়ন করতে হবে — সংসদের কমিটি তা বদলাতে পারবে না।\""
   },
   {
-    questionId: 'q10',
-    title: '"এক ব্যক্তি যাতে আজীবন ক্ষমতার কেন্দ্রবিন্দু না হতে পারেন, সেজন্য সংবিধানে প্রধানমন্ত্রীর দায়িত্ব পালনের সর্বোচ্চ মেয়াদ দুইবার নির্ধারণ করা জরুরি।"'
+    questionId: 'c17',
+    title: "\"গঙ্গার পানির নিশ্চিত হিস্যার গ্যারান্টি না পেলে ভারতের সাথে নতুন চুক্তি সই করা উচিত নয়, আলোচনা আটকে গেলেও।\""
   },
   {
-    questionId: 'q13',
-    title: '"পারিবারিক ও ধর্মীয় প্রথা যা-ই হোক না কেন, সম্পত্তিতে নারী ও পুরুষের সমান উত্তরাধিকার অধিকার নিশ্চিত করতে রাষ্ট্রীয় আইন প্রণয়ন করা উচিত।"'
+    questionId: 'c13',
+    title: "\"ফ্যামিলি কার্ডের মতো নগদ সহায়তার চেয়ে সেই টাকা কর্মসংস্থান তৈরিতে খরচ করা বেশি জরুরি।\""
   },
   {
-    questionId: 'q19',
-    title: '"প্রতি বছর জনগণের করের টাকায় লোকসান গোনা রাষ্ট্রায়ত্ত শিল্প ও কারখানাগুলো (যেমন পাটকল, চিনিকল) অবিলম্বে বেসরকারি খাতে ছেড়ে দেওয়া উচিত।"'
-  },
-  {
-    questionId: 'q22',
-    title: '"একটি একক আঞ্চলিক প্রতিবেশীর ওপর নির্ভরশীলতা কাটিয়ে উঠতে বাংলাদেশের উচিত যুক্তরাষ্ট্র, চীন ও পশ্চিমা বিশ্বের সাথে বহুমুখী কৌশলগত অংশীদারিত্ব গড়ে তোলা।"'
-  },
-  {
-    questionId: 'q26',
-    title: '"সাইবার নিরাপত্তা আইন বাতিল করা উচিত; ধর্ম বা রাষ্ট্রের অবমাননার অজুহাতে অনলাইনে ভিন্নমত দমন সম্পূর্ণ বন্ধ হওয়া উচিত।"'
-  },
-  {
-    questionId: 'q33',
-    title: '"জুলাই অভ্যুত্থানের অপরাধের সুরাহা ও দৃশ্যমান অনুশোচনা ছাড়া আওয়ামী লীগকে আসন্ন জাতীয় নির্বাচনে সরাসরি অংশ নিতে দেওয়া উচিত নয়।"'
+    questionId: 'c22',
+    title: "\"আইনশৃঙ্খলা ফেরাতে সেনাবাহিনীকে আবার ম্যাজিস্ট্রেসি ক্ষমতা দিয়ে মাঠে নামানো উচিত।\""
   }
 ];
 
@@ -598,36 +765,36 @@ export const LIKERT_MAX = 5;
 export const LIKERT_OPTIONS = [
   {
     "value": 1,
-    "label": "দৃঢ়ভাবে দ্বিমত",
-    "shortLabel": "কঠোর দ্বিমত",
+    "label": "একদমই না",
+    "shortLabel": "পুরো দ্বিমত",
     "multiplier": -2,
     "color": "#EF4444"
   },
   {
     "value": 2,
-    "label": "দ্বিমত",
+    "label": "কিছুটা দ্বিমত",
     "shortLabel": "দ্বিমত",
     "multiplier": -1,
     "color": "#F87171"
   },
   {
     "value": 3,
-    "label": "নিরপেক্ষ / পরিস্থিতিনির্ভর",
+    "label": "নিশ্চিত নই",
     "shortLabel": "নিরপেক্ষ",
     "multiplier": 0,
     "color": "#94A3B8"
   },
   {
     "value": 4,
-    "label": "একমত",
+    "label": "কিছুটা একমত",
     "shortLabel": "একমত",
     "multiplier": 1,
     "color": "#34D399"
   },
   {
     "value": 5,
-    "label": "দৃঢ়ভাবে একমত",
-    "shortLabel": "কঠোর একমত",
+    "label": "পুরোপুরি একমত",
+    "shortLabel": "পুরো একমত",
     "multiplier": 2,
     "color": "#10B981"
   }
@@ -656,7 +823,7 @@ export const CALIBRATION_QUESTION = {
     },
     {
       "value": "Sushil",
-      "label": "উদার সংবিধানবাদী সুশীল ধারা"
+      "label": "নির্দলীয় সুশাসনপন্থী ধারা"
     },
     {
       "value": "Other",
@@ -681,25 +848,25 @@ export const BLOC_PROFILES = {
     "englishName": "National Citizen Party (NCP)",
     "color": "#16A34A",
     "secondaryColor": "#15803D",
-    "badge": "সততা, ঐক্য, প্রগতি ও শাপলা কলি",
+    "badge": "তরুণ নেতৃত্ব ও রাষ্ট্র সংস্কার",
     "iconLetter": "শাপলা কলি",
     "symbolEmoji": "🌸",
     "centroid": {
       "x": -57,
       "y": 10
     },
-    "summaryHeadline": "আপনি জুলাই অভ্যুত্থানের চেতনা, সততা ও ঐক্যের ভিত্তিতে নতুন রাজনৈতিক বন্দোবস্ত এবং বৈষম্যহীন নতুন বাংলাদেশ প্রতিষ্ঠায় বিশ্বাসী।",
+    "summaryHeadline": "আপনি পুরোনো রাজনৈতিক ধারার বদলে তরুণ নেতৃত্বে রাষ্ট্রের মৌলিক সংস্কার এবং কম বৈষম্যের বাংলাদেশ চান।",
     "keyPillars": {
-      "state": "ফ্যাসিবাদবিরোধী আপসহীন বিচার, নতুন সংবিধান রূপান্তর ও তরুণ প্রজন্মের নাগরিক শাসন",
-      "market": "সিন্ডিকেট দমন, ব্যাংক লুটেরাদের সম্পত্তি বাজেয়াপ্ত ও শ্রমিক কল্যাণ",
+      "state": "অতীতের রাষ্ট্রীয় নিপীড়নের বিচার, সংবিধানে মৌলিক সংস্কার ও তরুণ নেতৃত্ব",
+      "market": "বাজার সিন্ডিকেট ভাঙা, খেলাপি ঋণ ও অর্থপাচারে কঠোরতা এবং শ্রমিক কল্যাণ",
       "liberty": "সততা, ঐক্য ও প্রগতি; মতপ্রকাশের পূর্ণ স্বাধীনতা ও বৈষম্যহীন সাম্য"
     },
-    "shortDescription": "জুলাই বিপ্লবের চেতনা, সততা ও প্রগতি, তরুণ নেতৃত্ব ও শাপলা কলির বৈষম্যহীন নতুন বন্দোবস্ত।",
-    "detailedDescription": "আপনার রাজনৈতিক চেতনা দাঁড়িয়ে আছে জুলাই গণ-অভ্যুত্থানের ঐতিহাসিক অর্জন ও নতুন রাজনৈতিক বন্দোবস্তের ওপর। আপনি বিশ্বাস করেন—পুরাতন সুবিধাবাদী রাজনৈতিক সংস্কৃতির অবসান ঘটিয়ে তরুণ নেতৃত্বের হাত ধরে সততা, নাগরিক ঐক্য এবং মৌলিক সাংবিধানিক রূপান্তরের মাধ্যমেই একটি বৈষম্যহীন ও সার্বভৌম বাংলাদেশ গড়ে তোলা সম্ভব।",
+    "shortDescription": "জুলাই অভ্যুত্থান-পরবর্তী রাষ্ট্র সংস্কার, তরুণ নেতৃত্ব এবং বৈষম্য কমানোর রাজনীতিতে আস্থাশীল।",
+    "detailedDescription": "আপনার রাজনৈতিক ভাবনা ২০২৪-এর জুলাই অভ্যুত্থান-পরবর্তী সংস্কারের দাবিকে ঘিরে। আপনি মনে করেন, পুরোনো দলীয় রাজনীতির বাইরে তরুণ নেতৃত্ব, সততা ও সংবিধানের মৌলিক পরিবর্তনের মাধ্যমে একটি বৈষম্যহীন ও সার্বভৌম বাংলাদেশ গড়া সম্ভব।",
     "coreValues": [
       "তরুণ নেতৃত্ব",
       "সততা, ঐক্য ও প্রগতি",
-      "ফ্যাসিবাদবিরোধী সংস্কার",
+      "রাষ্ট্র সংস্কার",
       "বৈষম্যহীন নতুন বন্দোবস্ত"
     ]
   },
@@ -734,7 +901,7 @@ export const BLOC_PROFILES = {
   },
   "JI": {
     "key": "JI",
-    "name": "জামায়াত-ইসলামী",
+    "name": "জামায়াতে ইসলামী",
     "shortName": "জামায়াত",
     "englishName": "Bangladesh Jamaat-e-Islami",
     "color": "#8B5CF6",
@@ -763,9 +930,9 @@ export const BLOC_PROFILES = {
   },
   "Sushil": {
     "key": "Sushil",
-    "name": "উদার সংবিধানবাদী সুশীল",
-    "shortName": "সুশীল",
-    "englishName": "Civil Society (Sushil)",
+    "name": "নির্দলীয় সুশাসনপন্থী",
+    "shortName": "সুশাসনপন্থী",
+    "englishName": "Non-partisan good governance",
     "color": "#06B6D4",
     "secondaryColor": "#0891B2",
     "badge": "আইনের শাসন ও প্রাতিষ্ঠানিক স্বকীয়তা",
@@ -824,42 +991,100 @@ export const BLOC_PROFILES = {
 export const QUADRANT_PROFILES = {
   "libertarian_left": {
     "key": "libertarian_left",
-    "name": "স্বাধীনতাবাদী বাম (Libertarian Left)",
-    "title": "স্বাধীনতাবাদী বাম (Libertarian Left)",
+    "name": "সনদের সৈনিক",
+    "title": "সনদের সৈনিক",
+    "nameEn": "The Charter Soldier",
+    "tagline": "গণভোটের রায় হুবহু কার্যকর করতে হবে।",
+    "taglineEn": "The referendum’s verdict must be carried out in full.",
     "badgeColor": "#10B981",
     "color": "#10B981",
     "description": "আপনি অর্থনৈতিক সমতা, সামাজিক ন্যায়বিচার এবং নাগরিক স্বাধীনতার পক্ষে। আপনি রাষ্ট্রীয় ক্ষমতার বিকেন্দ্রীকরণ ও প্রান্তিক মানুষের অধিকার সমর্থন করেন।"
   },
   "libertarian_right": {
     "key": "libertarian_right",
-    "name": "স্বাধীনতাবাদী ডান (Libertarian Right)",
-    "title": "স্বাধীনতাবাদী ডান (Libertarian Right)",
+    "name": "স্বাধীন নাগরিক",
+    "title": "স্বাধীন নাগরিক",
+    "nameEn": "The Free Citizen",
+    "tagline": "উদ্যোগ আর মতপ্রকাশ, দুটোই মুক্ত থাকুক।",
+    "taglineEn": "Keep both enterprise and speech free.",
     "badgeColor": "#3B82F6",
     "color": "#3B82F6",
     "description": "আপনি মুক্তবাজার অর্থনীতি, ব্যক্তিমালিকানা এবং ব্যক্তিগত নাগরিক স্বাধীনতার পক্ষে। আপনি মনে করেন রাষ্ট্রীয় হস্তক্ষেপ ন্যূনতম হওয়া উচিত।"
   },
   "authoritarian_left": {
     "key": "authoritarian_left",
-    "name": "রাষ্ট্রনিয়ন্ত্রিত ও সমতাভিত্তিক (Statist Left)",
-    "title": "রাষ্ট্রনিয়ন্ত্রিত ও সমতাভিত্তিক (Statist Left)",
+    "name": "জনস্বার্থের প্রহরী",
+    "title": "জনস্বার্থের প্রহরী",
+    "nameEn": "The Public Interest Guardian",
+    "tagline": "বাজারের আগে মানুষের স্বার্থ।",
+    "taglineEn": "People’s interests before the market.",
     "badgeColor": "#EF4444",
     "color": "#EF4444",
     "description": "আপনি রাষ্ট্রের প্রত্যক্ষ ভূমিকার মাধ্যমে অর্থনৈতিক সমতা ও গণকল্যাণ নিশ্চিত করার পক্ষে। আপনি মনে করেন জনস্বার্থে শক্তিশালী কেন্দ্রীয় নিয়ন্ত্রণ প্রয়োজন।"
   },
   "authoritarian_right": {
     "key": "authoritarian_right",
-    "name": "ঐতিহ্যবাদী ও মুক্তবাজার (Traditionalist Right)",
-    "title": "ঐতিহ্যবাদী ও মুক্তবাজার (Traditionalist Right)",
+    "name": "আইনের পাহারাদার",
+    "title": "আইনের পাহারাদার",
+    "nameEn": "The Guardian of Law",
+    "tagline": "আইনশৃঙ্খলা ছাড়া কোনো অগ্রগতি টেকে না।",
+    "taglineEn": "No progress lasts without law and order.",
     "badgeColor": "#F59E0B",
     "color": "#F59E0B",
     "description": "আপনি সামাজিক ঐতিহ্য, শৃঙ্খলা এবং শক্তিশালী রাষ্ট্রীয় কাঠামোর পক্ষে। পাশাপাশি আপনি মুক্তবাজার অর্থনীতি, ব্যক্তিমালিকানা এবং ব্যবসা-বান্ধব পরিবেশ সমর্থন করেন।"
   },
   "centrist": {
     "key": "centrist",
-    "name": "মধ্যপন্থী (Centrist)",
-    "title": "মধ্যপন্থী (Centrist)",
+    "name": "নিরপেক্ষ বিচারক",
+    "title": "নিরপেক্ষ বিচারক",
+    "nameEn": "The Impartial Judge",
+    "tagline": "দুই পক্ষ শুনে তবেই সিদ্ধান্ত।",
+    "taglineEn": "I decide only after hearing both sides.",
     "badgeColor": "#94A3B8",
     "color": "#94A3B8",
     "description": "আপনি রাজনৈতিক ও অর্থনৈতিক নীতিতে একটি ভারসাম্যপূর্ণ বাস্তবসম্মত অবস্থান পছন্দ করেন। চরমপন্থার বদলে আপনি নীতিগত ভারসাম্য খোঁজেন।"
   }
 };
+
+// A name like "সনদের সৈনিক" makes a specific claim, and the card prints the
+// person's verdicts right beneath it. If their own answer contradicts the
+// name, they get the alternate name for the same compass area instead.
+const IDENTITY_ALTERNATES = {
+  libertarian_left: {
+    requires: { questionId: 'c25', minScore: 3 },
+    name: 'রাজপথের কণ্ঠ',
+    nameEn: 'The Street Voice',
+    tagline: 'ভিন্নমত দমন করে দেশ চলে না।',
+    taglineEn: 'Silencing dissent is no way to run a country.'
+  }
+};
+
+export function getIdentity(quadrantKey, scoreOf) {
+  const base = QUADRANT_PROFILES[quadrantKey] || QUADRANT_PROFILES.centrist;
+  const alternate = IDENTITY_ALTERNATES[quadrantKey];
+  const score = alternate ? scoreOf(alternate.requires.questionId) : undefined;
+  const source = alternate && score !== undefined && score < alternate.requires.minScore ? alternate : base;
+  return {
+    name: source.name,
+    nameEn: source.nameEn,
+    tagline: source.tagline,
+    taglineEn: source.taglineEn
+  };
+}
+
+// Live issues that can appear on the share card. All are in the short quiz, so
+// every length has them. In priority order. Religion questions are left off on
+// purpose: a public verdict on them could put the person sharing at risk.
+export const CARD_ISSUES = [
+  { id: 'c25', agreeBn: 'সনদ হুবহু বাস্তবায়ন চাই', disagreeBn: 'সনদে সংশোধন প্রয়োজন', agreeEn: 'Implement the Charter in full', disagreeEn: 'The Charter needs amending', topicBn: 'জুলাই সনদ', topicEn: 'July Charter' },
+  { id: 'c17', agreeBn: 'গ্যারান্টি ছাড়া গঙ্গা চুক্তি নয়', disagreeBn: 'আগে গঙ্গা চুক্তি নবায়ন হোক', agreeEn: 'No Ganges deal without a guarantee', disagreeEn: 'Renew the Ganges deal first', topicBn: 'গঙ্গা চুক্তি', topicEn: 'Ganges deal' },
+  { id: 'c13', agreeBn: 'নগদ সহায়তার আগে কর্মসংস্থান', disagreeBn: 'ফ্যামিলি কার্ড চালু থাকুক', agreeEn: 'Jobs before cash support', disagreeEn: 'Keep the Family Card', topicBn: 'ফ্যামিলি কার্ড', topicEn: 'Family Card' },
+  { id: 'c14', agreeBn: 'নিত্যপণ্যের দাম বেঁধে দেওয়া হোক', disagreeBn: 'দাম নির্ধারণে সরকার নয়, বাজার', agreeEn: 'Fix essential food prices', disagreeEn: 'Let the market set prices', topicBn: 'বাজারদর', topicEn: 'Food prices' },
+  { id: 'c1', agreeBn: 'বড় নিয়োগে বিরোধী দলের সম্মতি', disagreeBn: 'নিয়োগের দায়িত্ব সরকারের', agreeEn: 'Opposition consent on top posts', disagreeEn: 'Appointments are the government’s job', topicBn: 'বড় নিয়োগ', topicEn: 'Top appointments' },
+  { id: 'c21', agreeBn: 'সমালোচনার জন্য গ্রেপ্তার নয়', disagreeBn: 'সমালোচনারও আইনি সীমা থাকুক', agreeEn: 'No arrests for criticism', disagreeEn: 'Criticism needs legal limits', topicBn: 'বাকস্বাধীনতা', topicEn: 'Free speech' },
+  { id: 'c29', agreeBn: 'আগে শ্রমিকের ন্যায্য মজুরি', disagreeBn: 'আগে কারখানা টিকিয়ে রাখা', agreeEn: 'Fair wages first', disagreeEn: 'Keep factories running first', topicBn: 'শ্রমিকের মজুরি', topicEn: 'Workers\' wages' },
+  { id: 'c5', agreeBn: 'সংসদে থেকেই বিরোধিতা', disagreeBn: 'প্রতিবাদে সংসদ বর্জন যৌক্তিক', agreeEn: 'Oppose from inside parliament', disagreeEn: 'Walkouts are a fair protest', topicBn: 'সংসদ বর্জন', topicEn: 'Parliament walkouts' },
+  { id: 'c26', agreeBn: 'মেয়াদ নয়, ভোটারই শেষ কথা', disagreeBn: 'প্রধানমন্ত্রীর মেয়াদের সীমা চাই', agreeEn: 'Voters decide, not term limits', disagreeEn: 'Term limits for prime ministers', topicBn: 'মেয়াদের সীমা', topicEn: 'Term limits' },
+  { id: 'c18', agreeBn: 'ভারতের সাথে সম্পর্ক স্বাভাবিক হোক', disagreeBn: 'আগে সমতা, পরে সম্পর্ক', agreeEn: 'Normalise relations with India', disagreeEn: 'Equality first, then relations', topicBn: 'ভারত সম্পর্ক', topicEn: 'India relations' }
+];
+

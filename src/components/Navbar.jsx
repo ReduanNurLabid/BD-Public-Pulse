@@ -1,23 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Compass, BarChart3, BookOpen, ShieldCheck, Menu, X, Award, Languages } from 'lucide-react';
+import { Compass, BarChart3, BookOpen, ShieldCheck, Menu, X, Award, Languages, Vote } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import lightLogo from '../assets/light mode logo.svg';
 import darkLogo from '../assets/dark mode logo.svg';
-import { isNewVisitor } from '../lib/visitorSession';
 
 export default function Navbar({ activeTab, onNavigate, liveVisitors, lang = 'bn', onToggleLang }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isNew, setIsNew] = useState(isNewVisitor);
-
-  useEffect(() => {
-    const handleStatusChange = () => setIsNew(isNewVisitor());
-    window.addEventListener('bdc_submission_status_changed', handleStatusChange);
-    window.addEventListener('storage', handleStatusChange);
-    return () => {
-      window.removeEventListener('bdc_submission_status_changed', handleStatusChange);
-      window.removeEventListener('storage', handleStatusChange);
-    };
-  }, []);
 
   const navRef = useRef(null);
 
@@ -82,7 +70,7 @@ export default function Navbar({ activeTab, onNavigate, liveVisitors, lang = 'bn
             </span>
             <div className="navbar-brand-subtitle" style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.2 }}>
               {lang === 'bn'
-                ? 'একটি স্বাধীন, নিরপেক্ষ এবং উন্মুক্ত গবেষণা প্রকল্প।'
+                ? 'দলহীন, স্বাধীন জনমত প্ল্যাটফর্ম'
                 : 'An independent, impartial, and open research project.'}
             </div>
           </div>
@@ -105,7 +93,7 @@ export default function Navbar({ activeTab, onNavigate, liveVisitors, lang = 'bn
           <div className="badge-tag font-latin" style={{
             background: 'rgba(5, 150, 105, 0.1)',
             borderColor: 'rgba(5, 150, 105, 0.25)',
-            color: '#059669',
+            color: 'var(--accent-green)',
             padding: '0.35rem 0.85rem',
             fontWeight: 700
           }}>
@@ -117,28 +105,36 @@ export default function Navbar({ activeTab, onNavigate, liveVisitors, lang = 'bn
             onClick={() => handleNav('home')}
             className={`btn-ghost ${activeTab === 'home' ? 'selected' : ''}`}
             style={{
-              color: activeTab === 'home' ? '#D97706' : 'var(--text-secondary)',
+              color: activeTab === 'home' ? 'var(--accent-red)' : 'var(--text-secondary)',
               fontWeight: activeTab === 'home' ? 700 : 500,
               display: 'inline-flex',
               alignItems: 'center',
               position: 'relative'
             }}
           >
-            <span>{lang === 'en' ? 'Home & Survey' : 'হোম ও মূল্যায়ন'}</span>
-            {isNew && (
-              <span
-                className="nav-guide-dot"
-                title={lang === 'en' ? 'New visitor: take the survey' : 'নতুন ভিজিটর: মূল্যায়ন শুরু করুন'}
-                aria-label={lang === 'en' ? 'New visitor: survey available' : 'নতুন ভিজিটর: মূল্যায়ন চালু আছে'}
-              />
-            )}
+            <span>{lang === 'en' ? 'Home & Survey' : 'হোম'}</span>
+          </button>
+
+          <button
+            onClick={() => handleNav('weekly')}
+            className="btn-ghost"
+            style={{
+              color: activeTab === 'weekly' ? 'var(--accent-red)' : 'var(--text-secondary)',
+              fontWeight: activeTab === 'weekly' ? 700 : 500,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem'
+            }}
+          >
+            <Vote size={17} />
+            <span>{lang === 'en' ? 'Weekly vote' : 'সাপ্তাহিক ভোট'}</span>
           </button>
 
           <button
             onClick={() => handleNav('dashboard')}
             className="btn-ghost"
             style={{
-              color: activeTab === 'dashboard' ? '#0284C7' : 'var(--text-secondary)',
+              color: activeTab === 'dashboard' ? 'var(--accent-red)' : 'var(--text-secondary)',
               fontWeight: activeTab === 'dashboard' ? 700 : 500,
               display: 'flex',
               alignItems: 'center',
@@ -153,7 +149,7 @@ export default function Navbar({ activeTab, onNavigate, liveVisitors, lang = 'bn
             onClick={() => handleNav('methodology')}
             className="btn-ghost"
             style={{
-              color: activeTab === 'methodology' ? '#7C3AED' : 'var(--text-secondary)',
+              color: activeTab === 'methodology' ? 'var(--accent-red)' : 'var(--text-secondary)',
               fontWeight: activeTab === 'methodology' ? 700 : 500,
               display: 'flex',
               alignItems: 'center',
@@ -161,7 +157,7 @@ export default function Navbar({ activeTab, onNavigate, liveVisitors, lang = 'bn
             }}
           >
             <BookOpen size={17} />
-            <span>{lang === 'en' ? 'Methodology' : 'গবেষণা পদ্ধতি'}</span>
+            <span>{lang === 'en' ? 'Methodology' : 'কীভাবে হিসাব হয়'}</span>
           </button>
 
           {/* The label shows the language this button will switch to. */}

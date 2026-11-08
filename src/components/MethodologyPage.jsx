@@ -1,3 +1,5 @@
+import { MODEL_VERSION } from '../lib/scoring';
+import { readableColor } from '../lib/format';
 import React, { useEffect, useState } from 'react';
 import {
   Sparkles,
@@ -18,11 +20,11 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { THEMATIC_BLOCKS, BLOC_PROFILES, QUESTIONS, QUADRANT_PROFILES, QUESTION_SET_VERSION } from '../data/questions';
+import { LEADER_PROFILES } from '../data/leaders';
 import BlocLogo from './BlocLogo';
 import darkLogo from '../assets/dark mode logo.svg';
 import lightLogo from '../assets/light mode logo.svg';
 
-const MODEL_VERSION = 'v4-2026-10';
 const PARAMS = {
   noMatchBelow: 52,
   closeCallMargin: 6,
@@ -52,18 +54,18 @@ const COPY = {
     subtitle: 'পুরো পদ্ধতি সহজ ভাষায়। প্রাথমিক ৪০টি প্রশ্ন থেকে নিবিড়ভাবে নির্বাচিত ২৪টি নীতিগত প্রশ্ন, নিরপেক্ষ স্কোরিং সূত্র এবং প্রতিটি প্রশ্নের ওজন এখানে উন্মুক্ত।',
     nav: ['সারসংক্ষেপ', 'স্কোরিং পদ্ধতি', 'দলের সঙ্গে মিল', 'তথ্য ও নিরাপত্তা', 'প্রশ্নোত্তর', 'উন্মুক্ত সূত্র ও CSV'],
     startTest: 'মূল্যায়ন শুরু করুন',
-    goBack: 'নীড়ে ফিরে যান',
+    goBack: 'নীড়ে ফিরে যান',
 
     overviewTitle: 'ত্রিশ সেকেন্ডে বুঝে নিন',
     steps: [
-      { h: 'আপনি ২৪টি নীতিগত বিবৃতির সঙ্গে একমত বা দ্বিমত জানান', b: 'প্রতিটি বিবৃতিতে দুটি বৈধ মূল্যবোধের মধ্যে টানাপোড়েন আছে। কোনো উত্তরই সঠিক বা ভুল নয়।' },
+      { h: 'আপনি ১৬, ২৪ বা ৩২টি নীতিগত বিবৃতির সঙ্গে একমত বা দ্বিমত জানান', b: 'প্রতিটি বিবৃতিতে দুটি বৈধ মূল্যবোধের মধ্যে টানাপোড়েন আছে। কোনো উত্তরই সঠিক বা ভুল নয়।' },
       { h: 'প্রতিটি উত্তর আপনার অবস্থানকে সুনির্দিষ্ট অক্ষে সরায়', b: 'একমত বা দ্বিমতের মাত্রা যত জোরালো, সরানোর জোর তত বেশি। “নিরপেক্ষ” উত্তর অবস্থান অপরিবর্তিত রাখে।' },
       { h: 'শেষে দুটি মূল অক্ষে আপনার অবস্থান নির্ণয় হয়', b: 'একটি অক্ষ অর্থনীতির (রাষ্ট্র বনাম বাজার), অন্যটি শাসনের (নিয়ন্ত্রণ বনাম স্বাধীনতা)।' },
       { h: 'তারপর শুরু হয় রাজনৈতিক ও ঐতিহাসিক তুলনা', b: 'আপনার উত্তর কোন রাজনৈতিক ধারার অনুমিত উত্তরের সঙ্গে বেশি মেলে এবং কোন নেতা ও রাষ্ট্রের মডেল আপনার সবচেয়ে কাছে, তা হিসাব করা হয়।' }
     ],
     isTitle: 'এই ফলাফল যা প্রকাশ করে',
     isItems: [
-      '২৪টি সুনির্দিষ্ট নীতিগত প্রশ্নে আপনার উত্তরের বস্তুনিষ্ঠ সারসংক্ষেপ',
+      '৮টি বিষয়ের নীতিগত প্রশ্নে আপনার উত্তরের বস্তুনিষ্ঠ সারসংক্ষেপ',
       'এই গবেষণার ৫টি রেফারেন্স প্রোফাইলের সঙ্গে আপনার অবস্থানের তুলনামূলক চিত্র',
       'রাষ্ট্র ও সমাজ পরিচালনায় দুটি বিপরীত মূল্যবোধের ভারসাম্য নিয়ে ভাবার একটি আয়না'
     ],
@@ -77,7 +79,7 @@ const COPY = {
 
     scoreTitle: 'আপনার উত্তর কীভাবে স্কোর হয়',
     scoreIntro: 'প্রতিটি বিবৃতির পাশে ৫টি বিকল্প থাকে। প্রতিটি বিকল্পের একটি সুনির্দিষ্ট গাণিতিক “ধাক্কা” (Push Multiplier) আছে:',
-    scale: ['দৃঢ়ভাবে একমত', 'একমত', 'নিরপেক্ষ', 'দ্বিমত', 'দৃঢ়ভাবে দ্বিমত'],
+    scale: ['পুরোপুরি একমত', 'কিছুটা একমত', 'নিশ্চিত নই', 'কিছুটা দ্বিমত', 'একদমই না'],
     scaleHelp: '+২ মানে দ্বিগুণ শক্তিতে সরানো, ০ মানে কোনো পরিবর্তন নেই।',
     directionNote: 'ধাক্কা কোন দিকে যাবে, তা নির্ভর করে প্রশ্নটি কোন আদর্শের দিকে রচিত তার ওপর। একই “একমত” উত্তর কোনো প্রশ্নে মুক্তবাজারের দিকে আবার কোনো প্রশ্নে রাষ্ট্রীয় কল্যাণের দিকে সরায়। পক্ষপাতহীনতা বজায় রাখতে প্রশ্নগুলো ইচ্ছাকৃতভাবে বিপরীতমুখী করে সাজানো।',
     tryTitle: 'একটি আসল প্রশ্নে পরীক্ষা করে দেখুন',
@@ -126,7 +128,7 @@ const COPY = {
       { h: 'মিশ্র বা অমীমাংসিত', b: '{mixed}% বা তার বেশি উত্তর নিরপেক্ষ বা বাদ রাখা হয়েছে।' }
     ],
     leadersTitle: 'ঐতিহাসিক ব্যক্তিত্ব ও রাষ্ট্রীয় মডেল',
-    leadersBody: 'আপনার কম্পাস স্থানাঙ্ককে বাংলাদেশ, দক্ষিণ এশিয়া ও আন্তর্জাতিক ইতিহাসের ২৩ জন স্মরণীয় ব্যক্তিত্বের মতাদর্শিক স্থানাঙ্কের সাথে মিলিয়ে দেখা হয়। প্রথমে আপনার দিক (কোণ) এবং পরে তীব্রতা পরিমাপ করা হয়। একই সাথে আপনার চতুর্ভাগের ওপর ভিত্তি করে একটি তুলনামূলক রাষ্ট্রীয় মডেল প্রদর্শিত হয়।',
+    leadersBody: 'আপনার কম্পাস স্থানাঙ্ককে বাংলাদেশের ইতিহাসের ১০ জন স্মরণীয় ব্যক্তিত্বের মতাদর্শিক স্থানাঙ্কের সাথে মিলিয়ে দেখা হয়। প্রথমে আপনার দিক (কোণ) এবং পরে তীব্রতা পরিমাপ করা হয়। একই সাথে আপনার চতুর্ভাগের ওপর ভিত্তি করে একটি তুলনামূলক রাষ্ট্রীয় মডেল প্রদর্শিত হয়। কোনো দলের ধারার সাথে আপনার মিল সবচেয়ে বেশি হলে, কার্ডের ব্যক্তিত্ব সেই ধারার সমর্থকেরা যাঁদের সম্মান করেন তাঁদের মধ্য থেকে বাছা হয়।',
     leadersWarn: 'ব্যক্তিত্বদের স্থানাঙ্ক নির্ধারণ একটি গবেষণামূলক রূপরেখা। এটি কোনো ব্যক্তিত্বের রাজনৈতিক সমর্থন বা সমালোচনা নয়, বরং নাগরিক পর্যালোচনার সহায়ক।',
 
     privacyTitle: 'তথ্য নিরাপত্তা ও কঠোর মানদণ্ড',
@@ -147,9 +149,9 @@ const COPY = {
     faq: [
       { q: 'এটা কি কোনো পরীক্ষা? সঠিক বা ভুল উত্তর আছে কি?', a: 'না, এটি কোনো পরীক্ষা নয়। এখানে প্রতিটি প্রশ্নে দুটি সমান গুরুত্বপূর্ণ মূল্যবোধের দ্বন্দ্ব দেখানো হয়েছে। আপনার বিবেক যা সমর্থন করে, সেটাই আপনার সঠিক উত্তর।' },
       { q: 'উভয় পক্ষের যুক্তিই যুক্তিসঙ্গত মনে হলে কী করব?', a: 'যেদিকের যুক্তির প্রতি আপনি সামান্য হলেও বেশি ঝুঁকে আছেন, সেদিকে “একমত” বা “দ্বিমত” বেছে নিন। একান্তই দোলাচলে থাকলে “নিরপেক্ষ” দিতে পারেন, তবে অতিরিক্ত নিরপেক্ষ দিলে ফলাফল “মিশ্র” দেখাবে।' },
-      { q: 'ফলাফলে কোনো দলের নাম এলে আমি কি তাদের সমর্থক?', a: 'একদমই না। এটি শুধু ২৪টি প্রশ্নে আপনার পছন্দের সাথে তাদের ঐতিহ্যগত অবস্থানের তুলনামূলক মিল দেখায়। দলীয় আনুগত্য মানুষের সার্বিক রাজনৈতিক চরিত্রের ক্ষুদ্র অংশমাত্র।' },
+      { q: 'ফলাফলে কোনো দলের নাম এলে আমি কি তাদের সমর্থক?', a: 'একদমই না। এটি শুধু এই প্রশ্নগুলোতে আপনার পছন্দের সাথে তাদের ঐতিহ্যগত অবস্থানের তুলনামূলক মিল দেখায়। দলীয় আনুগত্য মানুষের সার্বিক রাজনৈতিক চরিত্রের ক্ষুদ্র অংশমাত্র।' },
       { q: 'আমার কম্পাস অবস্থান মাঝখানে আসে কেন?', a: 'দুই অক্ষের যেকোনো দিকে ১০০ স্কোর পেতে হলে সংশ্লিষ্ট সবকটি প্রশ্নে চরম অবস্থান নিতে হয়। ভারসাম্যপূর্ণ ও বাস্তববাদী চিন্তাশীল নাগরিকরা সাধারণত কেন্দ্রের কাছাকাছি অবস্থান করেন।' },
-      { q: 'আমার ফলাফল কি সুরক্ষিত?', a: 'সম্পূর্ণ সুরক্ষিত। কোনো লগইন নেই, কোনো ট্র্যাকিং নেই। আপনার ব্যক্তিগত তথ্যের কোনো রেকর্ড কোথাও সংরক্ষিত হয় না।' }
+      { q: 'আমার ফলাফল কি সুরক্ষিত?', a: 'সম্পূর্ণ সুরক্ষিত। নাম, ফোন বা লগইন লাগে না; উত্তর একটি এলোমেলো আইডিতে জমা হয়। আপনার ব্যক্তিগত তথ্যের কোনো রেকর্ড কোথাও সংরক্ষিত হয় না।' }
     ],
 
     openTitle: 'উন্মুক্ত সূত্র ও গবেষণার ডেটাসেট',
@@ -163,12 +165,12 @@ const COPY = {
       { h: '৫. রাজনৈতিক ধারার সাদৃশ্য (Affinities)', b: 'কাঁচা স্কোর = Σ(m × bloc_weight)। স্বাভাবিকীকরণ f = (কাঁচা − সর্বনিম্ন) ÷ (সর্বোচ্চ − সর্বনিম্ন)। চূড়ান্ত স্কোর = f^{curve} × ১০০, যা {min}% থেকে {max}%-এ সীমাবদ্ধ।' },
       { h: '৬. নেতা ও মডেল মিল', b: 'কেন্দ্রের বাইরে দিক ও দূরত্বের কোণ বিবেচনায় নৈকট্য হিসাব করা হয়। দূরত্বের ভিত্তিতে মিল ৩০% থেকে ৯৯%-এর মধ্যে প্রদর্শিত হয়।' }
     ],
-    tableSummary: '২৪টি নীতিগত প্রশ্নের আদর্শিক ম্যাট্রিক্স',
-    tableIntro: 'নিচের টেবিলে ২৪টি প্রশ্নের X/Y প্রভাব, অভিমুখ এবং ৫টি প্রধান রাজনৈতিক ব্লকের জন্য নির্ধারিত আদর্শিক ওজন প্রদর্শিত হলো। গবেষকদের ব্যবহারের সুবিধার্থে পুরো ডেটাসেট CSV হিসেবে ডাউনলোড করার সুবিধা রাখা হয়েছে।',
+    tableSummary: '৩২টি নীতিগত প্রশ্নের আদর্শিক ম্যাট্রিক্স',
+    tableIntro: 'নিচের টেবিলে ৩২টি প্রশ্নের X/Y প্রভাব, অভিমুখ এবং ৫টি প্রধান রাজনৈতিক ব্লকের জন্য নির্ধারিত আদর্শিক ওজন প্রদর্শিত হলো। গবেষকদের ব্যবহারের সুবিধার্থে পুরো ডেটাসেট CSV হিসেবে ডাউনলোড করার সুবিধা রাখা হয়েছে।',
     tableHead: { serial: 'ক্রম', id: 'আইডি', block: 'নীতিগত ক্ষেত্র', statement: 'বিবৃতি', x: 'X অক্ষ', y: 'Y অক্ষ', dir: 'অভিমুখ' },
-    downloadCsv: '২৪টি প্রশ্নের CSV ডাউনলোড করুন',
-    downloadCount: '২৪টি নীতিগত প্রশ্ন অন্তর্ভুক্ত',
-    shortBloc: { AL: 'আ.লীগ', BNP: 'বিএনপি', JI: 'জামায়াত', Student: 'NCP', Sushil: 'সুশীল' },
+    downloadCsv: '৩২টি প্রশ্নের CSV ডাউনলোড করুন',
+    downloadCount: '৩২টি নীতিগত প্রশ্ন অন্তর্ভুক্ত',
+    shortBloc: { AL: 'আ.লীগ', BNP: 'বিএনপি', JI: 'জামায়াত', Student: 'NCP', Sushil: 'সুশাসনপন্থী' },
     csvName: 'bd-political-compass-24q-weights.csv'
   },
 
@@ -182,14 +184,14 @@ const COPY = {
 
     overviewTitle: 'The 30-Second Summary',
     steps: [
-      { h: 'You react to 24 core policy statements', b: 'Each statement presents a real trade-off between two legitimate values. There are no right or wrong answers.' },
+      { h: 'You react to 16, 24 or 32 policy statements', b: 'Each statement presents a real trade-off between two legitimate values. There are no right or wrong answers.' },
       { h: 'Each answer applies a weighted mathematical nudge', b: 'The stronger your agreement, the larger the displacement. Neutral answers leave your coordinates unchanged.' },
       { h: 'Your position plots on two foundational axes', b: 'One axis is Economic (State-led vs Market-driven), the other is Governance (Centralised control vs Liberty).' },
-      { h: 'Comparative insights with blocs & history', b: 'Your profile is compared against expected positions of 5 reference viewpoints, plus 23 historical figures and comparative governance models.' }
+      { h: 'Comparative insights with blocs & history', b: 'Your profile is compared against expected positions of 5 reference viewpoints, plus 10 figures from Bangladesh’s history.' }
     ],
     isTitle: 'What your result represents',
     isItems: [
-      'An objective mapping of where your answers land across 24 core national debates',
+      'An objective mapping of where your answers land across 8 core national debates',
       'A comparative benchmark against the 5 philosophical profiles in this study',
       'A structured tool to reflect on personal priorities and constitutional governance'
     ],
@@ -252,7 +254,7 @@ const COPY = {
       { h: 'Mixed / Undecided', b: '{mixed}% or more answers were neutral or skipped.' }
     ],
     leadersTitle: 'Historical Figures & Governance Models',
-    leadersBody: 'Your compass coordinates are compared against calibrated coordinates for 23 historical figures across Bangladesh, South Asia, and world history. Direction is prioritised before radial intensity, accompanied by a quadrant governance model.',
+    leadersBody: 'Your compass coordinates are compared against calibrated coordinates for 10 honoured figures from Bangladesh’s history. Direction is prioritised before radial intensity, accompanied by a quadrant governance model. If your closest match is a party, the figure on your card is chosen from those that party’s supporters honour.',
     leadersWarn: 'Historical placements represent illustrative comparative mappings for intellectual reflection, not political endorsements.',
 
     privacyTitle: 'Data Privacy & Rigour',
@@ -273,9 +275,9 @@ const COPY = {
     faq: [
       { q: 'Is this a test with correct and incorrect answers?', a: 'No. Every statement contrasts two legitimate socio-political principles. Your honest conviction is the correct answer.' },
       { q: 'What if I agree with aspects of both sides?', a: 'Select the option corresponding to whichever side holds slightly more weight for you. If genuinely torn, select Neutral; however, too many neutral answers will yield a Mixed outcome.' },
-      { q: 'Does receiving a bloc match mean I am a member?', a: 'No. It merely demonstrates affinity with that tradition on these 24 specific policy items.' },
+      { q: 'Does receiving a bloc match mean I am a member?', a: 'No. It merely demonstrates affinity with that tradition on these specific policy items.' },
       { q: 'Why did my result land near the centre?', a: 'Extreme coordinates require consistent extreme answers across all questions. Pragmatic or balanced views naturally plot closer to the centre.' },
-      { q: 'How is respondent privacy safeguarded?', a: 'Responses are completely pseudonymous. No contact details, IP logs, or personal credentials are ever recorded.' }
+      { q: 'How is respondent privacy safeguarded?', a: 'No name, phone number or login is needed, and answers are stored under a random ID.' }
     ],
 
     openTitle: 'Open Mathematics & Dataset',
@@ -289,10 +291,10 @@ const COPY = {
       { h: '5. Bloc affinity curve', b: 'raw = Σ(m × bloc_weight). Normalised f = (raw − min) ÷ (max − min). Score = f^{curve} × 100, clamped to {min}–{max}%.' },
       { h: '6. Historical figure proximity', b: 'Combines angular directional bearing and radial intensity ({rw} factor), scaled between 30% and 99%.' }
     ],
-    tableSummary: 'Curated 24-Question Ideological Matrix',
+    tableSummary: '32-Question Ideological Matrix',
     tableIntro: 'Review the weights matrix governing all 24 curated questions. Download the complete dataset in UTF-8 CSV format for independent analysis and research.',
     tableHead: { serial: 'No.', id: 'ID', block: 'Policy Domain', statement: 'Statement', x: 'X Axis', y: 'Y Axis', dir: 'Direction' },
-    downloadCsv: 'Download 24-Question CSV',
+    downloadCsv: 'Download 32-Question CSV',
     downloadCount: '24 Curated Questions Included',
     shortBloc: { AL: 'AL', BNP: 'BNP', JI: 'JI', Student: 'NCP', Sushil: 'Civil' },
     csvName: 'bd-political-compass-24q-weights.csv'
@@ -432,7 +434,7 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
   const demoPush = demoQ ? Math.round(demoMult * demoQ.x_weight * 10) / 10 : 0;
   const demoMax = demoQ ? 2 * Math.abs(demoQ.x_weight) : 1;
   const demoSide = demoPush > 0 ? c.tryRight : demoPush < 0 ? c.tryLeft : c.tryNone;
-  const scaleColors = ['#16a34a', '#4ade80', '#94a3b8', '#f87171', '#dc2626'];
+  const scaleColors = ['var(--accent-green)', 'var(--accent-green)', 'var(--text-muted)', 'var(--accent-red)', 'var(--accent-red)'];
   const scaleValues = [2, 1, 0, -1, -2];
 
   const quadName = (key) => (isEn ? QUADRANT_EN[key] : stripParen(QUADRANT_PROFILES?.[key]?.name));
@@ -788,7 +790,7 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
                       <BlocLogo blocKey={k} size={46} />
                     </div>
                     <div style={{ minWidth: 0 }}>
-                      <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: p.color }}>{isEn ? info?.en : p.name}</h4>
+                      <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: readableColor(p.color) }}>{isEn ? info?.en : p.name}</h4>
                       <span style={{ display: 'inline-block', margin: '0.2rem 0 0.45rem', padding: '0.1rem 0.6rem', borderRadius: '999px', border: '1px solid var(--border-subtle)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                         {info?.kind === 'view' ? c.nonParty : c.party}
                       </span>
@@ -957,7 +959,10 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
                         <th style={{ padding: '0.65rem 0.6rem', textAlign: 'center', color: 'var(--text-primary)', fontWeight: 700 }}>{c.tableHead.dir}</th>
                         {blocKeys.map((k) => (
                           <th key={k} style={{ padding: '0.65rem 0.6rem', textAlign: 'center', color: 'var(--text-primary)', fontWeight: 700 }}>
-                            {c.shortBloc[k] || k}
+                            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
+                              <BlocLogo blocKey={k} size={28} />
+                              {c.shortBloc[k] || k}
+                            </span>
                           </th>
                         ))}
                       </tr>
@@ -984,7 +989,7 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
                               {q.y_weight ? signed(q.y_weight) : '0'}
                             </td>
                             <td style={{ padding: '0.6rem 0.5rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                              {signed(q.direction)}
+                              {q.direction === undefined ? '–' : signed(q.direction)}
                             </td>
                             {blocKeys.map((k) => {
                               const w = (q.bloc_weights || {})[k] ?? 0;
@@ -997,6 +1002,55 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
                           </tr>
                         );
                       })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </details>
+
+            {/* Living leaders: every estimated answer, so anyone can check them */}
+            <details style={{ border: '1px solid var(--border-subtle)', borderRadius: '16px', background: 'var(--bg-primary)', overflow: 'hidden', marginTop: '1.25rem' }}>
+              <summary style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', padding: '1rem 1.25rem', cursor: 'pointer', listStyle: 'none', fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                <span>{isEn ? 'How we placed each current leader' : 'বর্তমান নেতাদের অবস্থান কীভাবে ঠিক হলো'}</span>
+                <ChevronDown size={18} style={{ color: 'var(--text-muted)' }} />
+              </summary>
+              <div style={{ padding: '0 1.25rem 1.25rem' }}>
+                <p style={{ margin: '0 0 1rem', fontSize: '0.92rem', lineHeight: 1.65, color: 'var(--text-muted)' }}>
+                  {isEn
+                    ? 'Each leader is given an answer to every question (1 = strongly disagree, 5 = strongly agree), estimated from party programmes, public statements and government decisions. Their compass position is computed from these answers with exactly the same formula as yours, and your match compares the direction of your answers with theirs. The five percentages are shares that add up to 100, so they show who is relatively closest, not an absolute score. Awami League leaders are not included because of the party ban. Think an answer is wrong? Tell us via the feedback button. Sheikh Hasina’s answers rest mainly on what her government did in 2009–24, because she and her party have stated no position on most of today’s questions. Where there is no basis the table shows “—” and the question is not counted. Results show only your closest leaders (at most three), with percentages worked out among them. Sheikh Hasina appears only for people whose answers match the Awami League line; when she appears Tarique Rahman does not, and supporters of one side are not shown the other as a match. The party bars follow the same rule.'
+                    : 'প্রত্যেক নেতাকে প্রতিটি প্রশ্নের একটি উত্তর দেওয়া হয়েছে (১ = একদমই না, ৫ = পুরোপুরি একমত) — দলীয় কর্মসূচি, প্রকাশ্য বক্তব্য ও সরকারি সিদ্ধান্ত থেকে আমাদের অনুমান। কম্পাসে তাঁদের অবস্থান এই উত্তর থেকে ঠিক আপনার মতো একই সূত্রে হিসাব হয়। আপনার সাথে মিল হিসাব হয় আপনার ও তাঁর মতের দিক তুলনা করে। পাঁচজনের শতাংশ মিলিয়ে মোট ১০০%, তাই এটা দেখায় কে তুলনামূলক বেশি কাছে; এটা কোনো নিরপেক্ষ নম্বর নয়। দলের ওপর নিষেধাজ্ঞার কারণে আওয়ামী লীগের নেতাদের রাখা হয়নি। কোনো উত্তর ভুল মনে হলে মতামত বাটনে জানান। শেখ হাসিনার উত্তর মূলত ২০০৯–২৪ সালে তাঁর সরকারের কাজের ভিত্তিতে ধরা, কারণ এখনকার বেশিরভাগ প্রশ্নে তাঁর বা তাঁর দলের ঘোষিত অবস্থান নেই। যে প্রশ্নে কোনো ভিত্তি পাওয়া যায়নি সেখানে “—” দেওয়া আছে, আর সেটি হিসাবে ধরা হয় না। ফলাফলে শুধু আপনার সবচেয়ে কাছের নেতাদের (সর্বোচ্চ তিনজন) দেখানো হয়, শতাংশ তাঁদের মধ্যেই হিসাব করা। আওয়ামী লীগের অবস্থানের সাথে উত্তর মিললেই কেবল শেখ হাসিনা আসেন; তিনি এলে তারেক রহমান আসেন না, আর এক পক্ষের সমর্থককে অন্য পক্ষের সাথে মিল দেখানো হয় না। দলীয় ধারার তালিকাতেও একই নিয়ম।'}
+                </p>
+                <p style={{ margin: '0 0 1rem', fontSize: '0.92rem', lineHeight: 1.65, color: 'var(--text-muted)' }}>
+                  {isEn
+                    ? 'Share card numbers. Government vs opposition: on questions where the prime minister and both main opposition leaders take opposite sides, the share of your decided answers on each side. "My 5-point demand" lists your five firmest positions from ten live issues; religion questions are never printed on the card.'
+                    : 'শেয়ার কার্ডের হিসাব। সরকার বনাম বিরোধী: যেসব প্রশ্নে প্রধানমন্ত্রী ও দুই প্রধান বিরোধী নেতা উল্টো অবস্থানে, সেখানে আপনার স্পষ্ট উত্তরগুলোর কত ভাগ কোন পক্ষে। "আমার ৫ দফা": ১০টি চলমান ইস্যু থেকে আপনার সবচেয়ে জোরালো ৫টি অবস্থান; ধর্মবিষয়ক প্রশ্ন কখনো কার্ডে ছাপা হয় না।'}
+                </p>
+                <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: '12px' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.84rem' }}>
+                    <thead>
+                      <tr style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>
+                        <th style={{ padding: '0.65rem 0.8rem', textAlign: 'left', color: 'var(--text-primary)', fontWeight: 700, minWidth: '300px' }}>{c.tableHead.statement}</th>
+                        {LEADER_PROFILES.map((l) => (
+                          <th key={l.id} style={{ padding: '0.65rem 0.6rem', textAlign: 'center', color: readableColor(l.color), fontWeight: 800, whiteSpace: 'nowrap' }}>
+                            {isEn ? l.shortEn : l.shortBn}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {QUESTIONS.map((q) => (
+                        <tr key={q.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                          <td style={{ padding: '0.55rem 0.8rem', lineHeight: 1.5, color: 'var(--text-secondary)' }}>{q.text}</td>
+                          {LEADER_PROFILES.map((l) => {
+                            const a = l.answers[q.id];
+                            return (
+                              <td key={l.id} className="font-latin" style={{ padding: '0.55rem 0.5rem', textAlign: 'center', fontWeight: 700, color: a >= 4 ? 'var(--accent-green)' : a <= 2 ? 'var(--accent-red)' : 'var(--text-muted)' }}>
+                                {a === undefined ? '—' : isEn ? a : String(a).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -1015,7 +1069,7 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
             {isEn ? 'Have you assessed your own position yet?' : 'আপনি কি এখনো আপনার নিজস্ব অবস্থান মূল্যায়ন করেননি?'}
           </h3>
           <p style={{ color: 'var(--text-secondary)' }}>
-            {isEn ? 'Answer 24 questions in just 3-4 minutes to discover where you stand in the new Bangladesh of 2026.' : 'মাত্র ৩-৪ মিনিটে ২৪টি প্রশ্নের উত্তর দিয়ে জেনে নিন ২০২৬-এর নতুন বাংলাদেশে আপনি কোন পন্থী।'}
+            {isEn ? 'Pick a 2, 4 or 6 minute quiz to discover where you stand in the new Bangladesh of 2026.' : '২, ৪ বা ৬ মিনিটের কুইজ বেছে নিয়ে জেনে নিন ২০২৬-এর নতুন বাংলাদেশে আপনি কোন পন্থী।'}
           </p>
 
           {onStartTest && (

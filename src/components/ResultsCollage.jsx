@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, Shuffle, Sparkles } from 'lucide-react';
 import PersonalityCard from './PersonalityCard';
-import { QUESTIONS, THEMATIC_BLOCKS } from '../data/questions';
-import { MASTER_PERSONALITIES } from '../lib/scoring';
+import { QUESTIONS, THEMATIC_BLOCKS, CARD_ISSUES, getIdentity } from '../data/questions';
+import { MASTER_PERSONALITIES, calculateComprehensiveAnalysis } from '../lib/scoring';
 
 const EXAMPLES = [
   {
@@ -12,9 +12,9 @@ const EXAMPLES = [
     badgeEmoji: '🌸',
     coordinates: { x: -48, y: 38 },
     demoProfiles: '14,320',
-    tendency: { en: 'Reformist Social Democrat', bn: 'সংস্কারপন্থী ও সমতাভিত্তিক', similarity: 82 },
+    tendency: { en: 'Reformist Social Democrat', bn: 'সংস্কারপন্থী সমতাবাদী', similarity: 82 },
     axisScores: [-42, 65, 38, -35, 45, 68, 72, 58],
-    figures: ['Tajuddin Ahmad', 'Nelson Mandela']
+    figures: ['Tajuddin Ahmad']
   },
   {
     id: 'trad-right',
@@ -23,9 +23,9 @@ const EXAMPLES = [
     badgeEmoji: '🔵',
     coordinates: { x: 44, y: -28 },
     demoProfiles: '16,840',
-    tendency: { en: 'Traditionalist & Free Market', bn: 'ঐতিহ্যবাদী ও মুক্তবাজার', similarity: 79 },
+    tendency: { en: 'Traditionalist & Free Market', bn: 'রক্ষণশীল বাজারপন্থী', similarity: 79 },
     axisScores: [38, -25, -35, 58, 62, -20, -15, 32],
-    figures: ['Ziaur Rahman', 'Winston Churchill']
+    figures: ['Ziaur Rahman']
   },
   {
     id: 'independent-centrist',
@@ -34,9 +34,9 @@ const EXAMPLES = [
     badgeEmoji: '⚖️',
     coordinates: { x: 8, y: 12 },
     demoProfiles: '18,910',
-    tendency: { en: 'Independent Pragmatist', bn: 'স্বতন্ত্র চিন্তাবিদ ও মধ্যপন্থী', similarity: 76 },
+    tendency: { en: 'Independent Pragmatist', bn: 'স্বাধীন চিন্তার বাস্তববাদী', similarity: 76 },
     axisScores: [15, 22, 10, 18, 25, 20, 30, 14],
-    figures: ['A. K. Fazlul Huq', 'Abraham Lincoln']
+    figures: ['A. K. Fazlul Huq']
   },
   {
     id: 'constitutional-liberal',
@@ -45,9 +45,21 @@ const EXAMPLES = [
     badgeEmoji: '🏛️',
     coordinates: { x: 32, y: 62 },
     demoProfiles: '11,450',
-    tendency: { en: 'Liberal Constitutionalist', bn: 'উদার সংবিধানবাদী ও সুশীল', similarity: 81 },
+    tendency: { en: 'Liberal Constitutionalist', bn: 'উদার সংবিধানপন্থী', similarity: 81 },
     axisScores: [45, 52, 48, 42, 28, 75, 40, 50],
-    figures: ['H. S. Suhrawardy', 'Thomas Jefferson']
+    figures: ['H. S. Suhrawardy']
+  },
+
+  {
+    id: 'founding-leader',
+    key: 'authoritarian_left',
+    accentColor: '#34D399',
+    badgeEmoji: '🌿',
+    coordinates: { x: -40, y: -30 },
+    demoProfiles: '',
+    tendency: { en: 'Welfare Nationalist', bn: 'কল্যাণ-জাতীয়তাবাদী', similarity: 78 },
+    axisScores: [-40, -20, 30, -55, 35, -10, 20, 40],
+    figures: ['Sheikh Mujibur Rahman']
   },
 
   {
@@ -57,11 +69,22 @@ const EXAMPLES = [
     badgeEmoji: '🚩',
     coordinates: { x: -68, y: -38 },
     demoProfiles: '13,120',
-    tendency: { en: 'Agrarian Mass Socialist', bn: 'মজলুম কৃষক ও মেহনতী মুক্তি', similarity: 80 },
+    tendency: { en: 'Agrarian Mass Socialist', bn: 'কৃষক-শ্রমিকের রাজনীতি', similarity: 80 },
     axisScores: [-60, -30, 25, -75, -20, -15, 60, -45],
-    figures: ['Maulana Bhashani', 'Karl Marx']
+    figures: ['Maulana Bhashani']
   }
 ];
+
+// Fixed, varied verdicts per sample so the cards don't all read the same.
+const sampleAnswers = (example) => {
+  const seed = EXAMPLES.indexOf(example);
+  return QUESTIONS.map((question) => {
+    const issueIndex = CARD_ISSUES.findIndex((issue) => issue.id === question.id);
+    // Alternate strong yes/no across the issues the card prints.
+    const score = issueIndex >= 0 && (issueIndex + seed) % 3 === 0 ? 1 : issueIndex >= 0 && (issueIndex + seed) % 3 === 1 ? 5 : 2;
+    return { questionId: question.id, score };
+  });
+};
 
 const getSampleAnalysis = (example) => ({
   coordinates: example.coordinates,
@@ -75,7 +98,9 @@ const getSampleAnalysis = (example) => ({
       englishName: example.tendency.en
     }
   },
-  answers: QUESTIONS.map((question) => ({ questionId: question.id, score: 4 })),
+  answers: sampleAnswers(example),
+  ...(({ leaderMatches, govMeter }) => ({ leaderMatches, govMeter }))(calculateComprehensiveAnalysis(sampleAnswers(example), { length: 'long' })),
+  identity: getIdentity(example.key, (id) => sampleAnswers(example).find((a) => a.questionId === id)?.score),
   blockResults: THEMATIC_BLOCKS.map((block, index) => ({
     ...block,
     bipolarScore: example.axisScores[index] !== undefined ? example.axisScores[index] : 0
