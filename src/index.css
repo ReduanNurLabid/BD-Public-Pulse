@@ -83,6 +83,8 @@
   --action-card2-btn-text: var(--brand-primary);
   --action-card3-bg:     color-mix(in srgb, var(--brand-primary) 70%, #bbffd854);
   --action-card3-text:   var(--brand-bg);
+  --feedback-btn-hover-bg:   transparent;
+  --feedback-btn-hover-text: var(--brand-bg);
   --action-card3-badge:  var(--brand-primary);
   --action-card3-btn-border: var(--brand-bg);
 
@@ -218,6 +220,8 @@
   --action-card2-btn-text: var(--dark-text);
   --action-card3-bg:     #1A4736;
   --action-card3-text:   var(--dark-text);
+  --feedback-btn-hover-bg:   var(--dark-text);
+  --feedback-btn-hover-text: #102E24;
   --action-card3-badge:  rgba(244, 241, 232, 0.15);
   --action-card3-btn-border: var(--dark-text);
 

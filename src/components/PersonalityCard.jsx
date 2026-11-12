@@ -274,7 +274,7 @@ export default function PersonalityCard({ analysis, lang = 'bn', showcaseOnly = 
     });
 
   const nameLength = Array.from(typeName).length;
-  const nameSize = isEnglish ? (nameLength <= 15 ? 92 : 74) : (nameLength <= 13 ? 112 : 98);
+  const nameSize = isEnglish ? (nameLength <= 15 ? 92 : nameLength <= 22 ? 74 : 58) : (nameLength <= 13 ? 112 : 98);
 
   const shareText = isEnglish
     ? `The quiz exposed me: I'm ${typeName}. Here's my 5-point demand. Where do you stand? ${SITE_URL}`
@@ -531,7 +531,7 @@ export default function PersonalityCard({ analysis, lang = 'bn', showcaseOnly = 
       <div style={{ position: 'absolute', left: '64px', top: '852px', transform: 'rotate(-2deg)', transformOrigin: 'left center', background: PAPER, color: INK, border: `4px solid ${INK}`, padding: '2px 22px 6px', fontSize: '36px', fontWeight: 800, lineHeight: 1.35 }}>
         {isEnglish ? 'The quiz exposed me. I’m' : 'কুইজে ধরা খেলাম। আমি আসলে—'}
       </div>
-      <div style={{ position: 'absolute', left: '56px', top: '926px', transform: 'rotate(-2deg)', transformOrigin: 'left center', background: accent, color: theme.onAccent, border: `5px solid ${INK}`, padding: '0 34px 12px', fontSize: `${nameSize}px`, fontWeight: 800, lineHeight: 1.3, whiteSpace: 'nowrap' }}>
+      <div style={{ position: 'absolute', left: '56px', top: '926px', transform: 'rotate(-2deg)', transformOrigin: 'left center', background: accent, color: theme.onAccent, border: `5px solid ${INK}`, padding: '0 34px 12px', fontSize: `${nameSize}px`, fontWeight: 800, lineHeight: 1.3, maxWidth: '900px', boxSizing: 'border-box' }}>
         {typeName}
       </div>
 

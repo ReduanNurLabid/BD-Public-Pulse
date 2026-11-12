@@ -110,8 +110,9 @@ function PublicApp() {
     const analysis = calculateComprehensiveAnalysis(answers, { length: activeLength });
     setAnalysisResult(analysis);
 
-    // Save response record to persistent dataset (O(1) architecture)
-    await saveAssessmentResponse({
+    // Save in the background: the result shows at once instead of waiting on
+    // the network, which took 10 seconds or more on slow mobile data.
+    saveAssessmentResponse({
       sessionId,
       answers,
       durationSeconds: testDuration,
@@ -128,7 +129,7 @@ function PublicApp() {
       quizLength: analysis.quizLength,
       demographics: demographicData,
       isVerified: testDuration >= 60 // Simple duration check
-    });
+    }).catch((err) => console.warn('Response could not be saved:', err));
 
     setCurrentView('result');
     // The next visit to the test view asks for a length again.

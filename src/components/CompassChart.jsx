@@ -13,11 +13,11 @@ import React from 'react';
 export default function CompassChart({ coordinates, quadrantProfile, primaryBloc, leaders = [], isMini = false, miniMaxWidth = '280px', lang = 'bn' }) {
   const isEnglish = lang === 'en';
   const quadrantTitles = {
-    authoritarian_left: 'The Public Interest Guardian',
-    authoritarian_right: 'The Guardian of Law',
-    libertarian_left: 'The Reform Soldier',
-    libertarian_right: 'The Free Citizen',
-    centrist: 'The Impartial Judge'
+    authoritarian_left: 'People’s Guardian',
+    authoritarian_right: 'Law Guardian',
+    libertarian_left: 'Reform Soldier',
+    libertarian_right: 'Free Citizen',
+    centrist: 'Impartial Judge'
   };
   const quadrantTitle = isEnglish
     ? (quadrantTitles[quadrantProfile?.key] || 'Political Quadrant')
@@ -274,10 +274,10 @@ export default function CompassChart({ coordinates, quadrantProfile, primaryBloc
             {isEnglish ? 'FREE CITIZEN' : 'স্বাধীন নাগরিক'}
           </text>
           <text x="138" y="420" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
-            {isEnglish ? 'PUBLIC GUARDIAN' : 'জনস্বার্থের প্রহরী'}
+            {isEnglish ? 'PEOPLE’S GUARDIAN' : 'জনস্বার্থের প্রহরী'}
           </text>
           <text x="342" y="420" textAnchor="middle" fill="#334155" fontSize="15" fontWeight="700">
-            {isEnglish ? 'GUARDIAN OF LAW' : 'আইনের পাহারাদার'}
+            {isEnglish ? 'LAW GUARDIAN' : 'আইনের পাহারাদার'}
           </text>
 
           {/* User's Plotted Coordinate Dot: Solid Dark Blue/Black (#0F172A) with Crisp White Border */}

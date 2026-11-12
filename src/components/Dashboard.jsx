@@ -113,7 +113,7 @@ const ENGLISH_ISSUES = {
   c25: '"The July Charter approved in the referendum must be implemented exactly as passed. A parliamentary committee cannot change it."',
   c17: '"Without a guaranteed share of Ganges water, Bangladesh should not sign a new treaty with India, even if talks stall."',
   c13: '"Spending the money on creating jobs matters more than cash support like the Family Card."',
-  c22: '"To restore law and order, the army should be deployed again with magistracy powers."'
+  c46: '"To prevent enforced disappearances and extrajudicial killings, special elite forces should be abolished and crime-fighting left to the regular police."'
 };
 
 const DashboardPoleIcon = ({ blockKey, side, style }) => {

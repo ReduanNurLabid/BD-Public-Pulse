@@ -51,7 +51,7 @@ const COPY = {
   bn: {
     badge: 'উন্মুক্ত গবেষণা পদ্ধতি',
     title: 'পদ্ধতি ও গাণিতিক কাঠামো',
-    subtitle: 'পুরো পদ্ধতি সহজ ভাষায়। প্রাথমিক ৪০টি প্রশ্ন থেকে নিবিড়ভাবে নির্বাচিত ২৪টি নীতিগত প্রশ্ন, নিরপেক্ষ স্কোরিং সূত্র এবং প্রতিটি প্রশ্নের ওজন এখানে উন্মুক্ত।',
+    subtitle: 'পুরো পদ্ধতি সহজ ভাষায়: ১৬, ২৪ বা ৩২টি প্রশ্ন, নিরপেক্ষ স্কোরিং সূত্র আর প্রতিটি প্রশ্নের ওজন, সবই এখানে খোলা।',
     nav: ['সারসংক্ষেপ', 'স্কোরিং পদ্ধতি', 'দলের সঙ্গে মিল', 'তথ্য ও নিরাপত্তা', 'প্রশ্নোত্তর', 'উন্মুক্ত সূত্র ও CSV'],
     startTest: 'মূল্যায়ন শুরু করুন',
     goBack: 'নীড়ে ফিরে যান',
@@ -109,7 +109,7 @@ const COPY = {
     notCountTitle: 'স্কোরিং ও প্রশ্ন বিন্যাস',
     notCount: [
       'নিরপেক্ষ (৩) বা বাদ দেওয়া উত্তর গণনায় ০ হয়, অর্থাৎ স্থানাঙ্ককে কোনো দিকেই সরায় না।',
-      'প্রাথমিক ৪০টি প্রশ্ন থেকে গবেষণার মাধ্যমে বাছাইকৃত এই ২৪টি নীতিগত প্রশ্নের সবগুলোই সরাসরি কম্পাস অক্ষ এবং ৮টি থিম্যাটিক ব্লকের ফলাফল তৈরিতে ভূমিকা রাখে।'
+      'বেশিরভাগ প্রশ্ন কম্পাস অক্ষ ও ৮টি বিষয়ের বার তৈরি করে। কয়েকটি প্রশ্ন, যেমন দলের বৈধতা, জাতির পিতা বা স্বাধীনতার ঘোষক নিয়ে, শুধু রাজনৈতিক ধারার সাথে মিল নির্ণয়ে কাজে লাগে; এগুলো কম্পাস বা বার সরায় না।'
     ],
 
     matchTitle: 'রাজনৈতিক ধারার সঙ্গে সাদৃশ্য নির্ধারণ',
@@ -159,7 +159,7 @@ const COPY = {
     ],
 
     openTitle: 'উন্মুক্ত সূত্র ও গবেষণার ডেটাসেট',
-    openIntro: 'গবেষক, সাংবাদিক ও সচেতন নাগরিকদের যাচাইয়ের জন্য পুরো গাণিতিক মডেল, ফিল্টারিং নিয়ম এবং ২৪টি প্রশ্নের প্রতিটি ওজন নিচে উন্মুক্ত করা হলো। মডেল সংস্করণ:',
+    openIntro: 'গবেষক, সাংবাদিক ও সচেতন নাগরিকদের যাচাইয়ের জন্য পুরো গাণিতিক মডেল, ফিল্টারিং নিয়ম এবং সব প্রশ্নের ওজন নিচে খোলা রাখা হলো। চলমান মডেল সংস্করণ:',
     formulaSummary: 'গাণিতিক সূত্র ও ধাপসমূহ',
     formulaSteps: [
       { h: '১. উত্তর রূপান্তর গুণাঙ্ক (Multiplier)', b: 'গুণাঙ্ক m = উত্তর − ৩ (অর্থাৎ −২ থেকে +২)। নিরপেক্ষ উত্তর বা বাদ দিলে m = ০।' },
@@ -181,7 +181,7 @@ const COPY = {
   en: {
     badge: 'Open Methodology',
     title: 'Methodology & Scoring Architecture',
-    subtitle: 'Explore the research methodology, scoring algorithms, and data architecture behind Bangladesh Open Public Opinion Survey 2026. Understand how your responses are mapped across 24 policy dimensions and compared with historical and contemporary political viewpoints.',
+    subtitle: 'The full method in plain language: 16, 24 or 32 questions, a neutral scoring formula and every question\'s weights, all open.',
     nav: ['Overview', 'Scoring Model', 'Bloc Alignment', 'Data & Privacy', 'FAQ', 'Formulas & CSV'],
     startTest: 'Take the survey',
     goBack: 'Back to Home',
@@ -239,7 +239,7 @@ const COPY = {
     notCountTitle: 'Scoring Rules & Scope',
     notCount: [
       'Neutral (3) and skipped answers yield a multiplier of 0, creating no displacement.',
-      'Refined from our initial 40-question draft, every single one of these 24 curated questions directly shapes both the 2D compass axes and the 8 thematic policy bars.'
+      'Most questions shape the compass axes and the 8 topic bars. A few, such as those on party legitimacy, the Father of the Nation or the declarer of independence, only feed the comparison with political camps; they do not move the compass or the bars.'
     ],
 
     matchTitle: 'Party & Ideology Matching',
@@ -289,7 +289,7 @@ const COPY = {
     ],
 
     openTitle: 'Open Mathematics & Dataset',
-    openIntro: 'For researchers, data scientists, and independent auditors, the full scoring formulation and weights matrix for all 24 questions are open below. Active model version:',
+    openIntro: 'For researchers, journalists and independent auditors, the full scoring formula, filtering rules and every question\'s weights are open below. Active model version:',
     formulaSummary: 'Step-by-Step Formulation',
     formulaSteps: [
       { h: '1. Multiplier mapping', b: 'm = score − 3 (−2 to +2). Skipped or neutral answers yield m = 0.' },
@@ -300,10 +300,10 @@ const COPY = {
       { h: '6. Historical figure proximity', b: 'Combines angular directional bearing and radial intensity ({rw} factor), scaled between 30% and 99%.' }
     ],
     tableSummary: '32-Question Ideological Matrix',
-    tableIntro: 'Review the weights matrix governing all 24 curated questions. Download the complete dataset in UTF-8 CSV format for independent analysis and research.',
+    tableIntro: 'Review the weights for all 32 questions. Download the complete dataset as a UTF-8 CSV for independent analysis.',
     tableHead: { serial: 'No.', id: 'ID', block: 'Policy Domain', statement: 'Statement', x: 'X Axis', y: 'Y Axis', dir: 'Direction' },
     downloadCsv: 'Download 32-Question CSV',
-    downloadCount: '24 Curated Questions Included',
+    downloadCount: '32 questions included',
     shortBloc: { AL: 'AL', BNP: 'BNP', JI: 'JI', Student: 'NCP', Sushil: 'Civil' },
     csvName: 'bd-political-compass-24q-weights.csv'
   }
@@ -1020,13 +1020,18 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
               <div style={{ padding: '0 1.25rem 1.25rem' }}>
                 <p style={{ margin: '0 0 1rem', fontSize: '0.92rem', lineHeight: 1.65, color: 'var(--text-muted)' }}>
                   {isEn
-                    ? 'Each leader is given an answer to every question (1 = strongly disagree, 5 = strongly agree), estimated from party programmes, public statements and government decisions. Their compass position is computed from these answers with exactly the same formula as yours, and your match compares the direction of your answers with theirs. The five percentages are shares that add up to 100, so they show who is relatively closest, not an absolute score. Awami League leaders are not included because of the party ban. Think an answer is wrong? Tell us via the feedback button. Sheikh Hasina’s answers rest mainly on what her government did in 2009–24, because she and her party have stated no position on most of today’s questions. Where there is no basis the table shows “—” and the question is not counted. Results show only your closest leaders (at most three), with percentages worked out among them. Sheikh Hasina appears only for people whose answers match the Awami League line; when she appears Tarique Rahman does not, and supporters of one side are not shown the other as a match. The party bars follow the same rule.'
-                    : 'প্রত্যেক নেতাকে প্রতিটি প্রশ্নের একটি উত্তর দেওয়া হয়েছে (১ = একদমই না, ৫ = পুরোপুরি একমত) — দলীয় কর্মসূচি, প্রকাশ্য বক্তব্য ও সরকারি সিদ্ধান্ত থেকে আমাদের অনুমান। কম্পাসে তাঁদের অবস্থান এই উত্তর থেকে ঠিক আপনার মতো একই সূত্রে হিসাব হয়। আপনার সাথে মিল হিসাব হয় আপনার ও তাঁর মতের দিক তুলনা করে। পাঁচজনের শতাংশ মিলিয়ে মোট ১০০%, তাই এটা দেখায় কে তুলনামূলক বেশি কাছে; এটা কোনো নিরপেক্ষ নম্বর নয়। দলের ওপর নিষেধাজ্ঞার কারণে আওয়ামী লীগের নেতাদের রাখা হয়নি। কোনো উত্তর ভুল মনে হলে মতামত বাটনে জানান। শেখ হাসিনার উত্তর মূলত ২০০৯–২৪ সালে তাঁর সরকারের কাজের ভিত্তিতে ধরা, কারণ এখনকার বেশিরভাগ প্রশ্নে তাঁর বা তাঁর দলের ঘোষিত অবস্থান নেই। যে প্রশ্নে কোনো ভিত্তি পাওয়া যায়নি সেখানে “—” দেওয়া আছে, আর সেটি হিসাবে ধরা হয় না। ফলাফলে শুধু আপনার সবচেয়ে কাছের নেতাদের (সর্বোচ্চ তিনজন) দেখানো হয়, শতাংশ তাঁদের মধ্যেই হিসাব করা। আওয়ামী লীগের অবস্থানের সাথে উত্তর মিললেই কেবল শেখ হাসিনা আসেন; তিনি এলে তারেক রহমান আসেন না, আর এক পক্ষের সমর্থককে অন্য পক্ষের সাথে মিল দেখানো হয় না। দলীয় ধারার তালিকাতেও একই নিয়ম।'}
+                    ? 'Each leader’s answers (1 = strongly disagree, 5 = strongly agree) come from public statements, party positions and government decisions, and are run through the same formula as yours. Results show at most three closest leaders, and supporters of one camp are never shown its rival as a match.'
+                    : 'নেতাদের উত্তর (১ = একদমই না, ৫ = পুরোপুরি একমত) প্রকাশ্য বক্তব্য, দলীয় অবস্থান ও সরকারি সিদ্ধান্ত থেকে নেওয়া, আর আপনার মতোই একই সূত্রে হিসাব হয়। ফলাফলে সবচেয়ে কাছের সর্বোচ্চ তিনজন নেতা দেখানো হয়; কোনো পক্ষের সমর্থককে প্রতিপক্ষকে মিল হিসেবে দেখানো হয় না।'}
                 </p>
                 <p style={{ margin: '0 0 1rem', fontSize: '0.92rem', lineHeight: 1.65, color: 'var(--text-muted)' }}>
                   {isEn
                     ? 'Share card numbers. Government vs opposition: on questions where the prime minister and both main opposition leaders take opposite sides, the share of your decided answers on each side. "My 5-point demand" lists your five firmest positions from ten live issues; religion questions are never printed on the card.'
                     : 'শেয়ার কার্ডের হিসাব। সরকার বনাম বিরোধী: যেসব প্রশ্নে প্রধানমন্ত্রী ও দুই প্রধান বিরোধী নেতা উল্টো অবস্থানে, সেখানে আপনার স্পষ্ট উত্তরগুলোর কত ভাগ কোন পক্ষে। "আমার ৫ দফা": ১০টি চলমান ইস্যু থেকে আপনার সবচেয়ে জোরালো ৫টি অবস্থান; ধর্মবিষয়ক প্রশ্ন কখনো কার্ডে ছাপা হয় না।'}
+                </p>
+                <p style={{ margin: '0 0 1rem', fontSize: '0.92rem', lineHeight: 1.65, color: 'var(--text-secondary)', fontWeight: 600 }}>
+                  {isEn
+                    ? 'We take no side; every party is measured the same way. Every number opens its news source; "—" means no public position, so it is not counted.'
+                    : 'আমরা কোনো পক্ষে নই; প্রতিটি দলকে একই মানদণ্ডে মাপা হয়। প্রতিটি সংখ্যায় চাপ দিলে সংবাদসূত্র খোলে; "—" মানে প্রকাশ্য অবস্থান পাওয়া যায়নি, তাই গোনা হয় না।'}
                 </p>
                 <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: '12px' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.84rem' }}>
@@ -1048,7 +1053,11 @@ export default function MethodologyPage({ lang = 'bn', onStartTest, onGoHome }) 
                             const a = l.answers[q.id];
                             return (
                               <td key={l.id} className="font-latin" style={{ padding: '0.55rem 0.5rem', textAlign: 'center', fontWeight: 700, color: a >= 4 ? 'var(--accent-green)' : a <= 2 ? 'var(--accent-red)' : 'var(--text-muted)' }}>
-                                {a === undefined ? '—' : isEn ? a : String(a).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])}
+                                {a === undefined ? '—' : l.sources?.[q.id] ? (
+                                  <a href={l.sources[q.id].url} target="_blank" rel="noreferrer" title={l.sources[q.id].outlet} style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+                                    {isEn ? a : String(a).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])}
+                                  </a>
+                                ) : isEn ? a : String(a).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])}
                               </td>
                             );
                           })}

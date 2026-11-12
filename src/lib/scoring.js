@@ -18,11 +18,12 @@ import { LEADER_PROFILES } from '../data/leaders.js';
  *   so a short quiz is not diluted by questions it never asked.
  */
 
-export const MODEL_VERSION = 'v5-2026-11';
+export const MODEL_VERSION = 'v6-2026-11';
 
 // ---- Tunables ---------------------------------------------------------------
 const NEUTRAL_SHARE_FOR_MIXED = 0.60;   // >=60% neutral/skipped -> "Mixed / Undecided"
-const NO_MATCH_THRESHOLD = 52;          // top similarity below this -> "No clear match"
+const NO_MATCH_THRESHOLD = 52;
+const TIE_MARGIN = 5;                   // top two camps closer than this -> no single camp is named          // top similarity below this -> "No clear match"
 const CLOSE_CALL_MARGIN = 6;            // top-2 gap (percentage points) below this -> close call
 const MIN_ANSWER_SHARE_FOR_STATS = 2 / 3; // answered fewer than this share of asked questions -> not "reliable"
 const STRAIGHTLINE_SHARE = 0.90;        // >=90% of decided answers on the same side -> straight-lining
@@ -41,26 +42,32 @@ const RADIAL_WEIGHT = 0.8;              // personality match: intensity counts, 
 const CAMP_FIGURES = {
   JI: { 'Haji Shariatullah': 3, 'A. K. Fazlul Huq': 1 },
   BNP: { 'Ziaur Rahman': 3, 'Begum Khaleda Zia': 3, 'A. K. Fazlul Huq': 1, 'Maulana Bhashani': 1 },
-  AL: { 'Sheikh Mujibur Rahman': 3, 'Tajuddin Ahmad': 1, 'H. S. Suhrawardy': 1 }
+  AL: { 'Sheikh Mujibur Rahman': 3, 'Tajuddin Ahmad': 1, 'H. S. Suhrawardy': 1 },
+  Student: { 'Sharif Osman Hadi': 3, 'Maulana Bhashani': 2 }
 };
-// The July movement's supporters are matched on compass position, without him.
-const CAMP_EXCLUDED = { Student: ['Sheikh Mujibur Rahman'] };
+// July-movement supporters are never paired with the Awami League's founding leaders.
+const CAMP_EXCLUDED = { Student: ['Sheikh Mujibur Rahman', 'Tajuddin Ahmad'] };
 
-// Questions that separate the Awami League line from everyone else's, and the
-// answer that side gives (+1 agree, -1 disagree). BNP and AL governed alike on
-// much of the quiz, so overall similarity alone cannot tell their supporters apart.
-const AL_LINE = { c17: -1, c18: 1, c26: 1 };
-// Agreeing with either of these rules a person out of the AL camp: keeping the
-// party banned, or punishing India until Sheikh Hasina is returned. Disagreeing
-// proves nothing, since many who oppose her still defend the party's right to exist.
-const AL_LINE_VETOES = ['c8', 'c20'];
+// Questions only Awami League supporters tend to agree with, and the answer
+// that side gives (+1 agree). Allowing the party back is also agreed with by
+// many outside AL, so on its own it never reaches the minimum signal.
+const AL_LINE = { c41: 1, c35: 1, c36: 1, c40: 1, c38: 1 };
+// Answers that rule a person out of the AL camp: wanting the party kept out of
+// politics, calling Ziaur Rahman the true declarer of independence, or saying the
+// opposition is fully free under this government. Disagreeing proves nothing,
+// since most people outside BNP disagree with the last two.
+const AL_LINE_VETOES = [{ id: 'c35', when: 'disagree' }, { id: 'c43', when: 'agree' }, { id: 'c44', when: 'agree' }];
 const AL_LINE_MIN_SIGNAL = 2;
 // When the defining questions lean only slightly, the camp must also lead the
 // other by this much overall before it is named.
 const AL_BNP_CLEAR_LEAD = 6;
 
 function alLineSignal(answerMap) {
-  if (AL_LINE_VETOES.some((id) => answerMap.get(id) >= 4)) return -Infinity;
+  const vetoed = AL_LINE_VETOES.some(({ id, when }) => {
+    const answer = answerMap.get(id);
+    return answer !== undefined && (when === 'agree' ? answer >= 4 : answer <= 2);
+  });
+  if (vetoed) return -Infinity;
   let signal = 0;
   for (const [id, direction] of Object.entries(AL_LINE)) {
     const answer = answerMap.get(id);
@@ -89,6 +96,7 @@ export const MASTER_PERSONALITIES = [
 
   // Lib-Left (x: -100 to 0, y: 0 to 100)
   { x: -60, y: 40, nationality: 'Bangladeshi', nameBn: 'তাজউদ্দীন আহমদ', nameEn: 'Tajuddin Ahmad', roleBn: 'প্রগতিশীল ও দূরদর্শী রাষ্ট্রনায়ক', roleEn: 'First prime minister of Bangladesh and leader of the wartime government', img: '/personalities/portraits/tajuddin.jpg' },
+  { x: -40, y: 30, nationality: 'Bangladeshi', nameBn: 'শরীফ ওসমান হাদি', nameEn: 'Sharif Osman Hadi', roleBn: 'জুলাই অভ্যুত্থানের সংগঠক ও ইনকিলাব মঞ্চের মুখপাত্র', roleEn: 'July uprising organiser and Inqilab Mancha spokesperson', img: '/personalities/portraits/osman-hadi.jpg' },
 
 
 
@@ -306,7 +314,7 @@ export function calculateComprehensiveAnalysis(answers, options = {}) {
   if (isMostlyNeutral) {
     matchType = 'mixed';
     primaryBloc = { key: 'Mixed', percentage: null, relativeShare: null, profile: MIXED_PROFILE };
-  } else if (topPct < NO_MATCH_THRESHOLD || unconfirmedCamp) {
+  } else if (topPct < NO_MATCH_THRESHOLD || unconfirmedCamp || topPct - secondPct < TIE_MARGIN) {
     matchType = 'no_clear_match';
     primaryBloc = { key: 'NoMatch', percentage: null, relativeShare: null, profile: NO_MATCH_PROFILE };
   }

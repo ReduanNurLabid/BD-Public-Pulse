@@ -1,114 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, Shuffle, Sparkles } from 'lucide-react';
 import PersonalityCard from './PersonalityCard';
-import { QUESTIONS, THEMATIC_BLOCKS, CARD_ISSUES, getIdentity } from '../data/questions';
+import { BLOC_PROFILES, getQuestionsForLength } from '../data/questions';
 import { MASTER_PERSONALITIES, calculateComprehensiveAnalysis } from '../lib/scoring';
 
+// Each sample card is a real result: the answers a typical supporter of that
+// camp would give, run through the same scoring as a visitor. Title, tagline,
+// five demands and closest leaders therefore all match the figure shown.
 const EXAMPLES = [
-  {
-    id: 'reformist-left',
-    key: 'libertarian_left',
-    accentColor: '#34D399',
-    badgeEmoji: '🌸',
-    coordinates: { x: -48, y: 38 },
-    demoProfiles: '14,320',
-    tendency: { en: 'Reformist Social Democrat', bn: 'সংস্কারপন্থী সমতাবাদী', similarity: 82 },
-    axisScores: [-42, 65, 38, -35, 45, 68, 72, 58],
-    figures: ['Tajuddin Ahmad']
-  },
-  {
-    id: 'trad-right',
-    key: 'authoritarian_right',
-    accentColor: '#FBBF24',
-    badgeEmoji: '🔵',
-    coordinates: { x: 44, y: -28 },
-    demoProfiles: '16,840',
-    tendency: { en: 'Traditionalist & Free Market', bn: 'রক্ষণশীল বাজারপন্থী', similarity: 79 },
-    axisScores: [38, -25, -35, 58, 62, -20, -15, 32],
-    figures: ['Ziaur Rahman']
-  },
-  {
-    id: 'independent-centrist',
-    key: 'centrist',
-    accentColor: '#F59E0B',
-    badgeEmoji: '⚖️',
-    coordinates: { x: 8, y: 12 },
-    demoProfiles: '18,910',
-    tendency: { en: 'Independent Pragmatist', bn: 'স্বাধীন চিন্তার বাস্তববাদী', similarity: 76 },
-    axisScores: [15, 22, 10, 18, 25, 20, 30, 14],
-    figures: ['A. K. Fazlul Huq']
-  },
-  {
-    id: 'constitutional-liberal',
-    key: 'libertarian_right',
-    accentColor: '#60A5FA',
-    badgeEmoji: '🏛️',
-    coordinates: { x: 32, y: 62 },
-    demoProfiles: '11,450',
-    tendency: { en: 'Liberal Constitutionalist', bn: 'উদার সংবিধানপন্থী', similarity: 81 },
-    axisScores: [45, 52, 48, 42, 28, 75, 40, 50],
-    figures: ['H. S. Suhrawardy']
-  },
+  { id: 'al', camp: 'AL', moderate: true, figure: 'Sheikh Mujibur Rahman', demoProfiles: '' },
+  { id: 'bnp', camp: 'BNP', figure: 'Ziaur Rahman', demoProfiles: '' },
+  { id: 'july', camp: 'Student', figure: 'Sharif Osman Hadi', demoProfiles: '' },
+  { id: 'jamaat', camp: 'JI', figure: 'Haji Shariatullah', demoProfiles: '' },
+  // An undecided visitor: few firm views, no clear camp.
+  { id: 'balanced', camp: null, pattern: [4, 3, 2, 3, 3], figure: 'A. K. Fazlul Huq', demoProfiles: '' },
+  { id: 'governance', camp: 'Sushil', figure: 'H. S. Suhrawardy', demoProfiles: '' }
+].map((example) => ({ ...example, accentColor: BLOC_PROFILES[example.camp]?.color || '#F59E0B' }));
 
-  {
-    id: 'founding-leader',
-    key: 'authoritarian_left',
-    accentColor: '#34D399',
-    badgeEmoji: '🌿',
-    coordinates: { x: -40, y: -30 },
-    demoProfiles: '',
-    tendency: { en: 'Welfare Nationalist', bn: 'কল্যাণ-জাতীয়তাবাদী', similarity: 78 },
-    axisScores: [-40, -20, 30, -55, 35, -10, 20, 40],
-    figures: ['Sheikh Mujibur Rahman']
-  },
-
-  {
-    id: 'mass-socialist',
-    key: 'authoritarian_left',
-    accentColor: '#F87171',
-    badgeEmoji: '🚩',
-    coordinates: { x: -68, y: -38 },
-    demoProfiles: '13,120',
-    tendency: { en: 'Agrarian Mass Socialist', bn: 'কৃষক-শ্রমিকের রাজনীতি', similarity: 80 },
-    axisScores: [-60, -30, 25, -75, -20, -15, 60, -45],
-    figures: ['Maulana Bhashani']
-  }
-];
-
-// Fixed, varied verdicts per sample so the cards don't all read the same.
-const sampleAnswers = (example) => {
-  const seed = EXAMPLES.indexOf(example);
-  return QUESTIONS.map((question) => {
-    const issueIndex = CARD_ISSUES.findIndex((issue) => issue.id === question.id);
-    // Alternate strong yes/no across the issues the card prints.
-    const score = issueIndex >= 0 && (issueIndex + seed) % 3 === 0 ? 1 : issueIndex >= 0 && (issueIndex + seed) % 3 === 1 ? 5 : 2;
-    return { questionId: question.id, score };
-  });
+const typicalScore = (weight, moderate) => {
+  const score = weight >= 1.5 ? 5 : weight > 0 ? 4 : weight === 0 ? 3 : weight > -1.5 ? 2 : 1;
+  if (!moderate) return score;
+  return score === 5 ? 4 : score === 1 ? 2 : score;
 };
 
-const getSampleAnalysis = (example) => ({
-  coordinates: example.coordinates,
-  quadrantProfile: { key: example.key },
-  primaryBloc: {
-    key: example.key,
-    percentage: example.tendency.similarity,
-    relativeShare: example.tendency.similarity,
-    profile: {
-      name: example.tendency.bn,
-      englishName: example.tendency.en
-    }
-  },
-  answers: sampleAnswers(example),
-  ...(({ leaderMatches, govMeter }) => ({ leaderMatches, govMeter }))(calculateComprehensiveAnalysis(sampleAnswers(example), { length: 'long' })),
-  identity: getIdentity(example.key, (id) => sampleAnswers(example).find((a) => a.questionId === id)?.score),
-  blockResults: THEMATIC_BLOCKS.map((block, index) => ({
-    ...block,
-    bipolarScore: example.axisScores[index] !== undefined ? example.axisScores[index] : 0
-  })),
-  personalities: example.figures
-    .map((nameEn) => MASTER_PERSONALITIES.find((person) => person.nameEn === nameEn))
-    .filter(Boolean)
-});
+const SAMPLE_ANALYSES = new Map(EXAMPLES.map((example) => {
+  const answers = getQuestionsForLength('medium').map((question, index) => ({
+    questionId: question.id,
+    score: example.pattern
+      ? (question.kind ? 3 : example.pattern[index % example.pattern.length])
+      : typicalScore(question.bloc_weights?.[example.camp] || 0, example.moderate)
+  }));
+  const analysis = calculateComprehensiveAnalysis(answers, { length: 'medium' });
+  const figure = MASTER_PERSONALITIES.find((person) => person.nameEn === example.figure);
+  return [example, { ...analysis, historicalPick: figure || analysis.historicalPick, personalities: figure ? [figure] : analysis.personalities }];
+}));
+
+const getSampleAnalysis = (example) => SAMPLE_ANALYSES.get(example);
 
 export default function ResultsCollage({ lang = 'bn' }) {
   const isEnglish = lang === 'en';
@@ -438,7 +365,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
               '--dot-accent': item.accentColor
             }}
             onClick={() => selectIndex(index)}
-            aria-label={isEnglish ? `Show card ${index + 1}: ${item.tendency.en}` : `কার্ড ${enToBn(index + 1)}: ${item.tendency.bn}`}
+            aria-label={isEnglish ? `Show card ${index + 1}: ${item.figure}` : `কার্ড ${enToBn(index + 1)}: ${BLOC_PROFILES[item.camp]?.name || item.figure}`}
             aria-pressed={index === activeIndex}
           />
         ))}

@@ -837,8 +837,8 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                 transition: 'all 0.2s ease'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = 'var(--action-card2-btn-bg)';
+                e.currentTarget.style.background = 'var(--feedback-btn-hover-bg)';
+                e.currentTarget.style.color = 'var(--feedback-btn-hover-text)';
                 e.currentTarget.style.borderColor = 'var(--action-card3-text)';
                 e.currentTarget.style.transform = 'translateY(-2px)';
               }}
