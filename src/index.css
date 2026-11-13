@@ -417,7 +417,7 @@ p {
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
   box-shadow: var(--shadow-md);
-  transition: all 0.25s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.25s; transition-timing-function: var(--ease-smooth);
   width: 100% !important;
   min-width: 0 !important;
   box-sizing: border-box !important;
@@ -841,7 +841,7 @@ main {
   border: 1.5px solid var(--text-primary);
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.2s; transition-timing-function: ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -898,7 +898,7 @@ main {
   border: 1.5px solid var(--text-primary);
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.2s; transition-timing-function: ease;
 }
 
 .btn-secondary svg {
@@ -977,7 +977,7 @@ main {
   border-radius: 20px;
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-sm);
-  transition: all 0.25s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.25s; transition-timing-function: var(--ease-smooth);
 }
 
 @media (max-width: 768px) {
@@ -1519,7 +1519,7 @@ main {
   box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.3s; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-ribbon-panel--collapsed {
@@ -1573,7 +1573,7 @@ main {
   color: var(--accent-gold);
   font-size: 0.82rem;
   font-weight: 700;
-  transition: all 0.2s ease;
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.2s; transition-timing-function: ease;
 }
 
 .filter-header-left {
@@ -1652,7 +1652,7 @@ main {
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.22s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.22s; transition-timing-function: var(--ease-smooth);
   box-shadow: var(--shadow-sm);
   outline: none;
 }
@@ -1744,7 +1744,7 @@ main {
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.2s; transition-timing-function: var(--ease-smooth);
 }
 
 [data-theme="dark"] .btn-filter-reset {
@@ -1780,7 +1780,7 @@ main {
   outline: none;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: all 0.22s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.22s; transition-timing-function: var(--ease-smooth);
 }
 
 .form-select-control:hover {
@@ -1825,7 +1825,7 @@ main {
   text-align: center;
   box-sizing: border-box;
   white-space: nowrap;
-  transition: all 0.3s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.3s; transition-timing-function: var(--ease-smooth);
 }
 
 /* Large / Hero badges that allow multiline content */
@@ -1839,7 +1839,7 @@ main {
   color: var(--text-secondary);
   text-align: center;
   box-sizing: border-box;
-  transition: all 0.3s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.3s; transition-timing-function: var(--ease-smooth);
 }
 
 [data-theme="dark"] .badge-tag {
@@ -2264,7 +2264,7 @@ main {
   user-select: none;
   border: 1px solid rgba(0, 0, 0, 0.06);
   padding: 0;
-  transition: all 0.3s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.3s; transition-timing-function: var(--ease-smooth);
 }
 
 /* Light Mode Track State */
@@ -2919,7 +2919,7 @@ main {
   outline: none;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: all 0.2s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.2s; transition-timing-function: var(--ease-smooth);
 }
 
 .form-select-control:focus {
@@ -2970,7 +2970,7 @@ main {
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
-  transition: all 0.3s var(--ease-smooth);
+  transition-property: background-color, color, border-color, transform, opacity, box-shadow; transition-duration: 0.3s; transition-timing-function: var(--ease-smooth);
 }
 
 /* Light Mode - High Contrast Cultural Accents */
@@ -3319,10 +3319,29 @@ svg.recharts-surface {
   bottom: 0;
   width: 100%;
   border-radius: 24px;
-  will-change: transform, filter;
+  will-change: transform;
   transform-origin: 50% 95%;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-              filter 0.45s ease;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Side and back cards are dimmed with an overlay: animating its opacity stays on
+   the graphics chip, while animating a CSS filter repaints the whole card. */
+.showcase-fanned-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #000;
+  opacity: var(--card-dim, 0);
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.showcase-fanned-card__placeholder {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: #1A1715;
 }
 
 .showcase-fanned-deck.is-dragging .showcase-fanned-card {
@@ -3333,8 +3352,8 @@ svg.recharts-surface {
   cursor: pointer;
 }
 
-.showcase-fanned-card.is-clickable:hover {
-  filter: brightness(0.92) saturate(0.95);
+.showcase-fanned-card.is-clickable:hover::after {
+  opacity: calc(var(--card-dim, 0) * 0.6);
 }
 
 /* Mobile responsive fanning adjustments */
@@ -3515,3 +3534,22 @@ svg.recharts-surface {
 }
 .result-more-details > summary::-webkit-details-marker { display: none; }
 .result-more-details[open] > summary svg { transform: rotate(180deg); }
+
+
+/* Phones: no live blur. Frosted-glass panels repaint on every scroll frame,
+   which drops frames on mid-range phones; a solid tint looks nearly the same. */
+@media (max-width: 768px) {
+  * {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

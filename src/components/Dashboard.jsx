@@ -714,7 +714,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
         style={{
           padding: isTrendingExpanded ? '1.75rem 2rem' : '1.25rem 1.75rem',
           marginBottom: '2.5rem',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          transition: 'background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         <div
@@ -861,7 +861,7 @@ export default function Dashboard({ onTakeTest, liveVisitors, lang }) {
                     fontSize: '0.85rem',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease',
                     outline: 'none'
                   }}
                   onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; }}

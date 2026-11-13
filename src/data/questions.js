@@ -1066,7 +1066,7 @@ const PATRIOT_NATIONALIST = {
   taglineEn: 'Bangladesh comes first.'
 };
 const IDENTITY_ALTERNATES = {
-  libertarian_left: [{
+  libertarian_left: [MUJIB_HEIR, {
     requires: { questionId: 'c25', minScore: 3 },
     name: 'রাজপথের কণ্ঠ',
     nameEn: 'Street Voice',
@@ -1074,7 +1074,9 @@ const IDENTITY_ALTERNATES = {
     taglineEn: 'Silencing dissent is no way to run a country.'
   }],
   authoritarian_left: [MUJIB_HEIR],
-  authoritarian_right: [MUJIB_HEIR, PATRIOT_NATIONALIST]
+  authoritarian_right: [MUJIB_HEIR, PATRIOT_NATIONALIST],
+  libertarian_right: [MUJIB_HEIR, PATRIOT_NATIONALIST],
+  centrist: [MUJIB_HEIR, PATRIOT_NATIONALIST]
 };
 
 export function getIdentity(quadrantKey, scoreOf) {

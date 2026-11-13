@@ -1,18 +1,28 @@
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import WelcomePage from './components/WelcomePage';
-import TestScreen from './components/TestScreen';
-import DemographicsForm from './components/DemographicsForm';
-import ResultScreen from './components/ResultScreen';
-import Dashboard from './components/Dashboard';
-import MethodologyPage from './components/MethodologyPage';
 import FeedbackModal from './components/FeedbackModal';
-import WeeklyPage from './components/WeeklyPage';
 import { calculateComprehensiveAnalysis } from './lib/scoring';
 import { QUESTION_SET_VERSION, getQuestionsForLength, QUIZ_LENGTHS, DEFAULT_QUIZ_LENGTH, QUADRANT_PROFILES, getIdentity } from './data/questions';
 
 // Dev-only: ?demo-result=short|medium|long renders a sample result locally
 // without saving anything, so the result screen can be checked safely.
+// Each page has its own address so the phone's back button moves between pages
+// instead of leaving the site, and pages like /dashboard can be shared.
+const VIEW_PATHS = {
+  home: '/',
+  test: '/quiz',
+  demographics: '/about-you',
+  result: '/result',
+  dashboard: '/dashboard',
+  weekly: '/weekly',
+  methodology: '/methodology'
+};
+const viewFromPath = (path) => {
+  const clean = path.replace(/\/+$/, '') || '/';
+  return Object.keys(VIEW_PATHS).find((view) => VIEW_PATHS[view] === clean) || 'home';
+};
+
 function getDemoResult() {
   if (!import.meta.env.DEV) return null;
   const length = new URLSearchParams(window.location.search).get('demo-result');
@@ -44,6 +54,12 @@ import darkLogo from './assets/dark mode logo.svg';
 import './index.css';
 
 const AdminPage = lazy(() => import('./components/AdminPage'));
+const WeeklyPage = lazy(() => import('./components/WeeklyPage'));
+const MethodologyPage = lazy(() => import('./components/MethodologyPage'));
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const ResultScreen = lazy(() => import('./components/ResultScreen'));
+const DemographicsForm = lazy(() => import('./components/DemographicsForm'));
+const TestScreen = lazy(() => import('./components/TestScreen'));
 
 export default function App() {
   if (window.location.pathname.replace(/\/$/, '') === '/admin') {
@@ -54,7 +70,46 @@ export default function App() {
 
 function PublicApp() {
   const [demoResult] = useState(getDemoResult);
-  const [currentView, setCurrentView] = useState(() => (demoResult ? 'result' : 'home')); // 'home' | 'test' | 'demographics' | 'result' | 'dashboard' | 'methodology'
+  const [currentView, setCurrentView] = useState(() => {
+    if (demoResult) return 'result';
+    const view = viewFromPath(window.location.pathname);
+    // Steps that need answers in memory cannot be opened directly or after a reload.
+    return view === 'result' || view === 'demographics' ? 'home' : view;
+  });
+  // Bumped when the phone's back button is pressed during the quiz.
+  const [quizBackRequest, setQuizBackRequest] = useState(0);
+  const currentViewRef = React.useRef(currentView);
+  currentViewRef.current = currentView;
+
+  const goTo = React.useCallback((view, { replace = false } = {}) => {
+    setCurrentView(view);
+    const url = VIEW_PATHS[view] || '/';
+    if (window.location.pathname !== url || replace) {
+      window.history[replace ? 'replaceState' : 'pushState']({ view }, '', url);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Fix the address if the start page was redirected (e.g. a reload on /result).
+    if (!demoResult && window.location.pathname !== (VIEW_PATHS[currentViewRef.current] || '/')) {
+      window.history.replaceState({ view: currentViewRef.current }, '', VIEW_PATHS[currentViewRef.current]);
+    }
+    const onPop = () => {
+      const target = viewFromPath(window.location.pathname);
+      if (currentViewRef.current === 'test' && target !== 'test') {
+        // Back during the quiz goes to the previous question; the quiz stays open.
+        window.history.pushState({ view: 'test' }, '', VIEW_PATHS.test);
+        setQuizBackRequest((n) => n + 1);
+        return;
+      }
+      const safe = target === 'result' || target === 'demographics' ? 'home' : target;
+      setCurrentView(safe);
+      if (safe !== target) window.history.replaceState({ view: safe }, '', VIEW_PATHS[safe]);
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, [demoResult]); // 'home' | 'test' | 'demographics' | 'result' | 'dashboard' | 'methodology'
   const [sessionId, setSessionId] = useState('');
   const [isFooterFeedbackOpen, setFooterFeedbackOpen] = useState(false);
   const [answers, setAnswers] = useState([]);
@@ -96,7 +151,7 @@ function PublicApp() {
     setAnswers(testAnswers);
     setTestDuration(durationSeconds);
     // Transition to optional post-test demographics
-    setCurrentView('demographics');
+    goTo('demographics', { replace: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -131,7 +186,7 @@ function PublicApp() {
       isVerified: testDuration >= 60 // Simple duration check
     }).catch((err) => console.warn('Response could not be saved:', err));
 
-    setCurrentView('result');
+    goTo('result', { replace: true });
     // The next visit to the test view asks for a length again.
     setQuizLength(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -142,7 +197,7 @@ function PublicApp() {
     setAnswers([]);
     setAnalysisResult(null);
     setDemographics(null);
-    setCurrentView('test');
+    goTo('test');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -159,7 +214,7 @@ function PublicApp() {
       <Navbar 
         activeTab={currentView}
         onNavigate={(tab) => {
-          setCurrentView(tab);
+          goTo(tab);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         liveVisitors={liveVisitors}
@@ -169,19 +224,20 @@ function PublicApp() {
 
       {/* Main Dynamic View Router */}
       <main style={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column', overflowX: 'hidden', alignItems: 'stretch', minWidth: 0, width: '100%', boxSizing: 'border-box' }}>
+        <Suspense fallback={<div style={{ minHeight: '60vh' }} aria-busy="true" />}>
         {currentView === 'home' && (
           <WelcomePage
             onStartTest={(length) => {
               setQuizLength(QUIZ_LENGTHS[length] ? length : null);
-              setCurrentView('test');
+              goTo('test');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onGoDashboard={() => {
-              setCurrentView('dashboard');
+              goTo('dashboard');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onGoWeekly={() => {
-              setCurrentView('weekly');
+              goTo('weekly');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             liveVisitors={liveVisitors}
@@ -196,6 +252,8 @@ function PublicApp() {
             key={activeLength}
             length={activeLength}
             onComplete={handleTestComplete}
+            backRequest={quizBackRequest}
+            onExit={() => goTo('home', { replace: true })}
             lang={lang}
             setLang={setLang}
             onToggleLang={() => setLang(prev => prev === 'bn' ? 'en' : 'bn')}
@@ -216,7 +274,7 @@ function PublicApp() {
             sessionId={sessionId}
             onRetake={handleRetake}
             onGoDashboard={() => {
-              setCurrentView('dashboard');
+              goTo('dashboard');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             lang={lang}
@@ -226,7 +284,7 @@ function PublicApp() {
         {currentView === 'dashboard' && (
           <Dashboard 
             onTakeTest={() => {
-              setCurrentView('test');
+              goTo('test');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             liveVisitors={liveVisitors}
@@ -238,15 +296,16 @@ function PublicApp() {
           <MethodologyPage 
             lang={lang}
             onStartTest={() => {
-              setCurrentView('test');
+              goTo('test');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onGoHome={() => {
-              setCurrentView('home');
+              goTo('home');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
         )}
+        </Suspense>
       </main>
 
       <footer className="site-footer">
@@ -278,7 +337,7 @@ function PublicApp() {
                   className="site-footer-link"
                   aria-current={currentView === view ? 'page' : undefined}
                   onClick={() => {
-                    setCurrentView(view);
+                    goTo(view);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >

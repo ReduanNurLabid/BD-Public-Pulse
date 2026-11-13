@@ -23,7 +23,9 @@ const typicalScore = (weight, moderate) => {
   return score === 5 ? 4 : score === 1 ? 2 : score;
 };
 
-const SAMPLE_ANALYSES = new Map(EXAMPLES.map((example) => {
+// Worked out the first time a card is shown, not all at once on page load.
+const sampleCache = new Map();
+const buildSample = (example) => {
   const answers = getQuestionsForLength('medium').map((question, index) => ({
     questionId: question.id,
     score: example.pattern
@@ -32,10 +34,13 @@ const SAMPLE_ANALYSES = new Map(EXAMPLES.map((example) => {
   }));
   const analysis = calculateComprehensiveAnalysis(answers, { length: 'medium' });
   const figure = MASTER_PERSONALITIES.find((person) => person.nameEn === example.figure);
-  return [example, { ...analysis, historicalPick: figure || analysis.historicalPick, personalities: figure ? [figure] : analysis.personalities }];
-}));
+  return { ...analysis, historicalPick: figure || analysis.historicalPick, personalities: figure ? [figure] : analysis.personalities };
+};
 
-const getSampleAnalysis = (example) => SAMPLE_ANALYSES.get(example);
+const getSampleAnalysis = (example) => {
+  if (!sampleCache.has(example)) sampleCache.set(example, buildSample(example));
+  return sampleCache.get(example);
+};
 
 export default function ResultsCollage({ lang = 'bn' }) {
   const isEnglish = lang === 'en';
@@ -217,7 +222,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
 
           let transform = `translate3d(0, ${backTy}px, 0) rotate(0deg) scale(${backScale})`;
           let zIndex = 1;
-          let filter = 'brightness(0.75) saturate(0.85)';
+          let dim = 0.3;
           let pointerEvents = 'none';
 
           if (isDragging) {
@@ -226,7 +231,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
               zIndex = 10;
               pointerEvents = 'auto';
               transform = `translate3d(${dragOffset}px, ${Math.abs(p) * 5}px, 0) rotate(${dragOffset * 0.03}deg) scale(${1 - Math.abs(p) * 0.03})`;
-              filter = 'none';
+              dim = 0;
             } else if (isRight) {
               pointerEvents = 'auto';
               if (p < 0) {
@@ -237,7 +242,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
                 const rot = sideRot * (1 - r);
                 const sc = sideScale + r * (1 - sideScale);
                 transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg) scale(${sc})`;
-                filter = `brightness(${0.82 + r * 0.18}) saturate(${0.9 + r * 0.1})`;
+                dim = 0.18 * (1 - r);
                 zIndex = 8;
               } else {
                 // Dragging toward prev: right card recedes behind
@@ -247,7 +252,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
                 const rot = sideRot + r * 1;
                 const sc = sideScale - r * 0.03;
                 transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg) scale(${sc})`;
-                filter = 'brightness(0.82) saturate(0.9)';
+                dim = 0.18;
                 zIndex = 5;
               }
             } else if (isLeft) {
@@ -260,7 +265,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
                 const rot = -sideRot * (1 - r);
                 const sc = sideScale + r * (1 - sideScale);
                 transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg) scale(${sc})`;
-                filter = `brightness(${0.82 + r * 0.18}) saturate(${0.9 + r * 0.1})`;
+                dim = 0.18 * (1 - r);
                 zIndex = 8;
               } else {
                 // Dragging toward next: left card recedes behind
@@ -270,7 +275,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
                 const rot = -sideRot - r * 1;
                 const sc = sideScale - r * 0.03;
                 transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg) scale(${sc})`;
-                filter = 'brightness(0.82) saturate(0.9)';
+                dim = 0.18;
                 zIndex = 5;
               }
             } else if (offset === 2 && p < 0) {
@@ -297,11 +302,11 @@ export default function ResultsCollage({ lang = 'bn' }) {
             if (isCenter) {
               transform = 'translate3d(0, 0, 0) rotate(0deg) scale(1)';
               zIndex = 10;
-              filter = 'none';
+              dim = 0;
               pointerEvents = 'auto';
             } else if (isRight) {
               transform = `translate3d(${sideTx}px, ${sideTy}px, 0) rotate(${sideRot}deg) scale(${sideScale})`;
-              filter = 'brightness(0.82) saturate(0.9)';
+              dim = 0.18;
               pointerEvents = 'auto';
               if (isAnimating) {
                 zIndex = transitionDirection === 'prev' ? 7 : 4;
@@ -310,7 +315,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
               }
             } else if (isLeft) {
               transform = `translate3d(-${sideTx}px, ${sideTy}px, 0) rotate(-${sideRot}deg) scale(${sideScale})`;
-              filter = 'brightness(0.82) saturate(0.9)';
+              dim = 0.18;
               pointerEvents = 'auto';
               if (isAnimating) {
                 zIndex = transitionDirection === 'next' ? 7 : 4;
@@ -320,7 +325,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
             } else {
               // Non-visible background deck cards: concealed directly behind center card
               transform = `translate3d(0, ${backTy}px, 0) rotate(0deg) scale(${backScale})`;
-              filter = 'brightness(0.7) saturate(0.8)';
+              dim = 0.3;
               zIndex = 1;
               pointerEvents = 'none';
             }
@@ -334,7 +339,7 @@ export default function ResultsCollage({ lang = 'bn' }) {
                 transform,
                 zIndex,
                 pointerEvents,
-                filter
+                '--card-dim': dim
               }}
               onClick={() => {
                 if (isRight) move(1);
@@ -343,12 +348,17 @@ export default function ResultsCollage({ lang = 'bn' }) {
               title={isRight ? (isEnglish ? 'Click to show next card' : 'পরের কার্ড দেখুন') : (isLeft ? (isEnglish ? 'Click to show previous card' : 'আগের কার্ড দেখুন') : undefined)}
               aria-hidden={!isCenter}
             >
-              <PersonalityCard
-                analysis={getSampleAnalysis(item)}
-                lang={lang}
-                showcaseOnly
-                demoProfiles={item.demoProfiles}
-              />
+              {/* Only the front card and its neighbours are drawn; the rest stay hidden behind them. */}
+              {Math.abs(offset) <= 1 ? (
+                <PersonalityCard
+                  analysis={getSampleAnalysis(item)}
+                  lang={lang}
+                  showcaseOnly
+                  demoProfiles={item.demoProfiles}
+                />
+              ) : (
+                <div className="showcase-fanned-card__placeholder" aria-hidden="true" />
+              )}
             </div>
           );
         })}

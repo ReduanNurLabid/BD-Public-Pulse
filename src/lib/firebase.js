@@ -1,6 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
-import { getAnalytics, isSupported as isAnalyticsSupported } from "firebase/analytics";
 import { connectAuthEmulator, getAuth, signInAnonymously } from "firebase/auth";
 import {
   connectFirestoreEmulator, getFirestore,
@@ -74,16 +73,16 @@ if (typeof window !== "undefined") {
   });
 }
 
-// Initialize Firebase Analytics safely
+// Firebase Analytics loads after the page is idle, so it never delays the first paint.
 export let analytics = null;
 if (typeof window !== "undefined") {
-  isAnalyticsSupported().then((supported) => {
-    if (supported) {
-      analytics = getAnalytics(app);
-    }
-  }).catch((err) => {
-    console.debug("Firebase analytics initialization notice:", err);
-  });
+  const startAnalytics = () => import("firebase/analytics")
+    .then(({ getAnalytics, isSupported }) => isSupported().then((supported) => {
+      if (supported) analytics = getAnalytics(app);
+    }))
+    .catch((err) => console.debug("Firebase analytics initialization notice:", err));
+  if ("requestIdleCallback" in window) window.requestIdleCallback(startAnalytics, { timeout: 5000 });
+  else window.setTimeout(startAnalytics, 3000);
 }
 
 // Initialize Firebase App Check (reCAPTCHA Enterprise / Fraud Defense)

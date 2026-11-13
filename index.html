@@ -35,10 +35,12 @@
     <meta name="twitter:description" content="আপনি কোন পন্থী? মাত্র ২ মিনিট থেকে শুরু। দেখুন কোন নেতার সাথে আপনার মিল সবচেয়ে বেশি — আর দেশের মানুষ কী ভাবছে।" />
     <meta name="twitter:image" content="https://politicalcompass.web.app/og-image.jpg" />
 
-    <!-- Google Fonts: Tiro Bangla + Noto Sans Bengali + Inter -->
+    <!-- Google Fonts: Noto Sans Bengali + Inter, loaded without blocking the first paint -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
     <!-- Anti-Flash Synchronous Theme Initializer (Default Light + LocalStorage) -->
     <script>

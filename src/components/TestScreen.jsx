@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -17,7 +17,7 @@ import {
   ENGLISH_THEMATIC_BLOCKS 
 } from '../data/questions';
 
-export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleLang, length = DEFAULT_QUIZ_LENGTH }) {
+export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleLang, length = DEFAULT_QUIZ_LENGTH, backRequest = 0, onExit }) {
   const QUESTIONS = React.useMemo(() => getQuestionsForLength(length), [length]);
   const [localLang, setLocalLang] = useState(lang);
 
@@ -93,6 +93,15 @@ export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleL
       }, 150);
     }
   }, [currentIndex, isTransitioning]);
+
+  // The phone's back button: previous question, or leave the quiz from the first one.
+  const lastBackRequest = useRef(backRequest);
+  useEffect(() => {
+    if (backRequest === lastBackRequest.current) return;
+    lastBackRequest.current = backRequest;
+    if (currentIndex > 0) handlePrevious();
+    else if (onExit) onExit();
+  }, [backRequest, currentIndex, handlePrevious, onExit]);
 
   const handleNext = useCallback(() => {
     if (currentIndex < QUESTIONS.length - 1 && !isTransitioning) {
@@ -208,7 +217,7 @@ export default function TestScreen({ onComplete, lang = 'bn', setLang, onToggleL
                       ? 'var(--accent-gold)' 
                       : 'var(--data-track)',
                   boxShadow: isCurrent ? '0 0 8px var(--accent-gold-glow)' : 'none',
-                  transition: 'all 0.35s ease'
+                  transition: 'background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease'
                 }}
               />
             );

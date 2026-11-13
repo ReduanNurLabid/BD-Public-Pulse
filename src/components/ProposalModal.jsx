@@ -667,7 +667,7 @@ export default function ProposalModal({ isOpen, onClose, lang = 'bn' }) {
                 gap: '0.5rem',
                 cursor: submitting ? 'not-allowed' : 'pointer',
                 opacity: submitting ? 0.7 : 1,
-                transition: 'all 0.2s ease'
+                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease'
               }}
             >
               {submitting ? (

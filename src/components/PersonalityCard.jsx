@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import html2canvas from 'html2canvas';
 import { Download, Link2, Share2 } from 'lucide-react';
 import darkLogo from '../assets/dark mode logo.svg';
 import { CARD_ISSUES } from '../data/questions';
@@ -274,7 +273,7 @@ export default function PersonalityCard({ analysis, lang = 'bn', showcaseOnly = 
     });
 
   const nameLength = Array.from(typeName).length;
-  const nameSize = isEnglish ? (nameLength <= 15 ? 92 : nameLength <= 22 ? 74 : 58) : (nameLength <= 13 ? 112 : 98);
+  const nameSize = isEnglish ? (nameLength <= 15 ? 92 : nameLength <= 22 ? 74 : 58) : (nameLength <= 13 ? 112 : nameLength <= 17 ? 96 : 76);
 
   const shareText = isEnglish
     ? `The quiz exposed me: I'm ${typeName}. Here's my 5-point demand. Where do you stand? ${SITE_URL}`
@@ -313,6 +312,8 @@ export default function PersonalityCard({ analysis, lang = 'bn', showcaseOnly = 
 
     try {
       await waitForImages(exportCard);
+      // Loaded on demand: the library is large and only needed when sharing.
+      const { default: html2canvas } = await import('html2canvas');
       return await html2canvas(exportCard, {
         scale: 1, // 1080x1920 is the story size; 2x made 5 MB files
         useCORS: true,

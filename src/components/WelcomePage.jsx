@@ -296,7 +296,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                 alignItems: 'center',
                 gap: '0.5rem',
                 cursor: 'pointer',
-                transition: 'all 0.2s ease'
+                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--text-primary)';
@@ -325,7 +325,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                 alignItems: 'center',
                 gap: '0.5rem',
                 cursor: 'pointer',
-                transition: 'all 0.2s ease'
+                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--text-primary)';
@@ -340,12 +340,11 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
             </button>
           </div>
 
-          <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginTop: '-0.5rem', marginBottom: '1.25rem' }}>
-            <div style={{ marginBottom: '0.5rem' }}>{t.lengthHint}</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <button type="button" className="btn-secondary" style={{ padding: '0.55rem 1.1rem', minHeight: '44px', fontSize: '0.95rem' }} onClick={() => onStartTest('short')}>{t.lengthShort}</button>
-              <button type="button" className="btn-secondary" style={{ padding: '0.55rem 1.1rem', minHeight: '44px', fontSize: '0.95rem' }} onClick={() => onStartTest('long')}>{t.lengthLong}</button>
-            </div>
+          <div style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginTop: '-0.5rem', marginBottom: '1.25rem', display: 'flex', flexWrap: 'wrap', alignItems: 'center', columnGap: '0.6rem' }}>
+            <span>{t.lengthHint}</span>
+            <button type="button" onClick={() => onStartTest('short')} style={{ background: 'none', border: 'none', padding: '0.25rem 0', minHeight: '44px', color: 'var(--text-primary)', fontWeight: 700, fontSize: 'inherit', fontFamily: 'inherit', cursor: 'pointer', textDecoration: 'underline wavy', textDecorationColor: 'var(--hero-accent)', textUnderlineOffset: '5px', textDecorationThickness: '1.5px' }}>{t.lengthShort}</button>
+            <span aria-hidden="true">·</span>
+            <button type="button" onClick={() => onStartTest('long')} style={{ background: 'none', border: 'none', padding: '0.25rem 0', minHeight: '44px', color: 'var(--text-primary)', fontWeight: 700, fontSize: 'inherit', fontFamily: 'inherit', cursor: 'pointer', textDecoration: 'underline wavy', textDecorationColor: 'var(--hero-accent)', textUnderlineOffset: '5px', textDecorationThickness: '1.5px' }}>{t.lengthLong}</button>
           </div>
 
           <div className="font-latin" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600, marginBottom: '2.5rem' }}>
@@ -391,7 +390,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                 gap: '0.5rem',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                transition: 'all 0.2s ease'
+                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'transparent';
@@ -421,7 +420,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              transition: 'all 0.3s ease'
+              transition: 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease'
             }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
@@ -456,7 +455,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
             
 
             {/* Stat Card 2 */}
-            <div style={{ background: 'var(--action-card2-bg)', border: '2px solid var(--action-card2-border)', borderRadius: '24px', padding: '2.25rem 2rem', color: 'var(--action-card2-text)', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease' }}>
+            <div style={{ background: 'var(--action-card2-bg)', border: '2px solid var(--action-card2-border)', borderRadius: '24px', padding: '2.25rem 2rem', color: 'var(--action-card2-text)', display: 'flex', flexDirection: 'column', transition: 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease' }}>
               <div style={{ color: 'var(--action-card2-text)', opacity: 0.7, fontSize: '0.9rem', fontWeight: 700, marginBottom: '1.25rem' }}>{t.blocsTitle}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                 {hasLiveData ? allBlocs.map(([blocKey, bloc], index) => (
@@ -541,7 +540,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
-              transition: 'all 0.3s ease'
+              transition: 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease'
             }}>
               {/* Badge in normal flex flow */}
               <div style={{
@@ -592,7 +591,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                       justifyContent: 'center',
                       alignItems: 'center',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease',
+                      transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease',
                       whiteSpace: 'nowrap'
                     }}
                     onMouseEnter={(e) => {
@@ -621,7 +620,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
-              transition: 'all 0.3s ease'
+              transition: 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease'
             }}>
               {/* Badge in normal flex flow */}
               <div style={{
@@ -664,7 +663,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                   alignItems: 'center',
                   gap: '0.5rem',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease',
                   marginTop: 'auto',
                   whiteSpace: 'nowrap'
                 }}
@@ -694,7 +693,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
-              transition: 'all 0.3s ease'
+              transition: 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease'
             }}>
               {/* Badge in normal flex flow */}
               <div style={{
@@ -737,7 +736,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                   alignItems: 'center',
                   gap: '0.5rem',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease',
                   marginTop: 'auto',
                   whiteSpace: 'nowrap'
                 }}
@@ -793,7 +792,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
               }}>
                 <MessageSquare size={19} />
               </div>
-              <h4 style={{
+              <h3 style={{
                 fontSize: 'clamp(1.05rem, 2.5vw, 1.2rem)',
                 fontWeight: 700,
                 color: 'var(--action-card3-text)',
@@ -801,7 +800,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                 lineHeight: 1.35
               }}>
                 {t.footerFeedbackTitle}
-              </h4>
+              </h3>
             </div>
 
             <p style={{
@@ -834,7 +833,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                 gap: '0.5rem',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                transition: 'all 0.2s ease'
+                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--feedback-btn-hover-bg)';
