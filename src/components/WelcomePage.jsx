@@ -445,7 +445,7 @@ export default function WelcomePage({ onStartTest, onGoDashboard, onGoWeekly, la
                 <div style={{ fontSize: '3.4rem', fontWeight: 800, color: 'var(--action-card1-text)', marginBottom: '0.5rem', lineHeight: 1 }} className="font-latin">
                   {hasLiveData ? fmt(totalResponses) : '—'}
                 </div>
-                <p style={{ fontSize: '0.88rem', opacity: 0.75, margin: 0, lineHeight: 1.55 }}>
+                <p style={{ fontSize: '0.88rem', opacity: 0.92, margin: 0, lineHeight: 1.55 }}>
                   {L === 'en' ? 'People who chose to take part. Not a representative national sample.' : 'যাঁরা নিজে থেকে অংশ নিয়েছেন। দেশের সবার প্রতিনিধিত্বমূলক নমুনা নয়।'}
                 </p>
               </div>

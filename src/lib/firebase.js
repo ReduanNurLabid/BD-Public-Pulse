@@ -1,6 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
-import { connectAuthEmulator, getAuth, signInAnonymously } from "firebase/auth";
+import { browserLocalPersistence, connectAuthEmulator, indexedDBLocalPersistence, initializeAuth, signInAnonymously } from "firebase/auth";
 import {
   connectFirestoreEmulator, getFirestore,
   collection,
@@ -65,7 +64,9 @@ export const db = getFirestore(app);
 if (import.meta.env.VITE_USE_EMULATORS === "true") connectFirestoreEmulator(db, "127.0.0.1", 8080);
 
 // Initialize Firebase Auth & Anonymous Session
-export const auth = getAuth(app);
+// No popup/redirect resolver here: it loads a 90 KB sign-in iframe on every page.
+// Only the admin Google sign-in needs it, and passes it itself (adminApi.js).
+export const auth = initializeAuth(app, { persistence: [indexedDBLocalPersistence, browserLocalPersistence] });
 if (import.meta.env.VITE_USE_EMULATORS === "true") connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
 if (typeof window !== "undefined") {
   auth.authStateReady().then(() => (auth.currentUser ? null : signInAnonymously(auth))).catch((err) => {
@@ -105,11 +106,18 @@ if (typeof window !== "undefined") {
         import.meta.env?.VITE_RECAPTCHA_SITE_KEY ||
         "6LcWYuctAAAAALym6f37MrZC1khgFr8Yws3cPr9i";
 
+      // reCAPTCHA is about 700 KB of script; start it once the page is idle.
+      const startAppCheck = () => import("firebase/app-check")
+        .then(({ initializeAppCheck, ReCaptchaEnterpriseProvider }) => {
+          appCheck = initializeAppCheck(app, {
+            provider: new ReCaptchaEnterpriseProvider(siteKey),
+            isTokenAutoRefreshEnabled: true
+          });
+        })
+        .catch((err) => console.debug("Firebase App Check initialization notice:", err));
       if (siteKey) {
-        appCheck = initializeAppCheck(app, {
-          provider: new ReCaptchaEnterpriseProvider(siteKey),
-          isTokenAutoRefreshEnabled: true
-        });
+        if ("requestIdleCallback" in window) window.requestIdleCallback(startAppCheck, { timeout: 6000 });
+        else window.setTimeout(startAppCheck, 4000);
       }
     } catch (err) {
       console.debug("Firebase App Check initialization notice:", err);

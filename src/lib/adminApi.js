@@ -1,6 +1,6 @@
 // Everything the /admin page reads and writes. Access is enforced by
 // firestore.rules through the `admin` custom claim, not by this file.
-import { GoogleAuthProvider, onAuthStateChanged, signInAnonymously, signInWithPopup, signOut } from 'firebase/auth';
+import { browserPopupRedirectResolver, GoogleAuthProvider, onAuthStateChanged, signInAnonymously, signInWithPopup, signOut } from 'firebase/auth';
 import {
   addDoc, collection, deleteDoc, doc, getDocs, limit, orderBy, query, serverTimestamp,
   startAfter, updateDoc, where, writeBatch
@@ -21,7 +21,7 @@ export function watchAdmin(callback) {
   });
 }
 
-export const adminSignIn = () => signInWithPopup(auth, new GoogleAuthProvider());
+export const adminSignIn = () => signInWithPopup(auth, new GoogleAuthProvider(), browserPopupRedirectResolver);
 
 export async function adminSignOut() {
   await signOut(auth);

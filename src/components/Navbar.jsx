@@ -79,6 +79,9 @@ export default function Navbar({ activeTab, onNavigate, liveVisitors, lang = 'bn
           {/* Mobile Hamburger Button */}
           <div className="mobile-menu-btn" style={{ display: 'none' }}>
             <button 
+              type="button"
+              aria-label={lang === 'en' ? (isMobileMenuOpen ? 'Close menu' : 'Open menu') : (isMobileMenuOpen ? 'মেনু বন্ধ করুন' : 'মেনু খুলুন')}
+              aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               style={{ background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', padding: '0.5rem' }}
             >
